@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="guonima-wxapp-common" />
+        <module name="guonima-wxapp-dao" />
+        <module name="guonima-wxapp-service" />
+        <module name="guonima-wxapp-web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="guonima-wxapp" target="1.5" />
+      <module name="guonima-wxapp-common" target="1.5" />
+      <module name="guonima-wxapp-dao" target="1.5" />
+      <module name="guonima-wxapp-service" target="1.5" />
+      <module name="guonima-wxapp-web" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

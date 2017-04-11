@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="guonima-wxapp-web:war">
+    <output-path>$PROJECT_DIR$/guonima-wxapp-web/target</output-path>
+    <root id="archive" name="guonima-wxapp-web-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="guonima-wxapp-web:war exploded" />
+    </root>
+  </artifact>
+</component>
