@@ -3,7 +3,7 @@ package com.guonima.wxapp.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable{
+public class UserDTO implements Serializable{
 
 	private static final long serialVersionUID = 4697983666949763147L;
 

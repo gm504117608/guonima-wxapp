@@ -19,6 +19,13 @@
 	<context:component-scan base-package="com.guonima.wxapp">
 	</context:component-scan>
 
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/mybatis/db/dbconfig.properties</value>
+			</list>
+		</property>
+	</bean>
 
 	<!-- DBCP -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"

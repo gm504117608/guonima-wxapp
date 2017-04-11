@@ -38,21 +38,21 @@
 
 	<!-- 设置只扫描 controller包下的Bean -->
 	<!-- 自动扫描且只扫描@Controller -->
-	<context:component-scan base-package="com.guonima.wxapp"
+	<context:component-scan base-package="com.guonima.wxapp.controller"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
 	<!-- 类型转换 -->
-	<!--<bean id="conversionService"-->
-		<!--class="org.springframework.format.support.FormattingConversionServiceFactoryBean">-->
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
 		<!--<property name="formatters">-->
 			<!--<set>-->
 				<!--<bean class="com.podinns.api.util.DateFormatterUtil"></bean>-->
 			<!--</set>-->
 		<!--</property>-->
-	<!--</bean>-->
+	</bean>
 
 	<!-- 解析String请求数据 -->
 	<bean id="stringConverter"

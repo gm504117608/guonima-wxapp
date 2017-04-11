@@ -12,6 +12,6 @@
   </head>
   <body>
       Hello word! This is api Server !
-      http://ip:8080/order-com.guonima.wxapp.service/services/users/get?name=xiejian
+      http://ip:8080/wxapp/app/users/123
   </body>
 </html>

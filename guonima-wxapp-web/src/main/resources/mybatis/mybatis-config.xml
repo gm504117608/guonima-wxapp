@@ -10,11 +10,7 @@
     </settings>
 
 	<typeAliases>
-		<typeAlias type="com.podinns.api.order.domain.RateDetailDO" alias="rateDetailDO"/>
-		<typeAlias type="com.podinns.api.order.domain.PaymentDO" alias="paymentDO"/>
-		<typeAlias type="com.podinns.api.order.domain.ReservationDO" alias="reservationDO"/>
-		<typeAlias type="com.podinns.api.order.domain.DistrictDO" alias="districtDO"/>
-		<typeAlias type="com.podinns.api.order.domain.CodeBaseDO" alias="codeBaseDO"/>
+		<typeAlias type="com.guonima.wxapp.domain.User" alias="user"/>
 	</typeAliases>
 
 
