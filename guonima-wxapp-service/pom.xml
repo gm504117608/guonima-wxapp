@@ -12,5 +12,14 @@
     <artifactId>guonima-wxapp-service</artifactId>
     <packaging>jar</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.guonima.wxapp</groupId>
+            <artifactId>guonima-wxapp-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+
 
 </project>

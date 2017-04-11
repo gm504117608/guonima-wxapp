@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="orderMapper">
+
+    <sql id="orderColumns">
+        id, hotel_id, hotel_code, order_no, rs_type, in_time, out_time, name,
+        guest_id, channel, channel2, source, pms_channel, market_code, room_type, rate_code, activity_code,
+        room_count, card_no, inner_card, card_type, coupon_no, coupon_code, adult, kid, mobile, cms_code,
+        salesman, pms_id, open_id, status, pms_arr, pms_dep, comment, product_code,
+        create_user, modify_user, create_time, modify_time
+	</sql>
+
+    <resultMap type="reservationDO" id="orderResultMap">
+        <id column="id" property="id"/>
+        <result column="hotel_id" property="hotelId"/>
+        <result column="hotel_code" property="hotelCode"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="rs_type" property="rsType"/>
+        <result column="in_time" property="inTime"/>
+        <result column="out_time" property="outTime"/>
+        <result column="name" property="name"/>
+        <result column="guest_id" property="guestId"/>
+        <result column="channel" property="channel"/>
+        <result column="channel2" property="channel2"/>
+        <result column="source" property="source"/>
+        <result column="pms_channel" property="pmsChannel"/>
+        <result column="market_code" property="marketCode"/>
+        <result column="room_type" property="roomType"/>
+        <result column="rate_code" property="rateCode"/>
+        <result column="activity_code" property="activityCode"/>
+        <result column="room_count" property="roomCount"/>
+        <result column="card_no" property="cardNo"/>
+        <result column="inner_card" property="innerCard"/>
+        <result column="card_type" property="cardType"/>
+        <result column="coupon_no" property="couponNo"/>
+        <result column="coupon_code" property="couponCode"/>
+        <result column="adult" property="adult"/>
+        <result column="kid" property="kid"/>
+        <result column="mobile" property="mobile"/>
+        <result column="cms_code" property="cmsCode"/>
+        <result column="salesman" property="salesman"/>
+        <result column="pms_id" property="pmsId"/>
+        <result column="open_id" property="openId"/>
+        <result column="status" property="status"/>
+        <result column="pms_arr" property="pmsArr"/>
+        <result column="pms_dep" property="pmsDep"/>
+        <result column="product_code" property="productCode"/>
+        <result column="comment" property="comment"/>
+        <result column="create_user" property="createUser"/>
+        <result column="modify_user" property="modifyUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+
+        <result column="isPay" property="isPay"/>
+    </resultMap>
+
+    <!-- 新增订单信息 -->
+    <insert id="insert" parameterType="reservationDO" useGeneratedKeys="true" keyProperty="id">
+		insert ignore into tb_reservation (
+		    hotel_id, hotel_code, order_no, rs_type, in_time, out_time, name,
+            guest_id, channel, channel2, source, pms_channel, market_code, room_type, rate_code, activity_code,
+            room_count, card_no, inner_card, card_type, adult, kid, coupon_no, coupon_code, mobile, cms_code,
+            salesman, pms_id, open_id, status, pms_arr, pms_dep, comment, product_code,
+            create_user, modify_user, create_time, modify_time
+		)values (
+		    trim(#{hotelId}), trim(#{hotelCode}), trim(#{orderNo}), trim(#{rsType}), trim(#{inTime}), trim(#{outTime}), trim(#{name}),
+		    trim(#{guestId}), trim(#{channel}), trim(#{channel2}), trim(#{source}), trim(#{pmsChannel}), trim(#{marketCode}),
+            trim(#{roomType}), trim(#{rateCode}), trim(#{activityCode}),
+		    trim(#{roomCount}), trim(#{cardNo}), trim(#{innerCard}), trim(#{cardType}), trim(#{adult}), trim(#{kid}),
+		    trim(#{couponNo}), trim(#{couponCode}), trim(#{mobile}), trim(#{cmsCode}),
+		    trim(#{salesman}), trim(#{pmsId}), trim(#{openId}), trim(#{status}), trim(#{pmsArr}), trim(#{pmsDep}), trim(#{comment}),
+		   trim(#{productCode}), trim(#{createUser}), trim(#{modifyUser}), sysdate(), sysdate()
+		)
+	</insert>
+
+    <!-- 修改订单信息 -->
+    <update id="update" parameterType="reservationDO">
+        update tb_reservation
+        <set>
+            <if test="pmsId != null and pmsId != ''">
+                pms_id = trim(#{pmsId}),
+            </if>
+            <if test="status != null and status != ''">
+                status = trim(#{status}),
+            </if>
+            <if test="pmsArr != null and pmsArr != ''">
+                pms_arr = trim(#{pmsArr}),
+            </if>
+            <if test="pmsDep != null and pmsDep != ''">
+                pms_dep = trim(#{pmsDep}),
+            </if>
+            <if test="comment != null and comment != ''">
+                comment = trim(#{comment}),
+            </if>
+            <if test="modifyUser != null and modifyUser != ''">
+                modify_user = trim(#{modifyUser}),
+            </if>
+            modify_time = sysdate()
+        </set>
+        <where>
+            <if test="orderNo != null and orderNo != ''">
+                and order_no = #{orderNo}
+            </if>
+        </where>
+    </update>
+
+    <!-- 获取会员下订单数据 -->
+    <select id="findOrderInfo" parameterType="java.util.Map" resultMap="orderResultMap">
+        select
+        <include refid="orderColumns"/>
+        ,(select count(1) from tb_payment where order_no = t.order_no) isPay
+        from tb_reservation t
+        <where>
+            <if test="orderNo != null and orderNo != ''">
+                and t.order_no = trim(#{orderNo})
+            </if>
+            <if test="status != null and status != ''">
+                and t.status = trim(#{status})
+            </if>
+            <if test="memberId != null and memberId != ''">
+                and t.guest_id = trim(#{memberId})
+            </if>
+            <if test="(startTime != null) and (endTime != null)">
+                and t.create_time between trim(#{startTime}) and trim(#{endTime})
+            </if>
+            order by t.create_time desc
+        </where>
+    </select>
+
+
+</mapper>

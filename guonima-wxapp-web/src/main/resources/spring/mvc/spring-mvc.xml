@@ -1,0 +1,176 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+  http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/context
+  http://www.springframework.org/schema/context/spring-context.xsd
+  http://www.springframework.org/schema/aop   
+  http://www.springframework.org/schema/aop/spring-aop.xsd
+  http://www.springframework.org/schema/mvc
+  http://www.springframework.org/schema/mvc/spring-mvc.xsd
+  http://www.springframework.org/schema/util        
+  http://www.springframework.org/schema/util/spring-util.xsd ">
+<!-- 
+	<bean id="configProperties"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:podsite.properties</value>
+			</list>
+		</property>
+	</bean>
+-->
+	<mvc:annotation-driven conversion-service="conversionService"
+		content-negotiation-manager="contentNegotiationManager">
+		<mvc:message-converters register-defaults="true">
+			<ref bean="stringConverter" />
+			<ref bean="fastjsonConverter" />
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!--通知spring使用cglib来生成代理方法, AOP可以拦截到Controller,因为是拦截Controller,这句必须加在springmvc配置文件中 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- 设置只扫描 controller包下的Bean -->
+	<!-- 自动扫描且只扫描@Controller -->
+	<context:component-scan base-package="com.guonima.wxapp"
+		use-default-filters="false">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- 类型转换 -->
+	<!--<bean id="conversionService"-->
+		<!--class="org.springframework.format.support.FormattingConversionServiceFactoryBean">-->
+		<!--<property name="formatters">-->
+			<!--<set>-->
+				<!--<bean class="com.podinns.api.util.DateFormatterUtil"></bean>-->
+			<!--</set>-->
+		<!--</property>-->
+	<!--</bean>-->
+
+	<!-- 解析String请求数据 -->
+	<bean id="stringConverter"
+		class="org.springframework.http.converter.StringHttpMessageConverter">
+		<constructor-arg value="UTF-8" index="0"></constructor-arg>
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/plain;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="fastjsonConverter"
+		class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+				<value>application/json;charset=UTF-8</value>
+			</list>
+		</property>
+		<property name="features">
+			<array value-type="com.alibaba.fastjson.serializer.SerializerFeature">
+				<value>WriteMapNullValue</value>
+				<value>QuoteFieldNames</value>
+				<value>DisableCircularReferenceDetect</value>
+
+				<value>WriteDateUseDateFormat</value>
+			</array>
+		</property>
+	</bean>
+
+	<util:list id="messageConverters">
+		<ref bean="stringConverter" />
+		<ref bean="fastjsonConverter" />
+	</util:list>
+
+	<bean id="DisableCircularReferenceDetect"
+		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField"
+			value="com.alibaba.fastjson.serializer.SerializerFeature.DisableCircularReferenceDetect"></property>
+	</bean>
+
+	<bean id="contentNegotiationManager"
+		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+
+		<property name="ignoreAcceptHeader" value="true" />
+
+		<property name="favorParameter" value="false"></property>
+
+		<property name="favorPathExtension" value="true"></property>
+
+		<property name="defaultContentType" value="text/html" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+				<entry key="xml" value="application/xml" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- ContentNegotiatingViewResolver -->
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1"></property>
+		<property name="contentNegotiationManager" ref="contentNegotiationManager" />
+		<property name="defaultViews">
+			<list>
+				<!-- json视图 -->
+				<bean class="com.alibaba.fastjson.support.spring.FastJsonJsonView">
+					<property name="extractValueFromSingleKeyModel" value="true" />
+					<property name="features">
+						<array value-type="com.alibaba.fastjson.serializer.SerializerFeature">
+
+							<value>WriteMapNullValue</value>
+
+							<value>DisableCircularReferenceDetect</value>
+
+							<value>WriteDateUseDateFormat</value>
+						</array>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="viewResolvers">
+			<list>
+				<!-- 视图解析器 -->
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+				<bean
+					class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<property name="viewClass"
+						value="org.springframework.web.servlet.view.JstlView" />
+					<property name="contentType" value="text/html" />
+					<property name="prefix" value="/" />
+					<property name="suffix" value=".jsp" />
+				</bean>
+
+			</list>
+		</property>
+	</bean>
+
+	<mvc:default-servlet-handler />
+
+	<!-- 配置文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 默认编码 -->
+		<property name="defaultEncoding" value="utf-8" />
+		<!-- 文件大小最大值 -->
+		<property name="maxUploadSize" value="10485760000" />
+		<!-- 内存中的最大值 -->
+		<property name="maxInMemorySize" value="40960" />
+	</bean>
+
+	<!-- restTemplate -->
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<property name="messageConverters" ref="messageConverters">
+		</property>
+	</bean>
+
+
+</beans>
