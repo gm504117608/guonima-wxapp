@@ -21,13 +21,6 @@
         <java.version>1.8</java.version>
         <java.encoding>UTF-8</java.encoding>
         <maven-compiler.version>3.5.1</maven-compiler.version>
-        <!--dubbo -->
-        <!--<dubbo.version>2.8.4</dubbo.version>-->
-        <!--<zkclient.version>0.5</zkclient.version>-->
-        <!--<resteasy.version>3.0.7.Final</resteasy.version>-->
-        <!--<ws.rs-api.version>2.0.1</ws.rs-api.version>-->
-        <!--tomcat-->
-        <!--<org.apache.tomcat.embed.version>8.0.11</org.apache.tomcat.embed.version>-->
         <!-- spring -->
         <spring-version>4.3.0.RELEASE</spring-version>
         <!-- mybatis -->
@@ -49,9 +42,6 @@
         <aspectj.version>1.8.9</aspectj.version>
         <asm.version>3.3.1</asm.version>
         <javassist.version>3.20.0-GA</javassist.version>
-        <!--validator -->
-        <!--<validation-api.version>1.1.0.Final</validation-api.version>-->
-        <!--<hibernate-validator.version>5.1.1.Final</hibernate-validator.version>-->
         <!-- log -->
         <logback-classic.version>1.1.7</logback-classic.version>
         <logback-ext-spring.version>0.1.4</logback-ext-spring.version>
@@ -66,21 +56,83 @@
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
         <commons-io.version>2.5</commons-io.version>
-        <!--<commons-lang.version>2.6</commons-lang.version>-->
         <commons-pool2.version>2.4.2</commons-pool2.version>
         <commons-fileupload.version>1.3.2</commons-fileupload.version>
         <!--常用工具 -->
         <jodd.version>3.7.1</jodd.version>
+        <joda-time.version>2.9.7</joda-time.version>
         <fasterxml.version>2.7.0-rc3</fasterxml.version>
         <fastjson.version>1.2.28</fastjson.version>
+        <!-- redis 缓存 -->
+        <redis.clients.version>2.9.0</redis.clients.version>
     </properties>
 
     <dependencyManagement>
+        <dependencies>
+            <!-- test start -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.dbunit</groupId>
+                <artifactId>dbunit</artifactId>
+                <version>${dbunit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.unitils</groupId>
+                <artifactId>unitils</artifactId>
+                <version>${unitils.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymock</artifactId>
+                <version>${easymock.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymockclassextension</artifactId>
+                <version>${easymock.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- test end-->
 
+            <!-- connector begin -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-dbcp</groupId>
+                <artifactId>commons-dbcp</artifactId>
+                <version>${commons-dbcp.version}</version>
+            </dependency>
+            <!-- connector end -->
+
+            <!-- redis 缓存 start -->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${redis.clients.version}</version>
+            </dependency>
+            <!-- redis 缓存 end -->
+
+        </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- Spring框架 -->
+        <!-- Spring框架 start -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
@@ -136,13 +188,11 @@
             <artifactId>spring-expression</artifactId>
             <version>${spring-version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
             <version>${spring-version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jms</artifactId>
@@ -158,40 +208,19 @@
             <artifactId>spring-test</artifactId>
             <version>${spring-version}</version>
         </dependency>
+        <!-- Spring框架 end -->
 
-        <!-- test -->
+        <!-- test start-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.dbunit</groupId>
-            <artifactId>dbunit</artifactId>
-            <version>${dbunit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.unitils</groupId>
-            <artifactId>unitils</artifactId>
-            <version>${unitils.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <version>${easymock.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymockclassextension</artifactId>
-            <version>${easymock.version}</version>
-            <scope>test</scope>
-        </dependency>
+        <!-- test end-->
 
-        <!-- aop代理 -->
+
+        <!-- aop代理 start -->
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
@@ -214,7 +243,7 @@
         </dependency>
         <!-- aop代理 end -->
 
-        <!-- mybatis -->
+        <!-- mybatis start -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
@@ -230,7 +259,6 @@
             <artifactId>mybatis-ehcache</artifactId>
             <version>${mybatis-ehcache.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
@@ -242,24 +270,6 @@
             <version>${ehcache.version}</version>
         </dependency>
         <!-- mybatis end -->
-
-        <!-- connector begin -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>${druid.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>${commons-dbcp.version}</version>
-        </dependency>
-        <!-- connector end -->
 
         <!-- log begin -->
         <dependency>
@@ -320,7 +330,6 @@
             <artifactId>commons-collections</artifactId>
             <version>${commons-collections.version}</version>
         </dependency>
-
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -337,11 +346,6 @@
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>commons-lang</groupId>-->
-        <!--<artifactId>commons-lang</artifactId>-->
-        <!--<version>${commons-lang.version}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
@@ -354,7 +358,7 @@
         </dependency>
         <!--commons end -->
 
-        <!-- Validation -->
+        <!-- Validation start -->
         <dependency>
             <groupId>com.fasterxml</groupId>
             <artifactId>classmate</artifactId>
@@ -373,7 +377,14 @@
             <artifactId>jodd-core</artifactId>
             <version>${jodd.version}</version>
         </dependency>
+        <!-- 日期时间处理库 -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda-time.version}</version>
+        </dependency>
         <!-- jodd end -->
+
         <!--fasterxml -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -390,18 +401,21 @@
             <artifactId>jackson-annotations</artifactId>
             <version>${fasterxml.version}</version>
         </dependency>
+
         <!--json处理 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope>
-        </dependency>
+
+        <!-- servlet -->
+        <!--<dependency>-->
+        <!--<groupId>javax.servlet</groupId>-->
+        <!--<artifactId>javax.servlet-api</artifactId>-->
+        <!--<version>3.1.0</version>-->
+        <!--<scope>provided</scope>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
@@ -411,16 +425,16 @@
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
             <!--单元测试插件 -->
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <!--使用pojo方式的单元测试。以*Tests.java结尾的java源文件（类）中test*开始的方法将被执行 -->
-                    <includes>
-                        <include>**/*Tests.java</include>
-                    </includes>
-                    <argLine>-Xmx256m</argLine>
-                </configuration>
-            </plugin>
+            <!--<plugin>-->
+            <!--<artifactId>maven-surefire-plugin</artifactId>-->
+            <!--<configuration>-->
+            <!--&lt;!&ndash;使用pojo方式的单元测试。以*Tests.java结尾的java源文件（类）中test*开始的方法将被执行 &ndash;&gt;-->
+            <!--<includes>-->
+            <!--<include>**/*Tests.java</include>-->
+            <!--</includes>-->
+            <!--<argLine>-Xmx256m</argLine>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
             <!--<plugin>-->
             <!--&lt;!&ndash;eclipse 项目生成插件 &ndash;&gt;-->
             <!--<artifactId>maven-eclipse-plugin</artifactId>-->
@@ -433,10 +447,6 @@
             <!--</plugin>-->
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.6</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -461,8 +471,8 @@
                 <version>2.7</version>
             </plugin>
             <!--<plugin>-->
-                <!--<artifactId>maven-eclipse-plugin</artifactId>-->
-                <!--<version>2.8</version>-->
+            <!--<artifactId>maven-eclipse-plugin</artifactId>-->
+            <!--<version>2.8</version>-->
             <!--</plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -479,13 +489,13 @@
             </plugin>
             <!--Javadoc plugin-->
             <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-javadoc-plugin</artifactId>-->
-                <!--<version>2.9.1</version>-->
-                <!--<configuration>-->
-                    <!--<charset>UTF16</charset>-->
-                    <!--<aggregate>true</aggregate>-->
-                <!--</configuration>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-javadoc-plugin</artifactId>-->
+            <!--<version>2.9.1</version>-->
+            <!--<configuration>-->
+            <!--<charset>UTF16</charset>-->
+            <!--<aggregate>true</aggregate>-->
+            <!--</configuration>-->
             <!--</plugin>-->
 
             <!-- 测试覆盖率 clover plugin -->
@@ -501,14 +511,14 @@
             <!--</plugin>-->
             <!--测试用例报告 plugin -->
             <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-surefire-plugin</artifactId>-->
-                <!--<version>2.17</version>-->
-                <!--<configuration>-->
-                    <!--<includes>-->
-                        <!--<include>**/*Test.java</include>-->
-                    <!--</includes>-->
-                <!--</configuration>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-surefire-plugin</artifactId>-->
+            <!--<version>2.17</version>-->
+            <!--<configuration>-->
+            <!--<includes>-->
+            <!--<include>**/*Test.java</include>-->
+            <!--</includes>-->
+            <!--</configuration>-->
             <!--</plugin>-->
 
         </plugins>
