@@ -7,11 +7,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
+<head>
     <title></title>
-  </head>
-  <body>
-      Hello word! This is api Server !
-      http://ip:8080/wxapp/app/users/123
-  </body>
+</head>
+    <body>
+        Hello word! This is api Server !
+        http://ip:8080/wxapp/api/members/123
+    </body>
 </html>

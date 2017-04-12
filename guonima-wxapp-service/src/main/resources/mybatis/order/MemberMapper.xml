@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+
+    <sql id="memberColumns">
+        id, nick_name, mobile, email, postcode, gender, country,
+        province, city, avatar_url, enabled, create_time, update_time
+    </sql>
+
+    <resultMap id="memberResultMap" type="memberDO">
+        <id column="id" property="id"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="postcode" property="postcode"/>
+        <result column="gender" property="gender"/>
+        <result column="country" property="country"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="avatar_url" property="avatarUrl"/>
+        <result column="enabled" property="enabled"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 新增会员信息 -->
+    <insert id="insert" parameterType="memberDO" useGeneratedKeys="true" keyProperty="id">
+        insert into member (
+            nick_name, mobile, email, postcode, gender, country,
+            province, city, avatar_url, create_time, update_time
+        )values (
+            trim(#{nickName}), trim(#{mobile}), trim(#{email}), trim(#{postcode}), trim(#{gender}),
+            trim(#{country}), trim(#{province}), trim(#{city}), trim(#{avatarUrl}), sysdate(), sysdate()
+        )
+    </insert>
+
+    <!-- 修改会员信息 -->
+    <update id="update" parameterType="memberDO">
+        update member
+        <set>
+            <if test="mobile != null and mobile != ''">
+                mobile = trim(#{mobile}),
+            </if>
+            <if test="email != null and email != ''">
+                email = trim(#{email}),
+            </if>
+            <if test="postcode != null and postcode != ''">
+                postcode = trim(#{postcode}),
+            </if>
+            <if test="enabled != null">
+                enabled = trim(#{enabled}),
+            </if>
+            update_time = sysdate()
+        </set>
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </update>
+
+    <!-- 获取会员数据 -->
+    <select id="findMemberInfo" parameterType="memberDO" resultMap="memberResultMap">
+        select
+            <include refid="memberColumns"/>
+        from member
+        <where>
+            <if test="id != null">
+                and id = trim(#{id})
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile = trim(#{mobile})
+            </if>
+            <if test="nickName != null and nickName != ''">
+                and nick_name like CONCAT(trim(#{nickName}), '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>
