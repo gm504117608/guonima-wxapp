@@ -8,6 +8,7 @@ public class MemberDO implements Serializable {
     private static final long serialVersionUID = 4697983666949763147L;
 
     private Long id; // 用户id
+    private String openid; // openid是公众号的普通用户的唯一的标识
     private String nickName; // 用户名称
     private String mobile; // 联系号码
     private String email; // 邮箱
@@ -27,6 +28,14 @@ public class MemberDO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
 
     public String getNickName() {
@@ -129,6 +138,7 @@ public class MemberDO implements Serializable {
     public String toString() {
         return "MemberDO{" +
                 "id=" + id +
+                ", openid='" + openid + '\'' +
                 ", nickName='" + nickName + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", email='" + email + '\'' +
