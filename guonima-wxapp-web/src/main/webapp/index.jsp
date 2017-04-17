@@ -10,8 +10,8 @@
 <head>
     <title></title>
 </head>
-    <body>
-        Hello word! This is api Server !
-        http://ip:8080/wxapp/api/members/123
-    </body>
+<body>
+Hello word! This is api Server !
+http://ip:8080/wxapp/api/members/123
+</body>
 </html>

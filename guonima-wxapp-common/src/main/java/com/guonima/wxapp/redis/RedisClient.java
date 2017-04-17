@@ -15,7 +15,6 @@ import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * Redis客户端访问
- *
  */
 public class RedisClient {
 

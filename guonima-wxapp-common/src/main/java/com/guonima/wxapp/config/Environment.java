@@ -11,51 +11,30 @@ import java.util.ResourceBundle;
  */
 public class Environment implements Serializable {
 
-    private static final Logger LOGGER = Logger.getLogger(Environment.class);
+    private static final Logger log = Logger.getLogger(Environment.class);
 
     /**
-     * url pms group数据获取URL
+     * 微信获取openid URL地址
      */
-    public static String PMS_GROUP_URL;
+    public static String WX_CODE_URL;
 
     /**
-     * url pms 会员数据获取URL
+     * 小程序唯一标识
      */
-    public static String PMS_MEMBER_URL;
+    public static String WX_APPID;
 
     /**
-     * 百度地图ak的值
+     * 小程序的密码
      */
-    public static String BAIDU_AK;
-    /**
-     * 高德地图key的值
-     */
-    public static String GAODE_KEY;
-
-    /**
-     * 地图定位解析地址失败之后默认查询的城市
-     */
-    public static String LOCATION_CITY_DESCRIPTION;
-
-    /**
-     * 应用密钥，支付网关分配
-     */
-    public static String PAY_APP_KEY;
-    /**
-     * 支付网关的地址
-     */
-    public static String PAY_URL;
+    public static String WX_SECRET;
 
     static {
         //读取属性文件 sysconfig.properties
+
         ResourceBundle resourceBundle = ResourceBundle.getBundle("sysconfig");
-        PMS_GROUP_URL = resourceBundle.getString("pms.group.url");
-        PMS_MEMBER_URL = resourceBundle.getString("pms.member.url");
-        BAIDU_AK = resourceBundle.getString("baiDu.ak");
-        GAODE_KEY = resourceBundle.getString("gaoDe.key");
-        LOCATION_CITY_DESCRIPTION = resourceBundle.getString("location.city.description");
-        PAY_APP_KEY = resourceBundle.getString("pay.app.key");
-        PAY_URL = resourceBundle.getString("pay.url");
+        WX_CODE_URL = resourceBundle.getString("wx.code.url");
+        WX_APPID = resourceBundle.getString("wx.appid");
+        WX_SECRET = resourceBundle.getString("wx.secret");
     }
 
     public Environment() {
