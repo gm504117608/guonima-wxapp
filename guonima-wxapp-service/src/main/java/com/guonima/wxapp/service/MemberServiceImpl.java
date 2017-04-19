@@ -41,10 +41,13 @@ public class MemberServiceImpl implements MemberService {
             } else { // 修改
                 dao.update("memberMapper.update", memberDO);
             }
-            // 生成一个token
-            token = SecurityUtil.createToken(memberDO.getOpenid());
-            // 有效时间一天 24 * 60 * 60
-            RedisClient.set(memberDO.getOpenid(), 86400,token);
+            token = (String) RedisClient.get(memberDO.getOpenid());
+            if(StringUtils.isEmpty(token)){
+                // 生成一个token
+                token = SecurityUtil.createToken(memberDO.getOpenid());
+                // 有效时间一天 24 * 60 * 60
+                RedisClient.set(memberDO.getOpenid(), 86400, token);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -58,23 +61,21 @@ public class MemberServiceImpl implements MemberService {
         String url = Environment.WX_CODE_URL +
                 "?appid=" + Environment.WX_APPID +
                 "&secret=" + Environment.WX_SECRET +
-                "&js_code=0217dwyz0RMQsj1VtvAz0Vrqyz07dwyH" + // code +
+                "&js_code=" + code +
                 "&grant_type=authorization_code";
-
         String result = HttpUtil.getResponseByPost(url);
-
         log.debug("通过登录凭证获取微信信息 ： " + result);
 
         if (StringUtils.isEmpty(result)) {
             return "通过登录凭证获取微信信息出现异常";
         }
         JSONObject wxInfo = JSONObject.parseObject(result);
-        int errcode = (Integer) wxInfo.get("errcode");
-        if (errcode == 0) {
+        Integer errCode = (Integer) wxInfo.get("errcode");
+        if (null == errCode) {
             // 通过sessionKey 和 iv 来解密 encryptedData 数据获取 UnionID(小程绑定公众号之后的关联值) 。
-            String session_key = (String) wxInfo.get("session_key"); //
+//            String session_key = (String) wxInfo.get("session_key"); //
             String openid = (String) wxInfo.get("openid");
-            Integer expires_in = (Integer) wxInfo.get("expires_in");
+//            Integer expires_in = (Integer) wxInfo.get("expires_in");
             memberDO.setOpenid(openid);
         }
         return (String) wxInfo.get("errmsg");

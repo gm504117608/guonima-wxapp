@@ -38,8 +38,7 @@ public class MemberController extends BaseController {
         if (StringUtils.isNotEmpty(result)) {
             return error(2000, result);
         }
-        memberService.login(memberDO);
-        return null;
+        return success(memberService.login(memberDO));
     }
 
     /**
