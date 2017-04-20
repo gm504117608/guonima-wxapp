@@ -11,6 +11,7 @@
 
     <typeAliases>
         <typeAlias type="com.guonima.wxapp.domain.MemberDO" alias="memberDO"/>
+        <typeAlias type="com.guonima.wxapp.domain.ShopDO" alias="shopDO"/>
     </typeAliases>
 
     <plugins>

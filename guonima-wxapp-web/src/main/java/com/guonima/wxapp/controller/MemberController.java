@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 public class MemberController extends BaseController {
 
     @Autowired

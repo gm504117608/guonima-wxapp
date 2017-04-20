@@ -5,7 +5,7 @@
 
     <sql id="memberColumns">
         id, openid, nick_name, mobile, email, postcode, gender, country,
-        province, city, avatar_url, signature, enabled, create_time, update_time
+        province, city, avatar_url, signature, enabled, create_time, modify_time
     </sql>
 
     <resultMap id="memberResultMap" type="memberDO">
@@ -23,14 +23,14 @@
         <result column="signature" property="signature"/>
         <result column="enabled" property="enabled"/>
         <result column="create_time" property="createTime"/>
-        <result column="update_time" property="updateTime"/>
+        <result column="modify_time" property="modifyTime"/>
     </resultMap>
 
     <!-- 新增会员信息 -->
     <insert id="insert" parameterType="memberDO" useGeneratedKeys="true" keyProperty="id">
         insert into member (
             openid, nick_name, mobile, email, postcode, gender, country,
-            province, city, avatar_url, signature, create_time, update_time
+            province, city, avatar_url, signature, create_time, modify_time
         )values (
             trim(#{openid}), trim(#{nickName}), trim(#{mobile}), trim(#{email}), trim(#{postcode}), trim(#{gender}),
             trim(#{country}), trim(#{province}), trim(#{city}), trim(#{avatarUrl}), trim(#{signature}), sysdate(), sysdate()
@@ -56,7 +56,7 @@
             <if test="enabled != null">
                 enabled = trim(#{enabled}),
             </if>
-            update_time = sysdate()
+            modify_time = sysdate()
         </set>
         <where>
             <if test="id != null">
