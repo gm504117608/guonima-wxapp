@@ -41,6 +41,24 @@
     <update id="update" parameterType="memberDO">
         update member
         <set>
+            <if test="nickName != null and nickName != ''">
+                nick_name = trim(#{nickName}),
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = trim(#{gender}),
+            </if>
+            <if test="country != null and country != ''">
+                country = trim(#{country}),
+            </if>
+            <if test="province != null and province != ''">
+                province = trim(#{province}),
+            </if>
+            <if test="city != null and city != ''">
+                city = trim(#{city}),
+            </if>
+            <if test="avatarUrl != null and avatarUrl != ''">
+                avatar_url = trim(#{avatarUrl}),
+            </if>
             <if test="mobile != null and mobile != ''">
                 mobile = trim(#{mobile}),
             </if>

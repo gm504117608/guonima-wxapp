@@ -12,6 +12,8 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 会员信息操作类
@@ -32,15 +34,18 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String login(MemberDO memberDO) {
+    public Map<String, Object> login(MemberDO memberDO) {
         MemberDO member = getMemberInfo(memberDO);
         String token = null;
+        Long id = null;
+        Map<String, Object>  result = null;
         try {
             if (member == null) { // 新增
                 dao.save("memberMapper.insert", memberDO);
             } else { // 修改
                 dao.update("memberMapper.update", memberDO);
             }
+            id = memberDO.getId();
             token = (String) RedisClient.get(memberDO.getOpenid());
             if(StringUtils.isEmpty(token)){
                 // 生成一个token
@@ -48,11 +53,14 @@ public class MemberServiceImpl implements MemberService {
                 // 有效时间一天 24 * 60 * 60
                 RedisClient.set(memberDO.getOpenid(), 86400, token);
             }
+            result = new HashMap<String, Object>();
+            result.put("id", id);
+            result.put("token", token);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        return token;
+        return result;
     }
 
     @Override

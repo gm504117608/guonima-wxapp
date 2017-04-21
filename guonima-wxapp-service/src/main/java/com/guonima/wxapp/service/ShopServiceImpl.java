@@ -1,5 +1,6 @@
 package com.guonima.wxapp.service;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.guonima.wxapp.dao.DaoSupport;
@@ -27,16 +28,15 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public Pageable getShops(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+        Page<ShopDO> page = PageHelper.startPage(pageNum, pageSize);
         List<ShopDO> list = (List<ShopDO>) dao.findForList("shopMapper.findShopInfo", new ShopDO());
         // 取分页信息
-        PageInfo<ShopDO> pageInfo = new PageInfo<ShopDO>(list);
-        Pageable page = new Pageable();
-        page.setPageNum(pageNum);
-        page.setPageSize(pageSize);
-        page.setTotalRows(pageInfo.getTotal());//获取总记录数
-        page.setTotalNum(pageInfo.getPages());
-        page.setResult(list);
-        return page;
+        Pageable result = new Pageable();
+        result.setPageNum(page.getPageNum());
+        result.setPageSize(page.getPageSize());
+        result.setTotalRows(page.getTotal());//获取总记录数
+        result.setTotalNum(page.getPages());
+        result.setResult(list);
+        return result;
     }
 }

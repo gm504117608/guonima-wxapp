@@ -3,6 +3,8 @@ package com.guonima.wxapp.service;
 
 import com.guonima.wxapp.domain.MemberDO;
 
+import java.util.Map;
+
 public interface MemberService {
 
     /**
@@ -19,7 +21,7 @@ public interface MemberService {
      * @param memberDO 会员信息实体
      * @return 返回一个session，其有有效时间，前端接口传参需带有
      */
-    public String login(MemberDO memberDO);
+    public Map<String, Object> login(MemberDO memberDO);
 
     /**
      * 通过 code 去微信服务器获取 session_key 和 openid
