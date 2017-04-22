@@ -23,7 +23,7 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public Object save(String str, Object obj) throws Exception {
+    public int save(String str, Object obj) throws Exception {
         return sqlSessionTemplate.insert(str, obj);
     }
 
@@ -35,7 +35,7 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public Object batchSave(String str, List objs) throws Exception {
+    public int batchSave(String str, List objs) throws Exception {
         return sqlSessionTemplate.insert(str, objs);
     }
 
@@ -47,7 +47,7 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public Object update(String str, Object obj) throws Exception {
+    public int update(String str, Object obj) throws Exception {
         return sqlSessionTemplate.update(str, obj);
     }
 
@@ -89,7 +89,7 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public Object batchDelete(String str, List objs) throws Exception {
+    public int batchDelete(String str, List objs) throws Exception {
         return sqlSessionTemplate.delete(str, objs);
     }
 
@@ -101,7 +101,7 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public Object delete(String str, Object obj) throws Exception {
+    public int delete(String str, Object obj) throws Exception {
         return sqlSessionTemplate.delete(str, obj);
     }
 

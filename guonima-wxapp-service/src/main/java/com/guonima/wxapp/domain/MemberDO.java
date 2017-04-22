@@ -18,9 +18,10 @@ public class MemberDO implements Serializable {
     private String province; // 省份
     private String city; // 城市
     private String avatarUrl; // 头像地址
+    private String signature; // 个性签名
     private Integer enabled; // 是否激活【1（可用）；0（不可用）】
     private Date createTime; // 创建时间
-    private Date updateTime; // 修改时间
+    private Date modifyTime; // 修改时间
 
     public Long getId() {
         return id;
@@ -110,6 +111,14 @@ public class MemberDO implements Serializable {
         this.avatarUrl = avatarUrl;
     }
 
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
     public Integer getEnabled() {
         return enabled;
     }
@@ -126,12 +135,12 @@ public class MemberDO implements Serializable {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 
     @Override
@@ -148,9 +157,10 @@ public class MemberDO implements Serializable {
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
+                ", signature='" + signature + '\'' +
                 ", enabled='" + enabled + '\'' +
                 ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
+                ", modifyTime=" + modifyTime +
                 '}';
     }
 }

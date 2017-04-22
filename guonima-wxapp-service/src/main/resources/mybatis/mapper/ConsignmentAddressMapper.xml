@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="consignmentAddressMapper">
+
+    <sql id="consignmentAddressColumns">
+        id, member_id, name, mobile, province, city, area,
+        address, postcode, is_using, create_time, modify_time
+    </sql>
+
+    <resultMap id="consigneeAddressResultMap" type="consigneeAddressDO">
+        <id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="name" property="name"/>
+        <result column="mobile" property="mobile"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="area" property="area"/>
+        <result column="address" property="address"/>
+        <result column="postcode" property="postcode"/>
+        <result column="is_using" property="isUsing"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+
+    <!-- 新增收货地址信息 -->
+    <insert id="insert" parameterType="consigneeAddressDO" useGeneratedKeys="true" keyProperty="id">
+        insert into consignee_address (
+            member_id, name, mobile, province, city, area,
+            address, postcode, is_using, create_time, modify_time
+        )values (
+            trim(#{memberId}), trim(#{name}), trim(#{mobile}), trim(#{province}), trim(#{city}), trim(#{area}),
+            trim(#{address}), trim(#{postcode}), trim(#{isUsing}), sysdate(), sysdate()
+        )
+    </insert>
+
+    <!-- 修改收货地址信息 -->
+    <update id="update" parameterType="consigneeAddressDO">
+        update consignee_address
+        <set>
+            <if test="name != null and name != ''">
+                name = trim(#{name}),
+            </if>
+            <if test="mobile != null and mobile != ''">
+                mobile = trim(#{mobile}),
+            </if>
+            <if test="province != null and province != ''">
+                province = trim(#{province}),
+            </if>
+            <if test="city != null and city != ''">
+                city = trim(#{city}),
+            </if>
+            <if test="area != null and area != ''">
+                area = trim(#{area}),
+            </if>
+            <if test="address != null and address != ''">
+                address = trim(#{address}),
+            </if>
+            <if test="postcode != null and postcode != ''">
+                postcode = trim(#{postcode}),
+            </if>
+            <if test="isUsing != null">
+                is_using = trim(#{isUsing}),
+            </if>
+            modify_time = sysdate()
+        </set>
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </update>
+
+    <!-- 获取会员下的收货地址数据 -->
+    <select id="getConsignmentAddressByMemberId" parameterType="consigneeAddressDO" resultMap="consigneeAddressResultMap">
+        select
+            <include refid="consignmentAddressColumns"/>
+        from consignee_address
+        <where>
+            <if test="memberId != null and memberId != ''">
+                and member_id = trim(#{memberId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取指定id的收货地址数据 -->
+    <select id="getConsignmentAddressById" parameterType="consigneeAddressDO" resultMap="consigneeAddressResultMap">
+        select
+            <include refid="consignmentAddressColumns"/>
+        from consignee_address
+        <where>
+            <if test="id != null">
+                and id = trim(#{id})
+            </if>
+            limit 1
+        </where>
+    </select>
+
+</mapper>

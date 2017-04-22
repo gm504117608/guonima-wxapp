@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 public class MemberController extends BaseController {
 
     @Autowired
@@ -38,8 +38,7 @@ public class MemberController extends BaseController {
         if (StringUtils.isNotEmpty(result)) {
             return error(2000, result);
         }
-        memberService.login(memberDO);
-        return null;
+        return success(memberService.login(memberDO));
     }
 
     /**

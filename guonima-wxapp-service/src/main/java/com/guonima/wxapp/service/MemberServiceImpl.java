@@ -12,6 +12,8 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 会员信息操作类
@@ -32,24 +34,33 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String login(MemberDO memberDO) {
+    public Map<String, Object> login(MemberDO memberDO) {
         MemberDO member = getMemberInfo(memberDO);
         String token = null;
+        Long id = null;
+        Map<String, Object>  result = null;
         try {
             if (member == null) { // 新增
                 dao.save("memberMapper.insert", memberDO);
             } else { // 修改
                 dao.update("memberMapper.update", memberDO);
             }
-            // 生成一个token
-            token = SecurityUtil.createToken(memberDO.getOpenid());
-            // 有效时间一天 24 * 60 * 60
-            RedisClient.set(memberDO.getOpenid(), 86400,token);
+            id = memberDO.getId();
+            token = (String) RedisClient.get(memberDO.getOpenid());
+            if(StringUtils.isEmpty(token)){
+                // 生成一个token
+                token = SecurityUtil.createToken(memberDO.getOpenid());
+                // 有效时间一天 24 * 60 * 60
+                RedisClient.set(memberDO.getOpenid(), 86400, token);
+            }
+            result = new HashMap<String, Object>();
+            result.put("id", id);
+            result.put("token", token);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        return token;
+        return result;
     }
 
     @Override
@@ -58,23 +69,21 @@ public class MemberServiceImpl implements MemberService {
         String url = Environment.WX_CODE_URL +
                 "?appid=" + Environment.WX_APPID +
                 "&secret=" + Environment.WX_SECRET +
-                "&js_code=0217dwyz0RMQsj1VtvAz0Vrqyz07dwyH" + // code +
+                "&js_code=" + code +
                 "&grant_type=authorization_code";
-
         String result = HttpUtil.getResponseByPost(url);
-
         log.debug("通过登录凭证获取微信信息 ： " + result);
 
         if (StringUtils.isEmpty(result)) {
             return "通过登录凭证获取微信信息出现异常";
         }
         JSONObject wxInfo = JSONObject.parseObject(result);
-        int errcode = (Integer) wxInfo.get("errcode");
-        if (errcode == 0) {
+        Integer errCode = (Integer) wxInfo.get("errcode");
+        if (null == errCode) {
             // 通过sessionKey 和 iv 来解密 encryptedData 数据获取 UnionID(小程绑定公众号之后的关联值) 。
-            String session_key = (String) wxInfo.get("session_key"); //
+//            String session_key = (String) wxInfo.get("session_key"); //
             String openid = (String) wxInfo.get("openid");
-            Integer expires_in = (Integer) wxInfo.get("expires_in");
+//            Integer expires_in = (Integer) wxInfo.get("expires_in");
             memberDO.setOpenid(openid);
         }
         return (String) wxInfo.get("errmsg");

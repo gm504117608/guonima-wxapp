@@ -5,7 +5,7 @@
 
     <sql id="memberColumns">
         id, openid, nick_name, mobile, email, postcode, gender, country,
-        province, city, avatar_url, enabled, create_time, update_time
+        province, city, avatar_url, signature, enabled, create_time, modify_time
     </sql>
 
     <resultMap id="memberResultMap" type="memberDO">
@@ -20,19 +20,20 @@
         <result column="province" property="province"/>
         <result column="city" property="city"/>
         <result column="avatar_url" property="avatarUrl"/>
+        <result column="signature" property="signature"/>
         <result column="enabled" property="enabled"/>
         <result column="create_time" property="createTime"/>
-        <result column="update_time" property="updateTime"/>
+        <result column="modify_time" property="modifyTime"/>
     </resultMap>
 
     <!-- 新增会员信息 -->
     <insert id="insert" parameterType="memberDO" useGeneratedKeys="true" keyProperty="id">
         insert into member (
             openid, nick_name, mobile, email, postcode, gender, country,
-            province, city, avatar_url, create_time, update_time
+            province, city, avatar_url, signature, create_time, modify_time
         )values (
             trim(#{openid}), trim(#{nickName}), trim(#{mobile}), trim(#{email}), trim(#{postcode}), trim(#{gender}),
-            trim(#{country}), trim(#{province}), trim(#{city}), trim(#{avatarUrl}), sysdate(), sysdate()
+            trim(#{country}), trim(#{province}), trim(#{city}), trim(#{avatarUrl}), trim(#{signature}), sysdate(), sysdate()
         )
     </insert>
 
@@ -40,6 +41,24 @@
     <update id="update" parameterType="memberDO">
         update member
         <set>
+            <if test="nickName != null and nickName != ''">
+                nick_name = trim(#{nickName}),
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = trim(#{gender}),
+            </if>
+            <if test="country != null and country != ''">
+                country = trim(#{country}),
+            </if>
+            <if test="province != null and province != ''">
+                province = trim(#{province}),
+            </if>
+            <if test="city != null and city != ''">
+                city = trim(#{city}),
+            </if>
+            <if test="avatarUrl != null and avatarUrl != ''">
+                avatar_url = trim(#{avatarUrl}),
+            </if>
             <if test="mobile != null and mobile != ''">
                 mobile = trim(#{mobile}),
             </if>
@@ -49,10 +68,13 @@
             <if test="postcode != null and postcode != ''">
                 postcode = trim(#{postcode}),
             </if>
+            <if test="signature != null and signature != ''">
+                signature = trim(#{signature}),
+            </if>
             <if test="enabled != null">
                 enabled = trim(#{enabled}),
             </if>
-            update_time = sysdate()
+            modify_time = sysdate()
         </set>
         <where>
             <if test="id != null">

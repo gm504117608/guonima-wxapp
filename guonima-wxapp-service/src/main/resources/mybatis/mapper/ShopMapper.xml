@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopMapper">
+
+    <sql id="shopColumns">
+        id, name, mobile, district, address, icon_url, remark,
+        enabled, create_time, create_user, modify_time, modify_user
+    </sql>
+
+    <resultMap id="shopResultMap" type="shopDO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="mobile" property="mobile"/>
+        <result column="district" property="district"/>
+        <result column="address" property="address"/>
+        <result column="icon_url" property="iconUrl"/>
+        <result column="remark" property="remark"/>
+        <result column="enabled" property="enabled"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="modify_user" property="modifyUser"/>
+    </resultMap>
+
+    <!-- 获取店铺数据 -->
+    <select id="findShopInfo" parameterType="shopDO" resultMap="shopResultMap">
+        select
+            <include refid="shopColumns"/>
+        from shop
+        <where>
+            <if test="id != null">
+                and id = trim(#{id})
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile = trim(#{mobile})
+            </if>
+            <if test="name != null and name != ''">
+                and name like CONCAT(trim(#{name}), '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>
