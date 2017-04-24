@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="districtMapper">
+
+    <sql id="districtColumns">
+        id, code, description, enabled, create_time
+    </sql>
+
+    <resultMap id="districtResultMap" type="districtDO">
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="description" property="description"/>
+        <result column="enabled" property="enabled"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 获取行政区数据 -->
+    <select id="findProvinceData" parameterType="districtDO" resultMap="districtResultMap">
+        select <include refid="districtColumns"/>
+        from district where code like '__' and enabled=1
+    </select>
+
+    <!-- 获取行政区数据 -->
+    <select id="findCityData" parameterType="districtDO" resultMap="districtResultMap">
+        select
+        <include refid="districtColumns"/>
+        from district
+        <where>
+            <if test="code != null and code != ''">
+                code like CONCAT(trim(#{code}), '__') and enabled=1
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取行政区数据 -->
+    <select id="findAreaData" parameterType="districtDO" resultMap="districtResultMap">
+        select
+        <include refid="districtColumns"/>
+        from district
+        <where>
+            <if test="code != null and code != ''">
+                code like CONCAT(trim(#{code}), '__') and enabled=1
+            </if>
+        </where>
+    </select>
+
+</mapper>

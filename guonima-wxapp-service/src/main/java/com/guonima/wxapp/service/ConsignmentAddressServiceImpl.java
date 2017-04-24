@@ -2,6 +2,7 @@ package com.guonima.wxapp.service;
 
 import com.guonima.wxapp.dao.DaoSupport;
 import com.guonima.wxapp.domain.ConsigneeAddressDO;
+import com.guonima.wxapp.domain.DistrictDO;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +50,30 @@ public class ConsignmentAddressServiceImpl implements ConsignmentAddressService 
     @Override
     public int update(ConsigneeAddressDO consigneeAddressDO) {
         try {
-            return dao.save("consignmentAddressMapper.update", consigneeAddressDO);
+            return dao.update("consignmentAddressMapper.update", consigneeAddressDO);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    @Override
+    public List<DistrictDO> getProvinceDatas() {
+        DistrictDO dd = new DistrictDO();
+        return (List<DistrictDO>) dao.findForList("districtMapper.findProvinceData", dd);
+    }
+
+    @Override
+    public List<DistrictDO> getCityDatas(String code) {
+        DistrictDO dd = new DistrictDO();
+        dd.setCode(code);
+        return (List<DistrictDO>) dao.findForList("districtMapper.findCityData", dd);
+    }
+
+    @Override
+    public List<DistrictDO> getAreaDatas(String code) {
+        DistrictDO dd = new DistrictDO();
+        dd.setCode(code);
+        return (List<DistrictDO>) dao.findForList("districtMapper.findAreaData", dd);
     }
 }

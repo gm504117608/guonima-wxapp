@@ -35,8 +35,22 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public int batchSave(String str, List objs) throws Exception {
-        return sqlSessionTemplate.insert(str, objs);
+    public void batchSave(String str, List objs) throws Exception {
+        SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
+        //批量执行器
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
+        try {
+            if (objs != null) {
+                for (int i = 0, size = objs.size(); i < size; i++) {
+                    sqlSession.insert(str, objs.get(i));
+                }
+                sqlSession.flushStatements();
+                sqlSession.commit();
+                sqlSession.clearCache();
+            }
+        } finally {
+            sqlSession.close();
+        }
     }
 
     /**
@@ -59,10 +73,6 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public Object batchUpdatetest(String str, List objs) throws Exception {
-        return sqlSessionTemplate.insert(str, objs);
-    }
-
     public void batchUpdate(String str, List objs) throws Exception {
         SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
         //批量执行器
@@ -89,8 +99,22 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public int batchDelete(String str, List objs) throws Exception {
-        return sqlSessionTemplate.delete(str, objs);
+    public void batchDelete(String str, List objs) throws Exception {
+        SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
+        //批量执行器
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
+        try {
+            if (objs != null) {
+                for (int i = 0, size = objs.size(); i < size; i++) {
+                    sqlSession.delete(str, objs.get(i));
+                }
+                sqlSession.flushStatements();
+                sqlSession.commit();
+                sqlSession.clearCache();
+            }
+        } finally {
+            sqlSession.close();
+        }
     }
 
     /**
