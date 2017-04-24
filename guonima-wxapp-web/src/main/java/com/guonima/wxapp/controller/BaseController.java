@@ -80,6 +80,8 @@ public class BaseController {
     @ExceptionHandler
     public Object handlerException(Exception e) {
         log.error("亲，出现了未知错误，请使用用户反馈功能投诉死他们。" +  e.getMessage());
+        e.printStackTrace();
+
         Response r = new Response();
         r.setCode(9999);
         r.setMessage("亲，出现了未知错误，请使用用户反馈功能投诉死他们。");

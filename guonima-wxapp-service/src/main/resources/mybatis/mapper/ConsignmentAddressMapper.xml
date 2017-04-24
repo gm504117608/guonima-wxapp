@@ -78,7 +78,7 @@
         from consignee_address
         <where>
             <if test="memberId != null and memberId != ''">
-                and member_id = trim(#{memberId}
+                and member_id = trim(#{memberId})
             </if>
         </where>
     </select>

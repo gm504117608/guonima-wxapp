@@ -23,7 +23,7 @@ public class ShopController extends BaseController {
     private ShopService shopService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/shops")
-    public Response getShopInfo(@RequestParam int pageNum, @RequestParam  int pageSize) throws IOException {
+    public Response getShopInfo(@RequestParam int pageNum, @RequestParam  int pageSize) {
         if(pageNum == 0){
             pageNum = 1;
         }

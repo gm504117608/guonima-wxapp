@@ -1,6 +1,7 @@
 package com.guonima.wxapp.service;
 
 import com.guonima.wxapp.domain.ConsigneeAddressDO;
+import com.guonima.wxapp.domain.DistrictDO;
 
 import java.util.List;
 
@@ -37,4 +38,22 @@ public interface ConsignmentAddressService {
      * @return
      */
     public int update(ConsigneeAddressDO consigneeAddressDO);
+
+    /**
+     * 获取省份配置数据
+     * @return
+     */
+    public List<DistrictDO> getProvinceDatas();
+
+    /**
+     * 获取城市配置数据
+     * @return
+     */
+    public List<DistrictDO> getCityDatas(String code);
+
+    /**
+     * 获取行政区配置数据
+     * @return
+     */
+    public List<DistrictDO> getAreaDatas(String code);
 }

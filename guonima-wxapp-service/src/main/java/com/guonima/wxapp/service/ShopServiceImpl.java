@@ -2,7 +2,6 @@ package com.guonima.wxapp.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.guonima.wxapp.dao.DaoSupport;
 import com.guonima.wxapp.domain.ShopDO;
 import com.guonima.wxapp.domain.common.Pageable;

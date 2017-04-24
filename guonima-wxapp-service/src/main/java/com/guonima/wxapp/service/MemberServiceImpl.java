@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.guonima.wxapp.config.Environment;
 import com.guonima.wxapp.dao.DaoSupport;
 import com.guonima.wxapp.domain.MemberDO;
+import com.guonima.wxapp.exception.ServiceException;
 import com.guonima.wxapp.redis.RedisClient;
 import com.guonima.wxapp.util.HttpUtil;
 import com.guonima.wxapp.util.SecurityUtil;
@@ -42,10 +43,11 @@ public class MemberServiceImpl implements MemberService {
         try {
             if (member == null) { // 新增
                 dao.save("memberMapper.insert", memberDO);
+                id = memberDO.getId();
             } else { // 修改
                 dao.update("memberMapper.update", memberDO);
+                id = member.getId();
             }
-            id = memberDO.getId();
             token = (String) RedisClient.get(memberDO.getOpenid());
             if(StringUtils.isEmpty(token)){
                 // 生成一个token
@@ -53,13 +55,12 @@ public class MemberServiceImpl implements MemberService {
                 // 有效时间一天 24 * 60 * 60
                 RedisClient.set(memberDO.getOpenid(), 86400, token);
             }
-            result = new HashMap<String, Object>();
-            result.put("id", id);
-            result.put("token", token);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new ServiceException("微信登录我方应用出现错误：", e.getCause());
         }
+        result = new HashMap<String, Object>();
+        result.put("id", id);
+        result.put("token", token);
         return result;
     }
 

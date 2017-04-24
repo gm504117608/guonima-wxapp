@@ -18,7 +18,7 @@ public class MemberController extends BaseController {
     private MemberService memberService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/members/{id}")
-    public Response getMemberInfo(@PathVariable("id") Long id) throws IOException {
+    public Response getMemberInfo(@PathVariable("id") Long id) {
         return success(memberService.getMemberById(id));
     }
 
