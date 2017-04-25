@@ -31,4 +31,11 @@ public interface MemberService {
      */
     public String getWxOpenidSessionKey(MemberDO memberDO, String code);
 
+    /**
+     * 保存用户一些可修改数据
+     *
+     * @param memberDO 会员信息实体
+     */
+    public int save(MemberDO memberDO);
+
 }

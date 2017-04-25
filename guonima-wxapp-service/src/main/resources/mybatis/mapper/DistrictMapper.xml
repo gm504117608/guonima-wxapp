@@ -45,4 +45,19 @@
         </where>
     </select>
 
+    <!-- 获取行政区数据 -->
+    <select id="findDistrictData" parameterType="districtDO" resultMap="districtResultMap">
+        select
+        <include refid="districtColumns"/>
+        from district
+        <where>
+            <if test="code != null and code != ''">
+                code = trim(#{code})
+            </if>
+            <if test="description != null and description != ''">
+                description like CONCAT(trim(#{description}), '%')
+            </if>
+        </where>
+    </select>
+
 </mapper>

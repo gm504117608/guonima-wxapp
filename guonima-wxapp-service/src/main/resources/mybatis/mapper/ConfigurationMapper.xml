@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="configurationMapper">
+
+    <sql id="configurationColumns">
+        id, parent_id, code, description, type, enabled,
+        create_time, create_user, modify_time, modify_user
+    </sql>
+
+    <resultMap id="configurationResultMap" type="configurationDO">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="code" property="code"/>
+        <result column="description" property="description"/>
+        <result column="type" property="type"/>
+        <result column="enabled" property="enabled"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="modify_user" property="modifyUser"/>
+    </resultMap>
+
+    <!-- 获取基础配置数据 -->
+    <select id="findBaseConfigurationData" parameterType="configurationDO" resultMap="configurationResultMap">
+        select
+            <include refid="configurationColumns"/>
+        from base_configuration
+        <where>
+            <if test="id != null">
+                id = trim(#{id})
+            </if>
+            <if test="parentId != null">
+                parent_id = trim(#{parentId})
+            </if>
+            <if test="code != null and code != ''">
+                code = trim(#{code})
+            </if>
+            <if test="type != null and type != ''">
+                type = trim(#{type})
+            </if>
+            <if test="description != null and description != ''">
+                description like CONCAT(trim(#{description}), '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

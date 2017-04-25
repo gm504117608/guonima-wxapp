@@ -4,7 +4,7 @@
 <mapper namespace="memberMapper">
 
     <sql id="memberColumns">
-        id, openid, nick_name, mobile, email, postcode, gender, country,
+        id, openid, nick_name, mobile, email, gender, country,
         province, city, avatar_url, signature, enabled, create_time, modify_time
     </sql>
 
@@ -14,7 +14,6 @@
         <result column="nick_name" property="nickName"/>
         <result column="mobile" property="mobile"/>
         <result column="email" property="email"/>
-        <result column="postcode" property="postcode"/>
         <result column="gender" property="gender"/>
         <result column="country" property="country"/>
         <result column="province" property="province"/>
@@ -29,10 +28,10 @@
     <!-- 新增会员信息 -->
     <insert id="insert" parameterType="memberDO" useGeneratedKeys="true" keyProperty="id">
         insert into member (
-            openid, nick_name, mobile, email, postcode, gender, country,
+            openid, nick_name, mobile, email, gender, country,
             province, city, avatar_url, signature, create_time, modify_time
         )values (
-            trim(#{openid}), trim(#{nickName}), trim(#{mobile}), trim(#{email}), trim(#{postcode}), trim(#{gender}),
+            trim(#{openid}), trim(#{nickName}), trim(#{mobile}), trim(#{email}), trim(#{gender}),
             trim(#{country}), trim(#{province}), trim(#{city}), trim(#{avatarUrl}), trim(#{signature}), sysdate(), sysdate()
         )
     </insert>
@@ -64,9 +63,6 @@
             </if>
             <if test="email != null and email != ''">
                 email = trim(#{email}),
-            </if>
-            <if test="postcode != null and postcode != ''">
-                postcode = trim(#{postcode}),
             </if>
             <if test="signature != null and signature != ''">
                 signature = trim(#{signature}),
