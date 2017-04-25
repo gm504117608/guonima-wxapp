@@ -11,12 +11,12 @@ public class MemberDTO implements Serializable {
     private String nickName; // 用户名称
     private String mobile; // 联系号码
     private String email; // 邮箱
-    private String postcode; // 邮编
     private Integer gender; // 性别
     private String country; // 国家
     private String province; // 省份
     private String city; // 城市
     private String avatarUrl; // 头像地址
+    private String signature; // 个性签名
     private Integer enabled; // 是否激活【1（可用）；0（不可用）】
     private String code; // 登录凭证
 
@@ -50,14 +50,6 @@ public class MemberDTO implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
     }
 
     public Integer getGender() {
@@ -100,6 +92,14 @@ public class MemberDTO implements Serializable {
         this.avatarUrl = avatarUrl;
     }
 
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
     public Integer getEnabled() {
         return enabled;
     }
@@ -122,12 +122,12 @@ public class MemberDTO implements Serializable {
                 ", nickName='" + nickName + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", email='" + email + '\'' +
-                ", postcode='" + postcode + '\'' +
                 ", gender=" + gender +
                 ", country='" + country + '\'' +
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
+                ", signature='" + signature + '\'' +
                 ", enabled='" + enabled + '\'' +
                 ", code=" + code +
                 '}';

@@ -12,7 +12,6 @@ public class MemberDO implements Serializable {
     private String nickName; // 用户名称
     private String mobile; // 联系号码
     private String email; // 邮箱
-    private String postcode; // 邮编
     private Integer gender; // 性别
     private String country; // 国家
     private String province; // 省份
@@ -61,14 +60,6 @@ public class MemberDO implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
     }
 
     public Integer getGender() {
@@ -151,7 +142,6 @@ public class MemberDO implements Serializable {
                 ", nickName='" + nickName + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", email='" + email + '\'' +
-                ", postcode='" + postcode + '\'' +
                 ", gender=" + gender +
                 ", country='" + country + '\'' +
                 ", province='" + province + '\'' +

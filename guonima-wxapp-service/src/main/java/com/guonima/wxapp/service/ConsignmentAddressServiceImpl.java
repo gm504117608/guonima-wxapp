@@ -38,7 +38,25 @@ public class ConsignmentAddressServiceImpl implements ConsignmentAddressService 
     }
 
     @Override
-    public int insert(ConsigneeAddressDO consigneeAddressDO) {
+    public int save(ConsigneeAddressDO consigneeAddressDO) {
+        Long id = consigneeAddressDO.getId();
+        Integer isUsing = consigneeAddressDO.getIsUsing();
+        // 是否默认地址处理 是否默认地址【1：是；0：否】
+        if(isUsing == 1){
+            ConsigneeAddressDO temp = new ConsigneeAddressDO();
+            temp.setIsUsing(0);
+            temp.setMemberId(consigneeAddressDO.getMemberId());
+            update(temp);
+        }
+        // 保存数据
+        if (null == id) {
+            return insert(consigneeAddressDO);
+        } else {
+            return update(consigneeAddressDO);
+        }
+    }
+
+    private int insert(ConsigneeAddressDO consigneeAddressDO) {
         try {
             return dao.save("consignmentAddressMapper.insert", consigneeAddressDO);
         } catch (Exception e) {
@@ -47,8 +65,7 @@ public class ConsignmentAddressServiceImpl implements ConsignmentAddressService 
         return -1;
     }
 
-    @Override
-    public int update(ConsigneeAddressDO consigneeAddressDO) {
+    private int update(ConsigneeAddressDO consigneeAddressDO) {
         try {
             return dao.update("consignmentAddressMapper.update", consigneeAddressDO);
         } catch (Exception e) {
@@ -75,5 +92,12 @@ public class ConsignmentAddressServiceImpl implements ConsignmentAddressService 
         DistrictDO dd = new DistrictDO();
         dd.setCode(code);
         return (List<DistrictDO>) dao.findForList("districtMapper.findAreaData", dd);
+    }
+
+    @Override
+    public DistrictDO getDistrictDatas(String code) {
+        DistrictDO dd = new DistrictDO();
+        dd.setCode(code);
+        return (DistrictDO) dao.findForObject("districtMapper.findDistrictData", dd);
     }
 }

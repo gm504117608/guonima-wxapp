@@ -26,18 +26,11 @@ public interface ConsignmentAddressService {
     public ConsigneeAddressDO getConsignmentAddressById(Long id);
 
     /**
-     * 通过收货地址唯一标识id获取收货地址信息
+     * 保存收货地址信息
      * @param consigneeAddressDO 收货地址实体
      * @return
      */
-    public int insert(ConsigneeAddressDO consigneeAddressDO);
-
-    /**
-     * 通过收货地址唯一标识id获取收货地址信息
-     * @param consigneeAddressDO 收货地址实体
-     * @return
-     */
-    public int update(ConsigneeAddressDO consigneeAddressDO);
+    public int save(ConsigneeAddressDO consigneeAddressDO);
 
     /**
      * 获取省份配置数据
@@ -56,4 +49,10 @@ public interface ConsignmentAddressService {
      * @return
      */
     public List<DistrictDO> getAreaDatas(String code);
+
+    /**
+     * 获取行政区配置数据
+     * @return
+     */
+    public DistrictDO getDistrictDatas(String code);
 }

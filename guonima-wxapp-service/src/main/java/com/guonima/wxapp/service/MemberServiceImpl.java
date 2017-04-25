@@ -39,7 +39,7 @@ public class MemberServiceImpl implements MemberService {
         MemberDO member = getMemberInfo(memberDO);
         String token = null;
         Long id = null;
-        Map<String, Object>  result = null;
+        Map<String, Object> result = null;
         try {
             if (member == null) { // 新增
                 dao.save("memberMapper.insert", memberDO);
@@ -49,7 +49,7 @@ public class MemberServiceImpl implements MemberService {
                 id = member.getId();
             }
             token = (String) RedisClient.get(memberDO.getOpenid());
-            if(StringUtils.isEmpty(token)){
+            if (StringUtils.isEmpty(token)) {
                 // 生成一个token
                 token = SecurityUtil.createToken(memberDO.getOpenid());
                 // 有效时间一天 24 * 60 * 60
@@ -88,6 +88,15 @@ public class MemberServiceImpl implements MemberService {
             memberDO.setOpenid(openid);
         }
         return (String) wxInfo.get("errmsg");
+    }
+
+    @Override
+    public int save(MemberDO memberDO) {
+        try {
+            return dao.update("memberMapper.update", memberDO);
+        } catch (Exception e) {
+            throw new ServiceException("修改用户信息出现错误：", e.getCause());
+        }
     }
 
     /**
