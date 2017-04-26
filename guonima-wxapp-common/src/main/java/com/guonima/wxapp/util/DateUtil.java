@@ -6,5 +6,5 @@ package com.guonima.wxapp.util;
  * @author guonima
  * @create 2017-04-11 14:29
  */
-public class DatesUtil {
+public class DateUtil {
 }

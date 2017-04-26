@@ -13,14 +13,14 @@ public class FeedbackDO implements Serializable {
 
     private Long id; // 唯一标识id
     private Long memberId; // 会员唯一标识id
-    private Integer type; // 反馈类型
+    private String type; // 反馈类型
     private String mobile; // 手机号码
     private String content; // 反馈内容
     private Integer isDispose; // 是否已经处理【1：是；0：否】
-    private Date create_time;
-    private Long create_user;
-    private Date modify_time;
-    private Long modify_user;
+    private Date createTime;
+    private Long createUser;
+    private Date modifyTime;
+    private Long modifyUser;
 
     public FeedbackDO() {
 
@@ -42,11 +42,11 @@ public class FeedbackDO implements Serializable {
         this.memberId = memberId;
     }
 
-    public Integer getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -74,36 +74,36 @@ public class FeedbackDO implements Serializable {
         this.isDispose = isDispose;
     }
 
-    public Date getCreate_time() {
-        return create_time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Long getCreate_user() {
-        return create_user;
+    public Long getCreateUser() {
+        return createUser;
     }
 
-    public void setCreate_user(Long create_user) {
-        this.create_user = create_user;
+    public void setCreateUser(Long createUser) {
+        this.createUser = createUser;
     }
 
-    public Date getModify_time() {
-        return modify_time;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
-    public void setModify_time(Date modify_time) {
-        this.modify_time = modify_time;
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 
-    public Long getModify_user() {
-        return modify_user;
+    public Long getModifyUser() {
+        return modifyUser;
     }
 
-    public void setModify_user(Long modify_user) {
-        this.modify_user = modify_user;
+    public void setModifyUser(Long modifyUser) {
+        this.modifyUser = modifyUser;
     }
 
     @Override
@@ -111,14 +111,14 @@ public class FeedbackDO implements Serializable {
         return "FeedbackDO{" +
                 "id=" + id +
                 ", memberId=" + memberId +
-                ", type=" + type +
+                ", type='" + type + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", content='" + content + '\'' +
                 ", isDispose=" + isDispose +
-                ", create_time=" + create_time +
-                ", create_user=" + create_user +
-                ", modify_time=" + modify_time +
-                ", modify_user=" + modify_user +
+                ", createTime=" + createTime +
+                ", createUser=" + createUser +
+                ", modifyTime=" + modifyTime +
+                ", modifyUser=" + modifyUser +
                 '}';
     }
 }

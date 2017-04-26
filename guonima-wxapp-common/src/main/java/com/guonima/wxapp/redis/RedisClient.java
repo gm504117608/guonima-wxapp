@@ -29,17 +29,22 @@ public class RedisClient {
         int maxWait = Integer.parseInt(resourceBundle.getString("redis.pool.maxWait"));
         String ip = resourceBundle.getString("redis.ip");
         int port = Integer.parseInt(resourceBundle.getString("redis.port"));
+        String password = resourceBundle.getString("redis.password");
+        int timeout = Integer.parseInt(resourceBundle.getString("redis.timeout"));
 
         JedisPoolConfig config = new JedisPoolConfig();
-        //设置最大连接数
+        //控制一个pool可分配多少个jedis实例，通过pool.getResource()来获取；
+        //如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
         config.setMaxTotal(maxActive);
         //设置最大空闲数
+        //控制一个pool最多有多少个状态为idle(空闲的)的jedis实例。
         config.setMaxIdle(maxIdle);
         //设置超时时间
         config.setMaxWaitMillis(maxWait);
 
         //初始化连接池
-        jedisPool = new JedisPool(config, ip, port);
+//        jedisPool = new JedisPool(config, ip, port);
+        jedisPool = new JedisPool(config, ip, port, timeout, password);
     }
 
     /**

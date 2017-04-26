@@ -137,16 +137,4 @@ public class HttpUtil {
         }
         return null;
     }
-
-    public static void main(String[] args) {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("hotelGroupId", "1");
-        map.put("cardId", "10728834");
-        map.put("cardNo", "48025696");
-        map.put("point", "20");
-        map.put("promotionTag", "");
-        map.put("remark", "取消未支付订单扣减20积分");
-        HttpUtil.getResponseByPost("http://115.236.19.4:20021/ipmsmember/membercard/pointPayByInterface", map);
-
-    }
 }

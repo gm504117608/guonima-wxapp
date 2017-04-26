@@ -35,8 +35,8 @@ public class FeedbackController extends BaseController {
     @RequestMapping(method = RequestMethod.POST, value = "/")
     public Response save(@RequestBody FeedbackDO feedbackDO) {
         StringBuilder sb = new StringBuilder();
-        Integer type = feedbackDO.getType();
-        if (type == null) {
+        String type = feedbackDO.getType();
+        if (StringUtils.isEmpty(type)) {
             sb.append("【反馈类型】不能为空;");
         }
         String mobile = feedbackDO.getMobile();
@@ -49,8 +49,8 @@ public class FeedbackController extends BaseController {
         }
         String content = feedbackDO.getContent();
         if (StringUtils.isNotEmpty(content)) {
-            if(!CommonUtil.checkLength(content, 1, 400)){
-                sb.append("【反馈内容】长度在1到400之间;");
+            if(!CommonUtil.checkLength(content, 0, 400)){
+                sb.append("【反馈内容】长度在0到400之间;");
             }
         }
         if (sb.length() != 0) {
