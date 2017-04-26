@@ -23,6 +23,8 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public int save(FeedbackDO feedbackDO) {
         try {
+            feedbackDO.setCreateUser(feedbackDO.getMemberId());
+            feedbackDO.setModifyUser(feedbackDO.getMemberId());
             return dao.save("feedbackMapper.insert", feedbackDO);
         } catch (Exception e) {
             e.printStackTrace();
