@@ -36,10 +36,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Map<String, Object> login(MemberDO memberDO) {
-        MemberDO member = getMemberInfo(memberDO);
+        MemberDO member = getMemberInfoRedis(memberDO);
         String token = null;
         Long id = null;
-        Map<String, Object> result = null;
         try {
             if (member == null) { // 新增
                 dao.save("memberMapper.insert", memberDO);
@@ -48,17 +47,11 @@ public class MemberServiceImpl implements MemberService {
                 dao.update("memberMapper.update", memberDO);
                 id = member.getId();
             }
-            token = (String) RedisClient.get(memberDO.getOpenid());
-            if (StringUtils.isEmpty(token)) {
-                // 生成一个token
-                token = SecurityUtil.createToken(memberDO.getOpenid());
-                // 有效时间一天 24 * 60 * 60
-                RedisClient.set(memberDO.getOpenid(), 86400, token);
-            }
+            token = getToken(memberDO.getOpenid());
         } catch (Exception e) {
             throw new ServiceException("微信登录我方应用出现错误：", e.getCause());
         }
-        result = new HashMap<String, Object>();
+        Map<String, Object>  result = new HashMap<String, Object>();
         result.put("id", id);
         result.put("token", token);
         return result;
@@ -107,5 +100,45 @@ public class MemberServiceImpl implements MemberService {
      */
     private MemberDO getMemberInfo(MemberDO memberDO) {
         return (MemberDO) dao.findForObject("memberMapper.findMemberInfo", memberDO);
+    }
+
+    /**
+     * 获取会员信息，带缓存功能
+     *
+     * @param memberDO
+     * @return
+     */
+    private MemberDO getMemberInfoRedis(MemberDO memberDO) {
+        MemberDO mdo = RedisClient.get(String.valueOf(memberDO.getId()), MemberDO.class);
+        if (null == mdo) {
+            mdo = (MemberDO) dao.findForObject("memberMapper.findMemberInfo", memberDO);
+            try {
+                RedisClient.set(String.valueOf(memberDO.getId()), mdo);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return mdo;
+    }
+
+
+    /**
+     * 获取token
+     *
+     * @return token
+     */
+    private String getToken(String openId) {
+        String token = (String) RedisClient.get(openId);
+        if (StringUtils.isEmpty(token)) {
+            // 生成一个token
+            token = SecurityUtil.createToken(openId);
+            try {
+                // 有效时间一天 24 * 60 * 60
+                RedisClient.set(openId, 86400, token);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return token;
     }
 }

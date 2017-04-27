@@ -17,6 +17,7 @@ public class ConfigurationDO implements Serializable {
     private String description; // 配置信息描述
     private String type; // 配置类型
     private Integer enabled; // 是否激活【1（可用）；0（不可用）】
+    private String remark; // 备注
     private Date createTime;
     private Long createUser;
     private Date modifyTime;
@@ -74,6 +75,14 @@ public class ConfigurationDO implements Serializable {
         this.enabled = enabled;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -115,6 +124,7 @@ public class ConfigurationDO implements Serializable {
                 ", description='" + description + '\'' +
                 ", type='" + type + '\'' +
                 ", enabled=" + enabled +
+                ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +
                 ", createUser=" + createUser +
                 ", modifyTime=" + modifyTime +
