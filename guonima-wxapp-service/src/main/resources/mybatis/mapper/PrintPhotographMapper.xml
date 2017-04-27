@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="printPhotographMapper">
+
+    <sql id="printPhotographColumns">
+        id, member_id, shop_id, description, type, store_url, clipping,
+        typesetting, amount, is_print, remark, create_time, modify_time
+    </sql>
+
+    <resultMap id="printPhotographResultMap" type="printPhotographDO">
+        <id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="description" property="description"/>
+        <result column="type" property="type"/>
+        <result column="store_url" property="storeUrl"/>
+        <result column="clipping" property="clipping"/>
+        <result column="typesetting" property="typesetting"/>
+        <result column="amount" property="amount"/>
+        <result column="is_print" property="isPrint"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+
+    <!-- 新增打印照片信息 -->
+    <insert id="insert" parameterType="printPhotographDO" useGeneratedKeys="true" keyProperty="id">
+        insert into print_photograph (
+          member_id, shop_id, description, type, store_url, clipping,
+          typesetting, amount, remark, create_time, modify_time
+        )values (
+          trim(#{memberId}), trim(#{shopId}), trim(#{description}), trim(#{type}), trim(#{storeUrl}), trim(#{clipping}),
+          trim(#{typesetting}), trim(#{amount}), trim(#{remark}), sysdate(), sysdate()
+        )
+    </insert>
+
+    <!-- 修改打印照片信息 -->
+    <update id="update" parameterType="printPhotographDO">
+        update print_photograph
+        <set>
+            <if test="description != null and description != ''">
+                description = trim(#{description}),
+            </if>
+            <if test="type != null and type != ''">
+                type = trim(#{type}),
+            </if>
+            <if test="storeUrl != null and storeUrl != ''">
+                store_url = trim(#{storeUrl}),
+            </if>
+            <if test="clipping != null and clipping != ''">
+                clipping = trim(#{clipping}),
+            </if>
+            <if test="typesetting != null and typesetting != ''">
+                typesetting = trim(#{typesetting}),
+            </if>
+            <if test="amount != null">
+                amount = trim(#{amount}),
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = trim(#{remark}),
+            </if>
+            modify_time = sysdate()
+        </set>
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="memberId != null">
+                and member_id = trim(#{memberId})
+            </if>
+            <if test="shopId != null">
+                and shop_id = trim(#{shopId})
+            </if>
+        </where>
+    </update>
+
+    <!-- 获取打印照片信息数据 -->
+    <select id="findPrintPhotographInfo" parameterType="printPhotographDO" resultMap="printPhotographResultMap">
+        select
+            <include refid="printPhotographColumns"/>
+        from print_photograph
+        <where>
+            <if test="id != null">
+                and id = trim(#{id})
+            </if>
+            <if test="memberId != null">
+                and member_id = trim(#{memberId})
+            </if>
+            <if test="shopId != null">
+                and shop_id = trim(#{shopId})
+            </if>
+        </where>
+    </select>
+
+</mapper>

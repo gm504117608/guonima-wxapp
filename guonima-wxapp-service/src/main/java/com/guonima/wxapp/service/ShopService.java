@@ -1,6 +1,9 @@
 package com.guonima.wxapp.service;
 
+import com.guonima.wxapp.domain.PrintPhotographDO;
 import com.guonima.wxapp.domain.common.Pageable;
+
+import java.util.List;
 
 /**
  * @author guonima
@@ -15,4 +18,17 @@ public interface ShopService {
      * @return
      */
     public Pageable getShops(int pageNum, int pageSize);
+
+    /**
+     * 保存图片打印的信息
+     * @param printPhotographDO 图片打印信息实体
+     */
+    public int savePrintPhoto(PrintPhotographDO printPhotographDO);
+
+    /**
+     * 获取上图图片信息
+     * @param printPhotographDO 图片打印信息实体
+     * @return
+     */
+    public List<PrintPhotographDO> findPrintPhotographInfo(PrintPhotographDO printPhotographDO);
 }

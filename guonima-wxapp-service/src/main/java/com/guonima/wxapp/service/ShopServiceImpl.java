@@ -3,8 +3,10 @@ package com.guonima.wxapp.service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.guonima.wxapp.dao.DaoSupport;
+import com.guonima.wxapp.domain.PrintPhotographDO;
 import com.guonima.wxapp.domain.ShopDO;
 import com.guonima.wxapp.domain.common.Pageable;
+import com.guonima.wxapp.exception.ServiceException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +39,24 @@ public class ShopServiceImpl implements ShopService {
         result.setTotalNum(page.getPages());
         result.setResult(list);
         return result;
+    }
+
+    @Override
+    public int savePrintPhoto(PrintPhotographDO printPhotographDO) {
+        Long id = printPhotographDO.getId();
+        try {
+            if(id == null){
+                return dao.save("printPhotographMapper.insert", printPhotographDO);
+            }else {
+                return dao.update("printPhotographMapper.update", printPhotographDO);
+            }
+        } catch (Exception e) {
+            throw new ServiceException("上传图片信息保存出现错误： " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<PrintPhotographDO> findPrintPhotographInfo(PrintPhotographDO printPhotographDO) {
+        return (List<PrintPhotographDO>) dao.findForList("printPhotographMapper.findPrintPhotographInfo", printPhotographDO);
     }
 }
