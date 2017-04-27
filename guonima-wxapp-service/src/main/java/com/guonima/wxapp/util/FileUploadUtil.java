@@ -7,6 +7,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -32,8 +34,8 @@ public class FileUploadUtil {
             String savePath = request.getSession().getServletContext().getRealPath("/") + PHOTO_PATH + path;
             File file = new File(savePath);
             //如果文件夹不存在则创建
-            if (!file.exists() && !file.isDirectory()) {
-                file.mkdir();
+            if (!file.exists()) {
+                file.mkdirs();
             }
             //转型为MultipartHttpRequest(重点的所在)
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -47,10 +49,32 @@ public class FileUploadUtil {
             }
             String imgPath = savePath + "/" + fileName;
             imgFile.transferTo(new File(imgPath));
-            return path + "/" + fileName;
+            String time = new SimpleDateFormat("yyMMddHHmmssSSS").format(new Date());
+            String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
+            String newName = time + "." + prefix;
+            renameFile(savePath, fileName, newName);
+            return PHOTO_PATH + path + "/" + newName;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 文件重命名
+     *
+     * @param path    文件目录
+     * @param oldName 原来的文件名
+     * @param newName 新文件名
+     */
+    private static void renameFile(String path, String oldName, String newName) {
+        if (!oldName.equals(newName)) {//新的文件名和以前文件名不同时,才有必要进行重命名
+            File oldFile = new File(path + "/" + oldName);
+            File newFile = new File(path + "/" + newName);
+            if (!oldFile.exists()) {
+                return;//重命名文件不存在
+            }
+            oldFile.renameTo(newFile);
+        }
     }
 }

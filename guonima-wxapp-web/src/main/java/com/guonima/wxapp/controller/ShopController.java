@@ -6,11 +6,10 @@ import com.guonima.wxapp.service.BaseConfigurationService;
 import com.guonima.wxapp.service.ShopService;
 import com.guonima.wxapp.util.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 /**
  * 店铺信息controller类
@@ -46,39 +45,55 @@ public class ShopController extends BaseController {
 
     /**
      * 保存上传图片信息
-     *
      */
     @RequestMapping(method = RequestMethod.POST, value = "/shops/photo/upload")
-    public Response photoUpload(HttpServletRequest request, @RequestBody PrintPhotographDO printPhotographDO) {
+    public Response photoUpload(HttpServletRequest request) {
 
+        String memberId = request.getParameter("memberId");
         StringBuilder sb = new StringBuilder();
-        Long memberId = printPhotographDO.getMemberId();
-        if(null == memberId){
+        if (StringUtils.isEmpty(memberId)) {
             sb.append("会员信息获取不到;");
         }
-        Long shopId = printPhotographDO.getShopId();
-        if(null == shopId){
+        String shopId = request.getParameter("shopId");
+        if (StringUtils.isEmpty(shopId)) {
             sb.append("店铺信息获取不到;");
         }
-        if(sb.length() != 0){
+        if (sb.length() != 0) {
             return error(2000, sb.toString());
         }
         String path = FileUploadUtil.fileUploadAndGetPath(request, "file", (shopId + "/" + memberId + "/"));
-        if(null == path){
+        if (null == path) {
             sb.append("照片上传失败;");
         }
-        String type = printPhotographDO.getType(); //打印类型
-        if(null == type){
+        String type = request.getParameter("type");//打印类型
+        if (StringUtils.isEmpty(type)) {
             sb.append("打印类型不能为空;");
         }
-        if(sb.length() != 0){
+        if (sb.length() != 0) {
             return error(2000, sb.toString());
         }
-        Integer amount = printPhotographDO.getAmount();
-        if(amount == null){ // 默认打印数量为1
-            printPhotographDO.setAmount(1);
+        String amount = request.getParameter("amount");//打印数量
+        if (StringUtils.isEmpty(amount)) { // 默认打印数量为1
+            amount = "1";
         }
+
+        PrintPhotographDO printPhotographDO = new PrintPhotographDO();
+        String id = request.getParameter("id");
+        if(StringUtils.isEmpty(id)){
+            printPhotographDO.setId(null);
+        }else{
+            printPhotographDO.setId(Long.parseLong(id));
+        }
+        printPhotographDO.setMemberId(Long.parseLong(memberId));
+        printPhotographDO.setShopId(Long.parseLong(shopId));
+        printPhotographDO.setClipping(request.getParameter("clipping"));
+        printPhotographDO.setTypesetting(request.getParameter("typesetting"));
+        printPhotographDO.setAmount(Integer.parseInt(amount));
+        printPhotographDO.setDescription(request.getParameter("description"));
+        printPhotographDO.setType(request.getParameter("type"));
+        printPhotographDO.setRemark(request.getParameter("remark"));
         printPhotographDO.setStoreUrl(path);
+
         return success(shopService.savePrintPhoto(printPhotographDO));
     }
 }

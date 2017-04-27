@@ -16,6 +16,7 @@
         <typeAlias type="com.guonima.wxapp.domain.DistrictDO" alias="districtDO"/>
         <typeAlias type="com.guonima.wxapp.domain.FeedbackDO" alias="feedbackDO"/>
         <typeAlias type="com.guonima.wxapp.domain.ConfigurationDO" alias="configurationDO"/>
+        <typeAlias type="com.guonima.wxapp.domain.PrintPhotographDO" alias="printPhotographDO"/>
     </typeAliases>
 
     <plugins>
