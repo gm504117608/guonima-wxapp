@@ -29,19 +29,19 @@
         from base_configuration
         <where>
             <if test="id != null">
-                id = trim(#{id})
+                and id = trim(#{id})
             </if>
             <if test="parentId != null">
-                parent_id = trim(#{parentId})
+                and parent_id = trim(#{parentId})
             </if>
             <if test="code != null and code != ''">
-                code = trim(#{code})
+                and code = trim(#{code})
             </if>
             <if test="type != null and type != ''">
-                type = trim(#{type})
+                and type = trim(#{type})
             </if>
             <if test="description != null and description != ''">
-                description like CONCAT(trim(#{description}), '%')
+                and description like CONCAT(trim(#{description}), '%')
             </if>
         </where>
     </select>

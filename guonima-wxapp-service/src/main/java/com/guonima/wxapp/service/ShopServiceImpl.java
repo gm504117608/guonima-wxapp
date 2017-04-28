@@ -59,4 +59,11 @@ public class ShopServiceImpl implements ShopService {
     public List<PrintPhotographDO> findPrintPhotographInfo(PrintPhotographDO printPhotographDO) {
         return (List<PrintPhotographDO>) dao.findForList("printPhotographMapper.findPrintPhotographInfo", printPhotographDO);
     }
+
+    @Override
+    public PrintPhotographDO findPrintPhotographInfo(Long id) {
+        PrintPhotographDO printPhotographDO = new PrintPhotographDO();
+        printPhotographDO.setId(id);
+        return (PrintPhotographDO) dao.findForObject("printPhotographMapper.findPrintPhotographInfo", printPhotographDO);
+    }
 }

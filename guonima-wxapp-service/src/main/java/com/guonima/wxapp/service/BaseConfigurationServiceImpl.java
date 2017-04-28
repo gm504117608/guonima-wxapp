@@ -32,6 +32,6 @@ public class BaseConfigurationServiceImpl implements BaseConfigurationService {
         ConfigurationDO cdo = new ConfigurationDO();
         cdo.setType(type);
         cdo.setCode(code);
-        return (ConfigurationDO) dao.findForList("configurationMapper.findBaseConfigurationData", cdo);
+        return (ConfigurationDO) dao.findForObject("configurationMapper.findBaseConfigurationData", cdo);
     }
 }

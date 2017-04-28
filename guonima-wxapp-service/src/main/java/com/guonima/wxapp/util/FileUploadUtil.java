@@ -27,37 +27,37 @@ public class FileUploadUtil {
      * @return
      */
     public static String fileUploadAndGetPath(HttpServletRequest request, String imgName, String path) {
+        if (StringUtils.isEmpty(imgName) || StringUtils.isEmpty(path)) {
+            return null;
+        }
+        String savePath = request.getSession().getServletContext().getRealPath("/") + PHOTO_PATH + path;
+        File file = new File(savePath);
+        //如果文件夹不存在则创建
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        //转型为MultipartHttpRequest(重点的所在)
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        //获得图片（根据前台的name名称得到上传的文件）
+        MultipartFile imgFile = multipartRequest.getFile(imgName);
+        //获取上传文件的文件名称
+        String fileName = imgFile.getOriginalFilename();
+        //文件名为空返回空地址
+        if (StringUtils.isEmpty(fileName)) {
+            return null;
+        }
+        String imgPath = savePath + fileName;
         try {
-            if (StringUtils.isEmpty(imgName) || StringUtils.isEmpty(path)) {
-                return null;
-            }
-            String savePath = request.getSession().getServletContext().getRealPath("/") + PHOTO_PATH + path;
-            File file = new File(savePath);
-            //如果文件夹不存在则创建
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            //转型为MultipartHttpRequest(重点的所在)
-            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-            //获得图片（根据前台的name名称得到上传的文件）
-            MultipartFile imgFile = multipartRequest.getFile(imgName);
-            //获取上传文件的文件名称
-            String fileName = imgFile.getOriginalFilename();
-            //文件名为空返回空地址
-            if (StringUtils.isEmpty(fileName)) {
-                return null;
-            }
-            String imgPath = savePath + "/" + fileName;
             imgFile.transferTo(new File(imgPath));
-            String time = new SimpleDateFormat("yyMMddHHmmssSSS").format(new Date());
-            String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
-            String newName = time + "." + prefix;
-            renameFile(savePath, fileName, newName);
-            return PHOTO_PATH + path + "/" + newName;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
+        String time = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+        String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
+        String newName = time + "." + prefix;
+        renameFile(savePath, fileName, newName);
+        return PHOTO_PATH + path + newName;
     }
 
     /**
@@ -69,8 +69,8 @@ public class FileUploadUtil {
      */
     private static void renameFile(String path, String oldName, String newName) {
         if (!oldName.equals(newName)) {//新的文件名和以前文件名不同时,才有必要进行重命名
-            File oldFile = new File(path + "/" + oldName);
-            File newFile = new File(path + "/" + newName);
+            File oldFile = new File(path + oldName);
+            File newFile = new File(path + newName);
             if (!oldFile.exists()) {
                 return;//重命名文件不存在
             }

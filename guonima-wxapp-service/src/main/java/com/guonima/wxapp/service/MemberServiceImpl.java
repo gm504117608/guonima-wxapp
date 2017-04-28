@@ -49,7 +49,7 @@ public class MemberServiceImpl implements MemberService {
             }
             token = getToken(memberDO.getOpenid());
         } catch (Exception e) {
-            throw new ServiceException("微信登录我方应用出现错误：", e.getCause());
+            throw new ServiceException("微信登录我方应用出现错误：" + e.getMessage());
         }
         Map<String, Object>  result = new HashMap<String, Object>();
         result.put("id", id);

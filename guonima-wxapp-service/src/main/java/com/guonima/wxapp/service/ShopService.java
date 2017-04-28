@@ -31,4 +31,11 @@ public interface ShopService {
      * @return
      */
     public List<PrintPhotographDO> findPrintPhotographInfo(PrintPhotographDO printPhotographDO);
+
+    /**
+     * 获取上图图片信息
+     * @param id 打印图片唯一标识id
+     * @return
+     */
+    public PrintPhotographDO findPrintPhotographInfo(Long id);
 }

@@ -5,17 +5,20 @@ import java.util.Date;
 
 /**
  * @author guonima
- * @create 2017-04-27 17:33
+ * @create 2017-04-28 12:00
  */
-public class PrintPhotographDO implements Serializable {
+public class PrintPhotographDTO implements Serializable {
 
     private static final long serialVersionUID = 4697983666949763147L;
+
 
     private Long id; //唯一标识id
     private Long memberId; //会员唯一标识id
     private Long shopId; //店铺唯一标识id
     private String description; //照片描述
     private String type; //打印类型
+    private String typeName; //打印类型名称
+    private String typeRemark; //打印类型备注
     private String storeUrl; //照片存储路径
     private String clipping; //裁剪方式
     private String typesetting; //排版方式
@@ -24,7 +27,7 @@ public class PrintPhotographDO implements Serializable {
     private Date createTime;
     private Date modifyTime;
 
-    public PrintPhotographDO() {
+    public PrintPhotographDTO() {
     }
 
     public Long getId() {
@@ -65,6 +68,22 @@ public class PrintPhotographDO implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getTypeRemark() {
+        return typeRemark;
+    }
+
+    public void setTypeRemark(String typeRemark) {
+        this.typeRemark = typeRemark;
     }
 
     public String getStoreUrl() {
@@ -125,12 +144,14 @@ public class PrintPhotographDO implements Serializable {
 
     @Override
     public String toString() {
-        return "PrintPhotographDO{" +
+        return "PrintPhotographDTO{" +
                 "id=" + id +
                 ", memberId=" + memberId +
                 ", shopId=" + shopId +
                 ", description='" + description + '\'' +
                 ", type='" + type + '\'' +
+                ", typeName='" + typeName + '\'' +
+                ", typeRemark='" + typeRemark + '\'' +
                 ", storeUrl='" + storeUrl + '\'' +
                 ", clipping='" + clipping + '\'' +
                 ", typesetting='" + typesetting + '\'' +
