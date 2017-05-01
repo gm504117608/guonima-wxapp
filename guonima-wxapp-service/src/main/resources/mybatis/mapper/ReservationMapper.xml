@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reservationMapper">
+
+<sql id="reservationColumns">
+    id, member_id, shop_id, order_no, cost, type,
+    remark, create_time, modify_time
+</sql>
+
+<resultMap id="reservationResultMap" type="reservationDO">
+    <id column="id" property="id"/>
+    <result column="member_id" property="memberId"/>
+    <result column="shop_id" property="shopId"/>
+    <result column="order_no" property="orderNo"/>
+    <result column="cost" property="cost"/>
+    <result column="type" property="type"/>
+    <result column="remark" property="remark"/>
+    <result column="create_time" property="createTime"/>
+    <result column="modify_time" property="modifyTime"/>
+</resultMap>
+
+<!-- 新增订单信息 -->
+<insert id="insert" parameterType="reservationDO" useGeneratedKeys="true" keyProperty="id">
+    insert into reservation (
+    member_id, shop_id, order_no, cost, type,
+    remark, create_time, modify_time
+    )values (
+    trim(#{memberId}), trim(#{shopId}), trim(#{orderNo}), trim(#{cost}), trim(#{type}),
+    trim(#{remark}), sysdate(), sysdate()
+  )
+</insert>
+
+    <!-- 修改订单信息 -->
+    <update id="update" parameterType="reservationDO">
+        update reservation
+        <set>
+            <if test="cost != null and cost != ''">
+                cost = trim(#{cost}),
+            </if>
+            <if test="type != null and type != ''">
+                type = trim(#{type}),
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = trim(#{remark}),
+            </if>
+            modify_time = sysdate()
+        </set>
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+                and order_no = trim(#{orderNo})
+            </if>
+        </where>
+    </update>
+
+<!-- 获取订单数据 -->
+<select id="findReservationInfo" parameterType="reservationDO" resultMap="reservationResultMap">
+    select
+    <include refid="reservationColumns"/>
+    from reservation
+    <where>
+        <if test="id != null">
+            and id = trim(#{id})
+        </if>
+        <if test="shopId != null">
+            and shop_id = trim(#{shopId})
+        </if>
+        <if test="memberId != null">
+            and member_id = trim(#{memberId})
+        </if>
+        <if test="orderNo != null and orderNo != ''">
+            and order_no = trim(#{orderNo})
+        </if>
+        <if test="type != null and type != ''">
+            and type = trim(#{type})
+        </if>
+    </where>
+</select>
+
+</mapper>

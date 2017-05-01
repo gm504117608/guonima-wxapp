@@ -21,7 +21,7 @@ public class OrderUtil {
     public static String createOrderNo() {
         StringBuilder orderNo = new StringBuilder("R000");
         // jdk1.8的时间类是线程安全的
-        orderNo.append(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmssSSS")));
+        orderNo.append(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")));
         orderNo.append((System.currentTimeMillis() / 1000 + "").substring(5));
         orderNo.append((System.nanoTime() + "").substring(8).substring(0, 5));
         return orderNo.toString();

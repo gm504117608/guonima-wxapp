@@ -43,8 +43,8 @@ public class RedisClient {
         config.setMaxWaitMillis(maxWait);
 
         //初始化连接池
-//        jedisPool = new JedisPool(config, ip, port);
-        jedisPool = new JedisPool(config, ip, port, timeout, password);
+        jedisPool = new JedisPool(config, ip, port);
+//        jedisPool = new JedisPool(config, ip, port, timeout, password);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.guonima.wxapp.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -19,6 +20,7 @@ public class PrintPhotographDTO implements Serializable {
     private String type; //打印类型
     private String typeName; //打印类型名称
     private String typeRemark; //打印类型备注
+    private BigDecimal price; // 打印价格
     private String storeUrl; //照片存储路径
     private String clipping; //裁剪方式
     private String typesetting; //排版方式
@@ -84,6 +86,14 @@ public class PrintPhotographDTO implements Serializable {
 
     public void setTypeRemark(String typeRemark) {
         this.typeRemark = typeRemark;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public String getStoreUrl() {
@@ -152,6 +162,7 @@ public class PrintPhotographDTO implements Serializable {
                 ", type='" + type + '\'' +
                 ", typeName='" + typeName + '\'' +
                 ", typeRemark='" + typeRemark + '\'' +
+                ", price='" + price + '\'' +
                 ", storeUrl='" + storeUrl + '\'' +
                 ", clipping='" + clipping + '\'' +
                 ", typesetting='" + typesetting + '\'' +

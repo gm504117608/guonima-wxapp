@@ -4,6 +4,7 @@ import com.guonima.wxapp.Response;
 import com.guonima.wxapp.domain.ConfigurationDO;
 import com.guonima.wxapp.domain.PrintPhotographDO;
 import com.guonima.wxapp.domain.PrintPhotographDTO;
+import com.guonima.wxapp.domain.ShopPrintCostConfigDO;
 import com.guonima.wxapp.service.BaseConfigurationService;
 import com.guonima.wxapp.service.ShopService;
 import com.guonima.wxapp.util.FileUploadUtil;
@@ -29,9 +30,6 @@ public class ShopController extends BaseController {
     @Autowired
     private ShopService shopService;
 
-    @Autowired
-    private BaseConfigurationService baseConfigurationService;
-
     @RequestMapping(method = RequestMethod.GET, value = "/shops")
     public Response getShopInfo(@RequestParam int pageNum, @RequestParam int pageSize) {
         if (pageNum == 0) {
@@ -43,9 +41,9 @@ public class ShopController extends BaseController {
         return success(shopService.getShops(pageNum, pageSize));
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/shops/photo/type")
-    public Response getShopPhotoType() {
-        return success(baseConfigurationService.getBaseConfiguration("photoType"));
+    @RequestMapping(method = RequestMethod.GET, value = "/shops/printCost/{shopId}")
+    public Response getShopPrintCostConfig(@PathVariable("shopId") Long shopId) {
+        return success(shopService.getShopPrintCostConfigList(shopId));
     }
 
     /**
@@ -121,6 +119,22 @@ public class ShopController extends BaseController {
         return success(ppdto);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/shops/payment/{ids}")
+    public Response getPaymentPrintPhoto(@PathVariable("ids") String ids){
+        String[] idArray = ids.split(",");
+        if(null == idArray || idArray.length == 0){
+            return error(2000, "获取打印照片信息的唯一标识不存在");
+        }
+        List<PrintPhotographDTO> result = new ArrayList<PrintPhotographDTO>();
+        for(String id : idArray){
+            PrintPhotographDO ppdo = shopService.findPrintPhotographInfo(Long.valueOf(id));
+            PrintPhotographDTO ppdto = new PrintPhotographDTO();
+            PrintPhotographDO2PrintPhotographDTO(ppdo, ppdto);
+            result.add(ppdto);
+        }
+        return success(result);
+    }
+
     /**
      * 两个对象之间相互赋值处理
      * @param printPhotographDO 打印照片数据库实体
@@ -132,9 +146,10 @@ public class ShopController extends BaseController {
         printPhotographDTO.setShopId(printPhotographDO.getShopId());
         printPhotographDTO.setDescription(printPhotographDO.getDescription());
         printPhotographDTO.setType(printPhotographDO.getType());
-        ConfigurationDO cd = baseConfigurationService.getBaseConfiguration("photoType", printPhotographDO.getType());
-        printPhotographDTO.setTypeName(cd.getDescription());
-        printPhotographDTO.setTypeRemark(cd.getRemark());
+        ShopPrintCostConfigDO spccdo = shopService.getShopPrintCostConfig(printPhotographDO.getType());
+        printPhotographDTO.setTypeName(spccdo.getDescription());
+        printPhotographDTO.setTypeRemark(spccdo.getRemark());
+        printPhotographDTO.setPrice(spccdo.getPrice());
         printPhotographDTO.setStoreUrl(printPhotographDO.getStoreUrl());
         printPhotographDTO.setClipping(printPhotographDO.getClipping());
         printPhotographDTO.setTypesetting(printPhotographDO.getTypesetting());

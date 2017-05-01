@@ -17,6 +17,9 @@
         <typeAlias type="com.guonima.wxapp.domain.FeedbackDO" alias="feedbackDO"/>
         <typeAlias type="com.guonima.wxapp.domain.ConfigurationDO" alias="configurationDO"/>
         <typeAlias type="com.guonima.wxapp.domain.PrintPhotographDO" alias="printPhotographDO"/>
+        <typeAlias type="com.guonima.wxapp.domain.ShopPrintCostConfigDO" alias="shopPrintCostConfigDO"/>
+        <typeAlias type="com.guonima.wxapp.domain.ReservationDO" alias="reservationDO"/>
+        <typeAlias type="com.guonima.wxapp.domain.ReservationPrintPhotographDO" alias="reservationPrintPhotographDO"/>
     </typeAliases>
 
     <plugins>

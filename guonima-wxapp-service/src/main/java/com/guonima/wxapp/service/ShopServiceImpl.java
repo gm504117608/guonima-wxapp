@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.guonima.wxapp.dao.DaoSupport;
 import com.guonima.wxapp.domain.PrintPhotographDO;
 import com.guonima.wxapp.domain.ShopDO;
+import com.guonima.wxapp.domain.ShopPrintCostConfigDO;
 import com.guonima.wxapp.domain.common.Pageable;
 import com.guonima.wxapp.exception.ServiceException;
 import org.apache.log4j.Logger;
@@ -65,5 +66,19 @@ public class ShopServiceImpl implements ShopService {
         PrintPhotographDO printPhotographDO = new PrintPhotographDO();
         printPhotographDO.setId(id);
         return (PrintPhotographDO) dao.findForObject("printPhotographMapper.findPrintPhotographInfo", printPhotographDO);
+    }
+
+    @Override
+    public List<ShopPrintCostConfigDO> getShopPrintCostConfigList(Long shopId) {
+        ShopPrintCostConfigDO shopPrintCostConfigDO = new ShopPrintCostConfigDO();
+        shopPrintCostConfigDO.setShopId(shopId);
+        return (List<ShopPrintCostConfigDO>) dao.findForList("shopPrintCostConfigMapper.findShopPrintCostConfigInfo", shopPrintCostConfigDO);
+    }
+
+    @Override
+    public ShopPrintCostConfigDO getShopPrintCostConfig(String code) {
+        ShopPrintCostConfigDO shopPrintCostConfigDO = new ShopPrintCostConfigDO();
+        shopPrintCostConfigDO.setCode(code);
+        return (ShopPrintCostConfigDO) dao.findForObject("shopPrintCostConfigMapper.findShopPrintCostConfigInfo", shopPrintCostConfigDO);
     }
 }

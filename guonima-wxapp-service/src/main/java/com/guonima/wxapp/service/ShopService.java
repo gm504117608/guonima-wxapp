@@ -1,6 +1,7 @@
 package com.guonima.wxapp.service;
 
 import com.guonima.wxapp.domain.PrintPhotographDO;
+import com.guonima.wxapp.domain.ShopPrintCostConfigDO;
 import com.guonima.wxapp.domain.common.Pageable;
 
 import java.util.List;
@@ -38,4 +39,19 @@ public interface ShopService {
      * @return
      */
     public PrintPhotographDO findPrintPhotographInfo(Long id);
+
+    /**
+     * 通过店铺ID获取店铺下面配置的打印花费信息
+     * @param shopId
+     * @return
+     */
+    public List<ShopPrintCostConfigDO> getShopPrintCostConfigList(Long shopId);
+
+    /**
+     * 通过打印话费代码获取店铺下面配置的打印花费信息
+     * @param code
+     * @return
+     */
+    public ShopPrintCostConfigDO getShopPrintCostConfig(String code);
+
 }
