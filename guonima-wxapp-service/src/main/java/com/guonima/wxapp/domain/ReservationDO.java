@@ -18,7 +18,7 @@ public class ReservationDO implements Serializable {
     private Long shopId; // 店铺唯一标识
     private String orderNo; // 订单号
     private BigDecimal cost; // 话费金额
-    private String type; // 订单状态
+    private String status; // 订单状态
     private String remark; // 备注
     private Date createTime; // 创建时间
     private Date modifyTime; // 修改时间
@@ -66,12 +66,12 @@ public class ReservationDO implements Serializable {
         this.cost = cost;
     }
 
-    public String getType() {
-        return type;
+    public String getStatus() {
+        return status;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getRemark() {
@@ -106,7 +106,7 @@ public class ReservationDO implements Serializable {
                 ", shopId=" + shopId +
                 ", orderNo='" + orderNo + '\'' +
                 ", cost=" + cost +
-                ", type='" + type + '\'' +
+                ", status='" + status + '\'' +
                 ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +
                 ", modifyTime=" + modifyTime +

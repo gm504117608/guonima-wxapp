@@ -2,17 +2,17 @@ package com.guonima.wxapp.controller;
 
 import com.guonima.wxapp.Response;
 import com.guonima.wxapp.domain.*;
+import com.guonima.wxapp.service.BaseConfigurationService;
 import com.guonima.wxapp.service.OrderService;
 import com.guonima.wxapp.service.ShopService;
 import com.guonima.wxapp.util.OrderUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 订单相关信息controller
@@ -29,6 +29,9 @@ public class OrderController extends BaseController {
 
     @Autowired
     private ShopService shopService;
+
+    @Autowired
+    private BaseConfigurationService baseConfigurationService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/orders")
     public Response savePrintPhotoOrder(@RequestBody ReservationDTO reservationDTO) {
@@ -85,6 +88,45 @@ public class OrderController extends BaseController {
         return success(null);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/orders/config/{type}")
+    public Response getBaseConfiguration(@PathVariable("type") String type) {
+       return success(baseConfigurationService.getBaseConfiguration(type));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/orders")
+    public Response getPrintPhotoOrderInfo(@RequestParam Long memberId, @RequestParam String status) {
+        StringBuilder sb = new StringBuilder();
+        if (memberId == null) {
+            sb.append("会员id不能为空;");
+        }
+        if (sb.length() != 0) {
+            error(2000, sb.toString());
+        }
+        List<ReservationDO> list = orderService.findReservationInfo(null, memberId, status);
+        ReservationDTO rdto = null;
+        ShopDO sdo = null;
+        ConfigurationDO cdo = null;
+        List<ReservationDTO> result = new ArrayList<ReservationDTO>();
+        for(ReservationDO rdo : list){
+            rdto = new ReservationDTO();
+            rdto.setId(rdo.getId());
+            rdto.setMemberId(rdo.getMemberId());
+            rdto.setShopId(rdo.getShopId());
+            sdo = shopService.getShopsInfo(rdo.getShopId());
+            rdto.setShopName(sdo.getName());
+            rdto.setOrderNo(rdo.getOrderNo());
+            rdto.setCost(rdo.getCost());
+            rdto.setStatus(rdo.getStatus());
+            cdo = baseConfigurationService.getBaseConfiguration("orderStatus", rdo.getStatus());
+            rdto.setStatusName(cdo.getDescription());
+            rdto.setRemark(rdo.getRemark());
+            rdto.setCreateTime(rdo.getCreateTime());
+            rdto.setModifyTime(rdo.getModifyTime());
+            result.add(rdto);
+        }
+        return success(result);
+    }
+
     /**
      * 订单实体之间相互转换
      * @param rdto 界面传入实体
@@ -93,7 +135,7 @@ public class OrderController extends BaseController {
     private void reservationDTO2ReservationDO(ReservationDTO rdto, ReservationDO rdo){
         rdo.setMemberId(rdto.getMemberId());
         rdo.setShopId(rdto.getShopId());
-        rdo.setType("S01");
+        rdo.setStatus("S01");
         rdo.setCost(calculatePrintPhotoCost(rdto.getPrintPhotographIds()));
         rdo.setRemark("照片打印订单信息生成");
     }

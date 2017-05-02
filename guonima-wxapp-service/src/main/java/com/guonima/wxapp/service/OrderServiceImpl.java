@@ -88,4 +88,13 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException("更新订单信息出现错误： " + e.getMessage());
         }
     }
+
+    @Override
+    public List<ReservationDO> findReservationInfo (String orderNo, Long memberId, String status){
+        ReservationDO reservationDO = new ReservationDO();
+        reservationDO.setOrderNo(orderNo);
+        reservationDO.setMemberId(memberId);
+        reservationDO.setStatus(status);
+        return (List<ReservationDO>) dao.findForList("reservationMapper.findReservationInfo", reservationDO);
+    }
 }

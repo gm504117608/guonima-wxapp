@@ -29,7 +29,7 @@ public class ShopServiceImpl implements ShopService {
 
 
     @Override
-    public Pageable getShops(int pageNum, int pageSize) {
+    public Pageable getShopsInfo(int pageNum, int pageSize) {
         Page<ShopDO> page = PageHelper.startPage(pageNum, pageSize);
         List<ShopDO> list = (List<ShopDO>) dao.findForList("shopMapper.findShopInfo", new ShopDO());
         // 取分页信息
@@ -40,6 +40,13 @@ public class ShopServiceImpl implements ShopService {
         result.setTotalNum(page.getPages());
         result.setResult(list);
         return result;
+    }
+
+    @Override
+    public ShopDO getShopsInfo(Long id){
+        ShopDO sdo = new ShopDO();
+        sdo.setId(id);
+        return (ShopDO)dao.findForObject("shopMapper.findShopInfo", sdo);
     }
 
     @Override

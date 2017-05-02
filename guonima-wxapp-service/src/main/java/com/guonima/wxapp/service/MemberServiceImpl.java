@@ -109,11 +109,11 @@ public class MemberServiceImpl implements MemberService {
      * @return
      */
     private MemberDO getMemberInfoRedis(MemberDO memberDO) {
-        MemberDO mdo = RedisClient.get(String.valueOf(memberDO.getId()), MemberDO.class);
+        MemberDO mdo = RedisClient.get("member-" + memberDO.getOpenid(), MemberDO.class);
         if (null == mdo) {
             mdo = (MemberDO) dao.findForObject("memberMapper.findMemberInfo", memberDO);
             try {
-                RedisClient.set(String.valueOf(memberDO.getId()), mdo);
+                RedisClient.set(String.valueOf("member-" + memberDO.getOpenid()), mdo);
             } catch(Exception e) {
                 e.printStackTrace();
             }
@@ -128,13 +128,13 @@ public class MemberServiceImpl implements MemberService {
      * @return token
      */
     private String getToken(String openId) {
-        String token = (String) RedisClient.get(openId);
+        String token = (String) RedisClient.get("token-" + openId);
         if (StringUtils.isEmpty(token)) {
             // 生成一个token
             token = SecurityUtil.createToken(openId);
             try {
                 // 有效时间一天 24 * 60 * 60
-                RedisClient.set(openId, 86400, token);
+                RedisClient.set("token-" + openId, 86400, token);
             } catch(Exception e) {
                 e.printStackTrace();
             }

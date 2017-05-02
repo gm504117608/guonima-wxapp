@@ -1,6 +1,7 @@
 package com.guonima.wxapp.service;
 
 import com.guonima.wxapp.domain.PrintPhotographDO;
+import com.guonima.wxapp.domain.ShopDO;
 import com.guonima.wxapp.domain.ShopPrintCostConfigDO;
 import com.guonima.wxapp.domain.common.Pageable;
 
@@ -18,7 +19,14 @@ public interface ShopService {
      * @param pageSize 每页大小
      * @return
      */
-    public Pageable getShops(int pageNum, int pageSize);
+    public Pageable getShopsInfo(int pageNum, int pageSize);
+
+    /**
+     * 获取店铺信息
+     * @param id  店铺唯一标识id
+     * @return
+     */
+    public ShopDO getShopsInfo(Long id);
 
     /**
      * 保存图片打印的信息

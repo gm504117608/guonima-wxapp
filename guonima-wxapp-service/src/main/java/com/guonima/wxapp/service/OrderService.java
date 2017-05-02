@@ -2,6 +2,8 @@ package com.guonima.wxapp.service;
 
 import com.guonima.wxapp.domain.ReservationDO;
 
+import java.util.List;
+
 /**
  * @author : guonima
  * @create : 2017-04-30-00:09
@@ -40,5 +42,13 @@ public interface OrderService {
      */
     public int updateReservation(ReservationDO reservationDO);
 
+    /**
+     * 获取订单实体信息
+     * @param orderNo 订单号
+     * @param memberId 会员id
+     * @param status 订单状态
+     * @return
+     */
+    public List<ReservationDO> findReservationInfo (String orderNo, Long memberId, String status);
 
 }

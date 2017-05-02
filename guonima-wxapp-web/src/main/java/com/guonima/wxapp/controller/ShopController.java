@@ -38,7 +38,7 @@ public class ShopController extends BaseController {
         if (pageSize == 0) {
             pageSize = 10;
         }
-        return success(shopService.getShops(pageNum, pageSize));
+        return success(shopService.getShopsInfo(pageNum, pageSize));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/shops/printCost/{shopId}")

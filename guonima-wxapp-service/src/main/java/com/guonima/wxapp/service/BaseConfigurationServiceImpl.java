@@ -1,7 +1,9 @@
 package com.guonima.wxapp.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.guonima.wxapp.dao.DaoSupport;
 import com.guonima.wxapp.domain.ConfigurationDO;
+import com.guonima.wxapp.redis.RedisClient;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +24,39 @@ public class BaseConfigurationServiceImpl implements BaseConfigurationService {
 
     @Override
     public List<ConfigurationDO> getBaseConfiguration(String type) {
-        ConfigurationDO cdo = new ConfigurationDO();
-        cdo.setType(type);
-        return (List<ConfigurationDO>) dao.findForList("configurationMapper.findBaseConfigurationData", cdo);
+        return getBaseConfigurationInfoRedis(type);
     }
 
     @Override
     public ConfigurationDO getBaseConfiguration(String type, String code) {
-        ConfigurationDO cdo = new ConfigurationDO();
-        cdo.setType(type);
-        cdo.setCode(code);
-        return (ConfigurationDO) dao.findForObject("configurationMapper.findBaseConfigurationData", cdo);
+        List<ConfigurationDO> list = getBaseConfigurationInfoRedis(type);
+        for(ConfigurationDO cdo : list){
+            if(cdo.getCode().equals(code)){
+                return cdo;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取基础配置信息表中指定 类型 的信息
+     *
+     * @param type 配置类型
+     * @return
+     */
+    private List<ConfigurationDO> getBaseConfigurationInfoRedis(String type) {
+        List<ConfigurationDO> list = RedisClient.lGet(type, ConfigurationDO.class);
+        if (null == list) {
+            log.info("取缓存中配置类型为【" + type + "】的配置信息");
+            ConfigurationDO cdo = new ConfigurationDO();
+            cdo.setType(type);
+            list = (List<ConfigurationDO>) dao.findForList("configurationMapper.findBaseConfigurationData", cdo);
+            try {
+                RedisClient.set(type, list);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
     }
 }

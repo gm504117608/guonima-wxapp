@@ -43,8 +43,8 @@ public class RedisClient {
         config.setMaxWaitMillis(maxWait);
 
         //初始化连接池
-        jedisPool = new JedisPool(config, ip, port);
-//        jedisPool = new JedisPool(config, ip, port, timeout, password);
+//        jedisPool = new JedisPool(config, ip, port);
+        jedisPool = new JedisPool(config, ip, port, timeout, password);
     }
 
     /**
@@ -190,6 +190,25 @@ public class RedisClient {
             jedis = jedisPool.getResource();
             String value = jedis.get(key);
             return JSON.parseObject(value, clazz);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+    }
+
+    /**
+     * 根据key 获取对象
+     *
+     * @param key
+     */
+    public static <T> List<T> lGet(String key, Class<T> clazz) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            String value = jedis.get(key);
+            return JSON.parseArray(value, clazz);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
