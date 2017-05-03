@@ -93,6 +93,36 @@ public class ShopController extends BaseController {
         return success(shopService.savePrintPhoto(printPhotographDO));
     }
 
+    /**
+     * 修改上传图片附属信息， 不包含图片信息
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/shops/photos")
+    public Response photoUploadNotHasPhoto(@RequestBody PrintPhotographDO printPhotographDO) {
+
+        StringBuilder sb = new StringBuilder();
+        Long id = printPhotographDO.getId();
+        if (id == null) {
+            sb.append("照片信息获取不到;");
+        }
+        Long memberId = printPhotographDO.getMemberId();
+        if (memberId == null) {
+            sb.append("会员信息获取不到;");
+        }
+        Long shopId = printPhotographDO.getShopId();
+        if (shopId == null) {
+            sb.append("店铺信息获取不到;");
+        }
+        String type = printPhotographDO.getType();//打印类型
+        if (StringUtils.isEmpty(type)) {
+            sb.append("打印类型不能为空;");
+        }
+        if (sb.length() != 0) {
+            return error(2000, sb.toString());
+        }
+        return success(shopService.savePrintPhoto(printPhotographDO));
+    }
+
+
 
     @RequestMapping(method = RequestMethod.GET, value = "/shops/photos/{shopId}/{memberId}")
     public Response getPrintPhotographInfo(@PathVariable("shopId") Long shopId, @PathVariable("memberId") Long memberId) {
