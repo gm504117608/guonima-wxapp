@@ -1,8 +1,11 @@
 package com.guonima.wxapp.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.guonima.wxapp.dao.DaoSupport;
 import com.guonima.wxapp.domain.ReservationDO;
 import com.guonima.wxapp.domain.ReservationPrintPhotographDO;
+import com.guonima.wxapp.domain.common.Pageable;
 import com.guonima.wxapp.exception.ServiceException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -97,4 +100,23 @@ public class OrderServiceImpl implements OrderService {
         reservationDO.setStatus(status);
         return (List<ReservationDO>) dao.findForList("reservationMapper.findReservationInfo", reservationDO);
     }
+
+    @Override
+    public Pageable findReservationInfo (Long memberId, String status, int pageNum, int pageSize){
+        ReservationDO reservationDO = new ReservationDO();
+        reservationDO.setMemberId(memberId);
+        reservationDO.setStatus(status);
+        Page<ReservationDO> page = PageHelper.startPage(pageNum, pageSize);
+        List<ReservationDO> list = (List<ReservationDO>) dao.findForList("reservationMapper.findReservationInfo", reservationDO);
+        // 取分页信息
+        Pageable result = new Pageable();
+        result.setPageNum(page.getPageNum());
+        result.setPageSize(page.getPageSize());
+        result.setTotalRows(page.getTotal());//获取总记录数
+        result.setTotalNum(page.getPages());
+        result.setResult(list);
+        return result;
+    }
+
+
 }

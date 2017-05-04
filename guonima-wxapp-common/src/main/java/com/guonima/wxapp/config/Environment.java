@@ -28,6 +28,20 @@ public class Environment implements Serializable {
      */
     public static String WX_SECRET;
 
+    /**
+     * 百度地图ak的值
+     */
+    public static String BAIDU_AK;
+    /**
+     * 高德地图key的值
+     */
+    public static String GAODE_KEY;
+
+    /**
+     * 地图定位解析地址失败之后默认查询的城市
+     */
+    public static String LOCATION_CITY_DESCRIPTION;
+
     static {
         //读取属性文件 sysconfig.properties
 
@@ -35,6 +49,9 @@ public class Environment implements Serializable {
         WX_CODE_URL = resourceBundle.getString("wx.code.url");
         WX_APPID = resourceBundle.getString("wx.appid");
         WX_SECRET = resourceBundle.getString("wx.secret");
+        BAIDU_AK = resourceBundle.getString("baiDu.ak");
+        GAODE_KEY = resourceBundle.getString("gaoDe.key");
+        LOCATION_CITY_DESCRIPTION = resourceBundle.getString("location.city.description");
     }
 
     public Environment() {

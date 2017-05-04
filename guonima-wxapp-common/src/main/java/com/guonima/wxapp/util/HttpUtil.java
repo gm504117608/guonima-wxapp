@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -131,6 +132,41 @@ public class HttpUtil {
             try {
                 httpclient.getConnectionManager().shutdown();
                 httppost.releaseConnection();
+            } catch (Exception ignore) {
+
+            }
+        }
+        return null;
+    }
+
+    /**
+     * get 直接通过地址调用
+     * 例如： url = sourceHost+"?targetValue="+targetValue+"&k="+sourceKey+"&p="+sourceSecret+"&e="+ext;
+     *
+     * @param url url地址
+     * @return
+     */
+    public static String getResponseByGet(String url) {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpGet httpGet = new HttpGet(url);
+
+        try {
+            HttpResponse response = httpclient.execute(httpGet);
+            int statusCode = response.getStatusLine().getStatusCode();
+            System.out.println("statusCode" + statusCode);
+            if (statusCode == HttpStatus.SC_OK) {
+                System.out.println("服务器正常响应.....");
+                HttpEntity resEntity = response.getEntity();
+                return EntityUtils.toString(resEntity, HTTP.UTF_8);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                httpclient.getConnectionManager().shutdown();
+                httpGet.releaseConnection();
             } catch (Exception ignore) {
 
             }

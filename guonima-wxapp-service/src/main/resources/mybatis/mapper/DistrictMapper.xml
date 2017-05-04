@@ -17,7 +17,8 @@
 
     <!-- 获取行政区数据 -->
     <select id="findProvinceData" parameterType="districtDO" resultMap="districtResultMap">
-        select <include refid="districtColumns"/>
+        select
+        <include refid="districtColumns"/>
         from district where code like '__' and enabled=1
     </select>
 

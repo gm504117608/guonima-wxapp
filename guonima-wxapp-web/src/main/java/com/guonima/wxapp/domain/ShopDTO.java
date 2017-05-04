@@ -5,9 +5,9 @@ import java.util.Date;
 
 /**
  * @author guonima
- * @create 2017-04-20 14:04
+ * @create 2017-05-04 18:19
  */
-public class ShopDO implements Serializable {
+public class ShopDTO implements Serializable {
 
     private static final long serialVersionUID = -1469798423423447L;
 
@@ -15,8 +15,11 @@ public class ShopDO implements Serializable {
     private String name; // 店铺名称
     private String mobile; // 手机号码
     private String province; // 省份
+    private String provinceName; // 省份名称
     private String city; // 城市
+    private String cityName; // 城市名称
     private String area; // 行政区
+    private String areaName; // 行政区名称
     private String address; // 详细地址
     private String iconUrl; // 展示店铺图片地址
     private String remark; // 备注
@@ -58,6 +61,14 @@ public class ShopDO implements Serializable {
         this.province = province;
     }
 
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
     public String getCity() {
         return city;
     }
@@ -66,12 +77,28 @@ public class ShopDO implements Serializable {
         this.city = city;
     }
 
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
     public String getArea() {
         return area;
     }
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 
     public String getAddress() {
@@ -145,8 +172,11 @@ public class ShopDO implements Serializable {
                 ", name='" + name + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", province='" + province + '\'' +
+                ", provinceName='" + provinceName + '\'' +
                 ", city='" + city + '\'' +
+                ", cityName='" + cityName + '\'' +
                 ", area='" + area + '\'' +
+                ", areaName='" + areaName + '\'' +
                 ", address='" + address + '\'' +
                 ", iconUrl='" + iconUrl + '\'' +
                 ", remark='" + remark + '\'' +

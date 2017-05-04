@@ -23,7 +23,8 @@
     </resultMap>
 
     <!-- 获取店铺打印话费配置信息数据 -->
-    <select id="findShopPrintCostConfigInfo" parameterType="shopPrintCostConfigDO" resultMap="shopPrintCostConfigResultMap">
+    <select id="findShopPrintCostConfigInfo" parameterType="shopPrintCostConfigDO"
+            resultMap="shopPrintCostConfigResultMap">
         select
         <include refid="shopPrintCostConfigColumns"/>
         from shop_print_cost_config

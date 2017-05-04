@@ -1,11 +1,9 @@
 package com.guonima.wxapp.controller;
 
 import com.guonima.wxapp.Response;
-import com.guonima.wxapp.domain.ConfigurationDO;
-import com.guonima.wxapp.domain.PrintPhotographDO;
-import com.guonima.wxapp.domain.PrintPhotographDTO;
-import com.guonima.wxapp.domain.ShopPrintCostConfigDO;
-import com.guonima.wxapp.service.BaseConfigurationService;
+import com.guonima.wxapp.domain.*;
+import com.guonima.wxapp.domain.common.Pageable;
+import com.guonima.wxapp.service.ConsignmentAddressService;
 import com.guonima.wxapp.service.ShopService;
 import com.guonima.wxapp.util.FileUploadUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +27,9 @@ public class ShopController extends BaseController {
     @Autowired
     private ShopService shopService;
 
+    @Autowired
+    private ConsignmentAddressService consignmentAddressService;
+
     @RequestMapping(method = RequestMethod.GET, value = "/shops")
     public Response getShopInfo(@RequestParam int pageNum, @RequestParam int pageSize) {
         if (pageNum == 0) {
@@ -38,7 +38,38 @@ public class ShopController extends BaseController {
         if (pageSize == 0) {
             pageSize = 10;
         }
-        return success(shopService.getShopsInfo(pageNum, pageSize));
+        Pageable page = shopService.getShopsInfo(pageNum, pageSize);
+        List<ShopDO> list = page.getResult();
+        ShopDTO sdto = null;
+        List<ShopDTO> result = new ArrayList<ShopDTO>();
+        DistrictDO ddo = new DistrictDO();
+        for (ShopDO sdo : list) {
+            sdto = new ShopDTO();
+            sdto.setId(sdo.getId()); // 唯一标识id
+            sdto.setName(sdo.getName()); // 店铺名称
+            sdto.setMobile(sdo.getMobile()); // 手机号码
+            sdto.setProvince(sdo.getProvince()); // 省份
+            ddo = consignmentAddressService.getDistrictDatas(sdo.getProvince());
+            sdto.setProvinceName(ddo.getDescription()); // 省份名称
+            sdto.setCity(sdo.getCity()); // 城市
+            ddo = consignmentAddressService.getDistrictDatas(sdo.getCity());
+            sdto.setCityName(ddo.getDescription()); // 城市名称
+            sdto.setArea(sdo.getArea()); // 行政区
+            ddo = consignmentAddressService.getDistrictDatas(sdo.getArea());
+            sdto.setAreaName(ddo.getDescription()); // 行政区名称
+            sdto.setAddress(sdo.getAddress()); // 详细地址
+            sdto.setIconUrl(sdo.getIconUrl()); // 展示店铺图片地址
+            sdto.setRemark(sdo.getRemark()); // 备注
+            sdto.setEnabled(sdo.getEnabled()); // 是否激活【1（可用）；0（不可用）】
+            sdto.setCreateTime(sdo.getCreateTime());
+            sdto.setCreateUser(sdo.getCreateUser());
+            sdto.setModifyTime(sdo.getModifyTime());
+            sdto.setModifyUser(sdo.getModifyUser());
+
+            result.add(sdto);
+        }
+        page.setResult(result);
+        return success(page);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/shops/printCost/{shopId}")
@@ -122,14 +153,17 @@ public class ShopController extends BaseController {
         return success(shopService.savePrintPhoto(printPhotographDO));
     }
 
-
-
-    @RequestMapping(method = RequestMethod.GET, value = "/shops/photos/{shopId}/{memberId}")
-    public Response getPrintPhotographInfo(@PathVariable("shopId") Long shopId, @PathVariable("memberId") Long memberId) {
-        PrintPhotographDO printPhotographDO = new PrintPhotographDO();
-        printPhotographDO.setMemberId(memberId);
-        printPhotographDO.setShopId(shopId);
-        List<PrintPhotographDO> list = shopService.findPrintPhotographInfo(printPhotographDO);
+    @RequestMapping(method = RequestMethod.GET, value = "/shops/photos")
+    public Response getPrintPhotographInfo(@RequestParam("shopId") Long shopId, @RequestParam("memberId") Long memberId,
+                                           @RequestParam("pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
+        if (pageNum == 0) {
+            pageNum = 1;
+        }
+        if (pageSize == 0) {
+            pageSize = 10;
+        }
+        Pageable page = shopService.findPrintPhotographInfo(shopId, memberId, pageNum, pageSize);
+        List<PrintPhotographDO> list = page.getResult();
         List<PrintPhotographDTO> result = new ArrayList<PrintPhotographDTO>();
         PrintPhotographDTO ppdto = null;
         ConfigurationDO cd = null;
@@ -138,7 +172,8 @@ public class ShopController extends BaseController {
             PrintPhotographDO2PrintPhotographDTO(ppdo, ppdto);
             result.add(ppdto);
         }
-        return success(result);
+        page.setResult(result);
+        return success(page);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/shops/photos/{id}")
@@ -150,13 +185,13 @@ public class ShopController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/shops/payment/{ids}")
-    public Response getPaymentPrintPhoto(@PathVariable("ids") String ids){
+    public Response getPaymentPrintPhoto(@PathVariable("ids") String ids) {
         String[] idArray = ids.split(",");
-        if(null == idArray || idArray.length == 0){
+        if (null == idArray || idArray.length == 0) {
             return error(2000, "获取打印照片信息的唯一标识不存在");
         }
         List<PrintPhotographDTO> result = new ArrayList<PrintPhotographDTO>();
-        for(String id : idArray){
+        for (String id : idArray) {
             PrintPhotographDO ppdo = shopService.findPrintPhotographInfo(Long.valueOf(id));
             PrintPhotographDTO ppdto = new PrintPhotographDTO();
             PrintPhotographDO2PrintPhotographDTO(ppdo, ppdto);
@@ -167,10 +202,11 @@ public class ShopController extends BaseController {
 
     /**
      * 两个对象之间相互赋值处理
-     * @param printPhotographDO 打印照片数据库实体
+     *
+     * @param printPhotographDO  打印照片数据库实体
      * @param printPhotographDTO 打印照片界面展示实体
      */
-    private void PrintPhotographDO2PrintPhotographDTO(PrintPhotographDO printPhotographDO, PrintPhotographDTO printPhotographDTO){
+    private void PrintPhotographDO2PrintPhotographDTO(PrintPhotographDO printPhotographDO, PrintPhotographDTO printPhotographDTO) {
         printPhotographDTO.setId(printPhotographDO.getId());
         printPhotographDTO.setMemberId(printPhotographDO.getMemberId());
         printPhotographDTO.setShopId(printPhotographDO.getShopId());

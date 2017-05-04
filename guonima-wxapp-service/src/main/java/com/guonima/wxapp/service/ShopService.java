@@ -36,10 +36,13 @@ public interface ShopService {
 
     /**
      * 获取上图图片信息
-     * @param printPhotographDO 图片打印信息实体
+     * @param shopId 店铺唯一标识id
+     * @param memberId 会员唯一标识id
+     * @param pageNum 当前页号
+     * @param pageSize 每页显示数量
      * @return
      */
-    public List<PrintPhotographDO> findPrintPhotographInfo(PrintPhotographDO printPhotographDO);
+    public Pageable findPrintPhotographInfo(Long shopId, Long memberId, int pageNum,  int pageSize);
 
     /**
      * 获取上图图片信息

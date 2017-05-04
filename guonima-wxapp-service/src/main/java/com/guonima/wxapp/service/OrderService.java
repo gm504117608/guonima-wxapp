@@ -1,6 +1,7 @@
 package com.guonima.wxapp.service;
 
 import com.guonima.wxapp.domain.ReservationDO;
+import com.guonima.wxapp.domain.common.Pageable;
 
 import java.util.List;
 
@@ -50,5 +51,15 @@ public interface OrderService {
      * @return
      */
     public List<ReservationDO> findReservationInfo (String orderNo, Long memberId, String status);
+
+    /**
+     * 获取订单实体信息(带分页功能)
+     * @param memberId 会员id
+     * @param status 订单状态
+     * @param pageNum 当前页数
+     * @param pageSize 每页显示数量
+     * @return
+     */
+    public Pageable findReservationInfo (Long memberId, String status, int pageNum, int pageSize);
 
 }

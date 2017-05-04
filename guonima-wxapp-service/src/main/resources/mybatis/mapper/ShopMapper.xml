@@ -4,7 +4,7 @@
 <mapper namespace="shopMapper">
 
     <sql id="shopColumns">
-        id, name, mobile, district, address, icon_url, remark,
+        id, name, mobile, province, city, area, address, icon_url, remark,
         enabled, create_time, create_user, modify_time, modify_user
     </sql>
 
@@ -12,7 +12,9 @@
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="mobile" property="mobile"/>
-        <result column="district" property="district"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="area" property="area"/>
         <result column="address" property="address"/>
         <result column="icon_url" property="iconUrl"/>
         <result column="remark" property="remark"/>
@@ -26,7 +28,7 @@
     <!-- 获取店铺数据 -->
     <select id="findShopInfo" parameterType="shopDO" resultMap="shopResultMap">
         select
-            <include refid="shopColumns"/>
+        <include refid="shopColumns"/>
         from shop
         <where>
             <if test="id != null">
@@ -36,7 +38,7 @@
                 and mobile = trim(#{mobile})
             </if>
             <if test="name != null and name != ''">
-                and name like CONCAT(trim(#{name}), '%')
+                and name like CONCAT('%', trim(#{name}), '%')
             </if>
         </where>
     </select>

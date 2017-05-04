@@ -24,8 +24,8 @@ public class ConsignmentAddressController extends BaseController {
     @Autowired
     private ConsignmentAddressService consignmentAddressService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/members/{id}")
-    public Response getConsignmentAddressByMemberId(@PathVariable("id") Long memberId) {
+    @RequestMapping(method = RequestMethod.GET, value = "/members/{memberId}")
+    public Response getConsignmentAddressByMemberId(@PathVariable("memberId") Long memberId) {
         List<ConsigneeAddressDO> list = consignmentAddressService.getConsignmentAddressByMemberId(memberId);
         Iterator<ConsigneeAddressDO> it = list.iterator();
         ConsigneeAddressDO cado = null;

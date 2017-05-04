@@ -2,6 +2,7 @@ package com.guonima.wxapp.controller;
 
 import com.guonima.wxapp.Response;
 import com.guonima.wxapp.domain.*;
+import com.guonima.wxapp.domain.common.Pageable;
 import com.guonima.wxapp.service.BaseConfigurationService;
 import com.guonima.wxapp.service.OrderService;
 import com.guonima.wxapp.service.ShopService;
@@ -94,7 +95,14 @@ public class OrderController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/orders")
-    public Response getPrintPhotoOrderInfo(@RequestParam Long memberId, @RequestParam String status) {
+    public Response getPrintPhotoOrderInfo(@RequestParam Long memberId, @RequestParam String status,
+                                           @RequestParam int pageNum, @RequestParam int pageSize) {
+        if (pageNum == 0) {
+            pageNum = 1;
+        }
+        if (pageSize == 0) {
+            pageSize = 10;
+        }
         StringBuilder sb = new StringBuilder();
         if (memberId == null) {
             sb.append("会员id不能为空;");
@@ -102,7 +110,8 @@ public class OrderController extends BaseController {
         if (sb.length() != 0) {
             error(2000, sb.toString());
         }
-        List<ReservationDO> list = orderService.findReservationInfo(null, memberId, status);
+        Pageable page = orderService.findReservationInfo(memberId, status, pageNum, pageSize);
+        List<ReservationDO> list = page.getResult();
         ReservationDTO rdto = null;
         ShopDO sdo = null;
         ConfigurationDO cdo = null;
@@ -124,7 +133,8 @@ public class OrderController extends BaseController {
             rdto.setModifyTime(rdo.getModifyTime());
             result.add(rdto);
         }
-        return success(result);
+        page.setResult(result);
+        return success(page);
     }
 
     /**

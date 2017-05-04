@@ -26,11 +26,11 @@
     <!-- 新增打印照片信息 -->
     <insert id="insert" parameterType="printPhotographDO" useGeneratedKeys="true" keyProperty="id">
         insert into print_photograph (
-          member_id, shop_id, description, type, store_url, clipping,
-          typesetting, remark, create_time, modify_time
+        member_id, shop_id, description, type, store_url, clipping,
+        typesetting, remark, create_time, modify_time
         )values (
-          trim(#{memberId}), trim(#{shopId}), trim(#{description}), trim(#{type}), trim(#{storeUrl}), trim(#{clipping}),
-          trim(#{typesetting}), trim(#{remark}), sysdate(), sysdate()
+        trim(#{memberId}), trim(#{shopId}), trim(#{description}), trim(#{type}), trim(#{storeUrl}), trim(#{clipping}),
+        trim(#{typesetting}), trim(#{remark}), sysdate(), sysdate()
         )
     </insert>
 
@@ -74,7 +74,7 @@
     <!-- 获取打印照片信息数据 -->
     <select id="findPrintPhotographInfo" parameterType="printPhotographDO" resultMap="printPhotographResultMap">
         select
-            <include refid="printPhotographColumns"/>
+        <include refid="printPhotographColumns"/>
         from print_photograph
         <where>
             <if test="id != null">
@@ -86,6 +86,7 @@
             <if test="shopId != null">
                 and shop_id = trim(#{shopId})
             </if>
+            order by create_time desc
         </where>
     </select>
 

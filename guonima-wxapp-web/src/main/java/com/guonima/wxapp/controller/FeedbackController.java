@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 用户反馈信息controller类
+ *
  * @author guonima
  * @create 2017-04-25 17:39
  */
@@ -48,8 +49,10 @@ public class FeedbackController extends BaseController {
             }
         }
         String content = feedbackDO.getContent();
-        if (StringUtils.isNotEmpty(content)) {
-            if(!CommonUtil.checkLength(content, 0, 400)){
+        if (StringUtils.isEmpty(content)) {
+            sb.append("【反馈内容】不能为空;");
+        } else {
+            if (!CommonUtil.checkLength(content, 0, 400)) {
                 sb.append("【反馈内容】长度在0到400之间;");
             }
         }

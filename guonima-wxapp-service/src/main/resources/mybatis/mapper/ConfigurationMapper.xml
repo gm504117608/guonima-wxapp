@@ -25,7 +25,7 @@
     <!-- 获取基础配置数据 -->
     <select id="findBaseConfigurationData" parameterType="configurationDO" resultMap="configurationResultMap">
         select
-            <include refid="configurationColumns"/>
+        <include refid="configurationColumns"/>
         from base_configuration
         <where>
             <if test="id != null">

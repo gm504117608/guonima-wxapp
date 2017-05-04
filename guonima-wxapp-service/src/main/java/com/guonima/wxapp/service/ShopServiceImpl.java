@@ -10,6 +10,7 @@ import com.guonima.wxapp.domain.common.Pageable;
 import com.guonima.wxapp.exception.ServiceException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -64,8 +65,20 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public List<PrintPhotographDO> findPrintPhotographInfo(PrintPhotographDO printPhotographDO) {
-        return (List<PrintPhotographDO>) dao.findForList("printPhotographMapper.findPrintPhotographInfo", printPhotographDO);
+    public Pageable findPrintPhotographInfo(Long shopId, Long memberId, int pageNum,  int pageSize) {
+        PrintPhotographDO printPhotographDO = new PrintPhotographDO();
+        printPhotographDO.setMemberId(memberId);
+        printPhotographDO.setShopId(shopId);
+        Page<PrintPhotographDO> page = PageHelper.startPage(pageNum, pageSize);
+        List<PrintPhotographDO> list =(List<PrintPhotographDO>) dao.findForList("printPhotographMapper.findPrintPhotographInfo", printPhotographDO);
+        // 取分页信息
+        Pageable result = new Pageable();
+        result.setPageNum(page.getPageNum());
+        result.setPageSize(page.getPageSize());
+        result.setTotalRows(page.getTotal());//获取总记录数
+        result.setTotalNum(page.getPages());
+        result.setResult(list);
+        return result;
     }
 
     @Override

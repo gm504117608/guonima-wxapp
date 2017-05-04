@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reservationPrintPhotographMapper">
 
-<sql id="reservationPrintPhotographColumns">
-    id, order_no, print_photograph_id, amount, create_time,modify_time
-</sql>
+    <sql id="reservationPrintPhotographColumns">
+        id, order_no, print_photograph_id, amount, create_time,modify_time
+    </sql>
 
-<resultMap id="reservationPrintPhotographResultMap" type="reservationPrintPhotographDO">
-    <id column="id" property="id"/>
-    <result column="order_no" property="orderNo"/>
-    <result column="print_photograph_id" property="printPhotographId"/>
-    <result column="amount" property="amount"/>
-    <result column="create_time" property="createTime"/>
-    <result column="modify_time" property="modifyTime"/>
-</resultMap>
+    <resultMap id="reservationPrintPhotographResultMap" type="reservationPrintPhotographDO">
+        <id column="id" property="id"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="print_photograph_id" property="printPhotographId"/>
+        <result column="amount" property="amount"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
 
-<!-- 新增订单关联照片信息 -->
-<insert id="insert" parameterType="reservationPrintPhotographDO" useGeneratedKeys="true" keyProperty="id">
-    insert into reservation_print_photograph (
-       order_no, print_photograph_id, amount, create_time,modify_time
-    )values
-       (trim(#{orderNo}), trim(#{printPhotographId}), trim(#{amount}), sysdate(), sysdate())
-</insert>
+    <!-- 新增订单关联照片信息 -->
+    <insert id="insert" parameterType="reservationPrintPhotographDO" useGeneratedKeys="true" keyProperty="id">
+        insert into reservation_print_photograph (
+        order_no, print_photograph_id, amount, create_time,modify_time
+        )values
+        (trim(#{orderNo}), trim(#{printPhotographId}), trim(#{amount}), sysdate(), sysdate())
+    </insert>
 
     <!-- 修改订单关联照片信息 -->
     <update id="update" parameterType="reservationPrintPhotographDO">
@@ -46,19 +46,20 @@
         </where>
     </update>
 
-<!-- 获取订单关联照片数据 -->
-<select id="findReservationPrintPhotographInfo" parameterType="reservationPrintPhotographDO" resultMap="reservationPrintPhotographResultMap">
-    select
-    <include refid="reservationPrintPhotographColumns"/>
-    from reservation_print_photograph
-    <where>
-        <if test="id != null">
-            and id = trim(#{id})
-        </if>
-        <if test="orderNo != null and orderNo != ''">
-            and order_no = trim(#{orderNo})
-        </if>
-    </where>
-</select>
+    <!-- 获取订单关联照片数据 -->
+    <select id="findReservationPrintPhotographInfo" parameterType="reservationPrintPhotographDO"
+            resultMap="reservationPrintPhotographResultMap">
+        select
+        <include refid="reservationPrintPhotographColumns"/>
+        from reservation_print_photograph
+        <where>
+            <if test="id != null">
+                and id = trim(#{id})
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+                and order_no = trim(#{orderNo})
+            </if>
+        </where>
+    </select>
 
 </mapper>

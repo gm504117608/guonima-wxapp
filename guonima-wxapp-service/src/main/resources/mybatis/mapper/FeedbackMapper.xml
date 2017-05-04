@@ -24,11 +24,11 @@
     <!-- 新增用户反馈信息 -->
     <insert id="insert" parameterType="feedbackDO" useGeneratedKeys="true" keyProperty="id">
         insert into user_feedback (
-            member_id, type, mobile, content,
-            create_time, create_user, modify_time, modify_user
+        member_id, type, mobile, content,
+        create_time, create_user, modify_time, modify_user
         )values (
-            trim(#{memberId}), trim(#{type}), trim(#{mobile}), trim(#{content}),
-            sysdate(), trim(#{createUser}), sysdate(), trim(#{modifyUser})
+        trim(#{memberId}), trim(#{type}), trim(#{mobile}), trim(#{content}),
+        sysdate(), trim(#{createUser}), sysdate(), trim(#{modifyUser})
         )
     </insert>
 
