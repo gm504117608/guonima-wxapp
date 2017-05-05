@@ -4,6 +4,7 @@ import com.guonima.wxapp.domain.ReservationDO;
 import com.guonima.wxapp.domain.common.Pageable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author : guonima
@@ -46,11 +47,9 @@ public interface OrderService {
     /**
      * 获取订单实体信息
      * @param orderNo 订单号
-     * @param memberId 会员id
-     * @param status 订单状态
      * @return
      */
-    public List<ReservationDO> findReservationInfo (String orderNo, Long memberId, String status);
+    public ReservationDO findReservationInfo (String orderNo);
 
     /**
      * 获取订单实体信息(带分页功能)
@@ -62,4 +61,10 @@ public interface OrderService {
      */
     public Pageable findReservationInfo (Long memberId, String status, int pageNum, int pageSize);
 
+    /**
+     * 获取订单详细内容信息
+     * @param orderNo 订单号
+     * @return
+     */
+    public List<Map<String, Object>> findReservationPrintPhotographInfo (String orderNo);
 }

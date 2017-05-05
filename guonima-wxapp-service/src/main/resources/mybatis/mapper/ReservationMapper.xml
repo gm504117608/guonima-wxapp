@@ -4,17 +4,19 @@
 <mapper namespace="reservationMapper">
 
     <sql id="reservationColumns">
-        id, member_id, shop_id, order_no, cost, status,
-        remark, create_time, modify_time
+        id, member_id, shop_id, consignment_id, order_no, cost, status,
+        dispatching_way, remark, create_time, modify_time
     </sql>
 
     <resultMap id="reservationResultMap" type="reservationDO">
         <id column="id" property="id"/>
         <result column="member_id" property="memberId"/>
         <result column="shop_id" property="shopId"/>
+        <result column="consignment_id" property="consignmentId"/>
         <result column="order_no" property="orderNo"/>
         <result column="cost" property="cost"/>
         <result column="status" property="status"/>
+        <result column="dispatching_way" property="dispatchingWay"/>
         <result column="remark" property="remark"/>
         <result column="create_time" property="createTime"/>
         <result column="modify_time" property="modifyTime"/>
@@ -23,11 +25,11 @@
     <!-- 新增订单信息 -->
     <insert id="insert" parameterType="reservationDO" useGeneratedKeys="true" keyProperty="id">
         insert into reservation (
-        member_id, shop_id, order_no, cost, status,
-        remark, create_time, modify_time
+        member_id, shop_id, consignment_id, order_no, cost, status,
+        dispatching_way, remark, create_time, modify_time
         )values (
-        trim(#{memberId}), trim(#{shopId}), trim(#{orderNo}), trim(#{cost}), trim(#{status}),
-        trim(#{remark}), sysdate(), sysdate()
+        trim(#{memberId}), trim(#{shopId}), trim(#{consignmentId}), trim(#{orderNo}), trim(#{cost}), trim(#{status}),
+        trim(#{dispatchingWay}), trim(#{remark}), sysdate(), sysdate()
         )
     </insert>
 
@@ -35,11 +37,17 @@
     <update id="update" parameterType="reservationDO">
         update reservation
         <set>
+            <if test="consignmentId != null">
+                consignment_id = trim(#{consignmentId}),
+            </if>
             <if test="cost != null and cost != ''">
                 cost = trim(#{cost}),
             </if>
             <if test="status != null and status != ''">
                 status = trim(#{status}),
+            </if>
+            <if test="dispatchingWay != null and dispatchingWay != ''">
+                dispatching_way = trim(#{dispatchingWay}),
             </if>
             <if test="remark != null and remark != ''">
                 remark = trim(#{remark}),
@@ -80,5 +88,18 @@
             order by create_time desc
         </where>
     </select>
+
+    <!-- 获取订单详细数据 -->
+    <select id="findReservationPrintPhotographInfo" parameterType="java.util.Map" resultType="java.util.Map">
+        select a.amount amount, b.description description, b.type type, b.store_url storeUrl
+        from reservation_print_photograph a, print_photograph b
+        <where>
+            a.print_photograph_id = b.id
+            <if test="orderNo != null and orderNo != ''">
+                and a.order_no = trim(#{orderNo})
+            </if>
+        </where>
+    </select>
+
 
 </mapper>

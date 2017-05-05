@@ -1,4 +1,4 @@
-package com.guonima.wxapp.domain;
+package com.guonima.wxapp.domain.reservation;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -21,6 +21,7 @@ public class ReservationDTO implements Serializable {
     private BigDecimal cost; // 花费金额
     private String status; // 订单状态
     private String statusName; // 订单状态名称
+    private String dispatchingWay; // 配送方式
     private String remark; // 备注
     private Date createTime; // 创建时间
     private Date modifyTime; // 修改时间
@@ -93,6 +94,14 @@ public class ReservationDTO implements Serializable {
         this.statusName = statusName;
     }
 
+    public String getDispatchingWay() {
+        return dispatchingWay;
+    }
+
+    public void setDispatchingWay(String dispatchingWay) {
+        this.dispatchingWay = dispatchingWay;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -136,6 +145,7 @@ public class ReservationDTO implements Serializable {
                 ", cost=" + cost +
                 ", status='" + status + '\'' +
                 ", statusName='" + statusName + '\'' +
+                ", dispatchingWay='" + dispatchingWay + '\'' +
                 ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +
                 ", modifyTime=" + modifyTime +

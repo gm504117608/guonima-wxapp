@@ -1,6 +1,5 @@
 package com.guonima.wxapp.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.guonima.wxapp.dao.DaoSupport;
 import com.guonima.wxapp.domain.ConfigurationDO;
 import com.guonima.wxapp.redis.RedisClient;

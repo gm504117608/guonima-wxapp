@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 订单相关信息service
@@ -93,12 +95,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ReservationDO> findReservationInfo (String orderNo, Long memberId, String status){
+    public ReservationDO findReservationInfo (String orderNo){
         ReservationDO reservationDO = new ReservationDO();
         reservationDO.setOrderNo(orderNo);
-        reservationDO.setMemberId(memberId);
-        reservationDO.setStatus(status);
-        return (List<ReservationDO>) dao.findForList("reservationMapper.findReservationInfo", reservationDO);
+        return (ReservationDO) dao.findForObject("reservationMapper.findReservationInfo", reservationDO);
     }
 
     @Override
@@ -118,5 +118,11 @@ public class OrderServiceImpl implements OrderService {
         return result;
     }
 
+    @Override
+    public List<Map<String, Object>> findReservationPrintPhotographInfo (String orderNo){
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("orderNo", orderNo);
+       return (List<Map<String, Object>>) dao.findForList("reservationMapper.findReservationPrintPhotographInfo", param);
+    }
 
 }

@@ -16,6 +16,9 @@ public class OrderPaymentDTO implements Serializable {
     private String amounts; // 打印照片数量 拼串 格式 xxx,xxx,xxx
     private String orderNo; // 订单号
     private BigDecimal cost; // 需要支付金额
+    private Long consignmentId; // 收件人地址唯一标识id
+    private String dispatchingWay; // 配送方式
+
 
     public OrderPaymentDTO() {
 
@@ -53,6 +56,22 @@ public class OrderPaymentDTO implements Serializable {
         this.cost = cost;
     }
 
+    public Long getConsignmentId() {
+        return consignmentId;
+    }
+
+    public void setConsignmentId(Long consignmentId) {
+        this.consignmentId = consignmentId;
+    }
+
+    public String getDispatchingWay() {
+        return dispatchingWay;
+    }
+
+    public void setDispatchingWay(String dispatchingWay) {
+        this.dispatchingWay = dispatchingWay;
+    }
+
     @Override
     public String toString() {
         return "OrderPaymentDTO{" +
@@ -60,6 +79,8 @@ public class OrderPaymentDTO implements Serializable {
                 ", amounts='" + amounts + '\'' +
                 ", orderNo='" + orderNo + '\'' +
                 ", cost=" + cost +
+                ", consignmentId=" + consignmentId +
+                ", dispatchingWay='" + dispatchingWay + '\'' +
                 '}';
     }
 }

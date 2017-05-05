@@ -3,7 +3,11 @@ package com.guonima.wxapp.controller;
 import com.guonima.wxapp.Response;
 import com.guonima.wxapp.domain.*;
 import com.guonima.wxapp.domain.common.Pageable;
+import com.guonima.wxapp.domain.reservation.PrintPhoto;
+import com.guonima.wxapp.domain.reservation.ReservationDTO;
+import com.guonima.wxapp.domain.reservation.ReservationDetailDTO;
 import com.guonima.wxapp.service.BaseConfigurationService;
+import com.guonima.wxapp.service.ConsignmentAddressService;
 import com.guonima.wxapp.service.OrderService;
 import com.guonima.wxapp.service.ShopService;
 import com.guonima.wxapp.util.OrderUtil;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 订单相关信息controller
@@ -33,6 +38,9 @@ public class OrderController extends BaseController {
 
     @Autowired
     private BaseConfigurationService baseConfigurationService;
+
+    @Autowired
+    private ConsignmentAddressService consignmentAddressService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/orders")
     public Response savePrintPhotoOrder(@RequestBody ReservationDTO reservationDTO) {
@@ -82,6 +90,8 @@ public class OrderController extends BaseController {
         ReservationDO rdo = new ReservationDO();
         rdo.setOrderNo(orderPaymentDTO.getOrderNo());
         rdo.setCost(result);
+        rdo.setConsignmentId(orderPaymentDTO.getConsignmentId());
+        rdo.setDispatchingWay(orderPaymentDTO.getDispatchingWay());
         orderService.updateReservation(rdo);
         // 更新打印照片数量
         orderService.updateReservationPrintPhotograph(orderPaymentDTO.getIds(),
@@ -92,6 +102,54 @@ public class OrderController extends BaseController {
     @RequestMapping(method = RequestMethod.GET, value = "/orders/config/{type}")
     public Response getBaseConfiguration(@PathVariable("type") String type) {
        return success(baseConfigurationService.getBaseConfiguration(type));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/orders/{orderNo}")
+    public Response getPrintPhotoOrderDetailInfo(@PathVariable("orderNo") String orderNo) {
+        // 订单信息
+        ReservationDO rdo = orderService.findReservationInfo(orderNo);
+        // 店铺信息
+        ShopDO sdo = shopService.getShopsInfo(rdo.getShopId());
+        // 收货地址信息
+        ConsigneeAddressDO cado = consignmentAddressService.getConsignmentAddressById(rdo.getConsignmentId());
+        // 订单详细内容信息
+        List<Map<String, Object>> list = orderService.findReservationPrintPhotographInfo(orderNo);
+
+        ReservationDetailDTO reservationDetailDTO = new ReservationDetailDTO();
+
+        reservationDetailDTO.setOrderNo(rdo.getOrderNo());
+        reservationDetailDTO.setCost(rdo.getCost());
+        ConfigurationDO cdo = baseConfigurationService.getBaseConfiguration("orderStatus", rdo.getStatus());
+        reservationDetailDTO.setStatusName(cdo.getDescription());
+        reservationDetailDTO.setRemark(rdo.getRemark());
+        reservationDetailDTO.setCreateTime(rdo.getCreateTime());
+        reservationDetailDTO.setShopName(sdo.getName());
+        reservationDetailDTO.setDispatchingWay(rdo.getDispatchingWay());
+
+        reservationDetailDTO.setName(cado.getName());
+        reservationDetailDTO.setMobile(cado.getMobile());
+        DistrictDO ddo = consignmentAddressService.getDistrictDatas(cado.getProvince());
+        String provinceName = ddo.getDescription();
+        ddo = consignmentAddressService.getDistrictDatas(cado.getCity());
+        String cityName = ddo.getDescription();
+        ddo = consignmentAddressService.getDistrictDatas(cado.getArea());
+        String areaName = ddo.getDescription();
+        reservationDetailDTO.setAddress(provinceName + cityName + areaName + cado.getAddress());
+
+        PrintPhoto printPhoto = null;
+        ShopPrintCostConfigDO spccdo = null;
+        List<PrintPhoto> ppList = new ArrayList<PrintPhoto>();
+        for(Map<String, Object> map : list){
+            printPhoto = new PrintPhoto();
+            printPhoto.setDescription((String) map.get("description"));
+            printPhoto.setStoreUrl((String) map.get("storeUrl"));
+            spccdo = shopService.getShopPrintCostConfig((String) map.get("type"));
+            printPhoto.setType(spccdo.getRemark());
+            printPhoto.setAmount(Integer.parseInt(String.valueOf(map.get("amount"))));
+            ppList.add(printPhoto);
+        }
+        reservationDetailDTO.setPrintPhotoList(ppList);
+        return success(reservationDetailDTO);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/orders")

@@ -3,16 +3,20 @@ package com.guonima.wxapp.controller;
 import com.guonima.wxapp.Response;
 import com.guonima.wxapp.domain.*;
 import com.guonima.wxapp.domain.common.Pageable;
+import com.guonima.wxapp.service.BaseConfigurationService;
 import com.guonima.wxapp.service.ConsignmentAddressService;
 import com.guonima.wxapp.service.ShopService;
 import com.guonima.wxapp.util.FileUploadUtil;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 店铺信息controller类
@@ -29,6 +33,9 @@ public class ShopController extends BaseController {
 
     @Autowired
     private ConsignmentAddressService consignmentAddressService;
+
+    @Autowired
+    private BaseConfigurationService baseConfigurationService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/shops")
     public Response getShopInfo(@RequestParam int pageNum, @RequestParam int pageSize) {
@@ -178,6 +185,7 @@ public class ShopController extends BaseController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/shops/photos/{id}")
     public Response getPrintPhotographInfo(@PathVariable("id") Long id) {
+        // 打印照片信息
         PrintPhotographDO ppdo = shopService.findPrintPhotographInfo(id);
         PrintPhotographDTO ppdto = new PrintPhotographDTO();
         PrintPhotographDO2PrintPhotographDTO(ppdo, ppdto);
@@ -190,14 +198,31 @@ public class ShopController extends BaseController {
         if (null == idArray || idArray.length == 0) {
             return error(2000, "获取打印照片信息的唯一标识不存在");
         }
+        // 打印照片信息
         List<PrintPhotographDTO> result = new ArrayList<PrintPhotographDTO>();
+        PrintPhotographDO ppdo = null;
+        PrintPhotographDTO ppdto = null;
         for (String id : idArray) {
-            PrintPhotographDO ppdo = shopService.findPrintPhotographInfo(Long.valueOf(id));
-            PrintPhotographDTO ppdto = new PrintPhotographDTO();
+            ppdo = shopService.findPrintPhotographInfo(Long.valueOf(id));
+            ppdto = new PrintPhotographDTO();
             PrintPhotographDO2PrintPhotographDTO(ppdo, ppdto);
             result.add(ppdto);
         }
-        return success(result);
+        // 收货地址默认
+        ConsigneeAddressDO consigneeAddressDO= null;
+        List<ConsigneeAddressDO> list = consignmentAddressService.getConsignmentAddressByMemberId(ppdo.getMemberId());
+        for(ConsigneeAddressDO cado : list){
+            if(cado.getIsUsing() == 1){
+                consigneeAddressDO = cado;
+            }
+        }
+        // 配送方式
+        List<ConfigurationDO> cdoList = baseConfigurationService.getBaseConfiguration("dispatchingWay");
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("printPhoto", result);
+        map.put("consigneeAddress", consigneeAddressDO);
+        map.put("dispatchingWays", cdoList);
+        return success(map);
     }
 
     /**
