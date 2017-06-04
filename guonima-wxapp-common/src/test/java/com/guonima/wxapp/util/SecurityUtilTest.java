@@ -1,5 +1,6 @@
 package com.guonima.wxapp.util;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -42,7 +43,10 @@ public class SecurityUtilTest {
      */
     @Test
     public void testCreateTokenStr() throws Exception {
-        System.out.println(SecurityUtil.createToken("3333"));
+//        System.out.println(SecurityUtil.createToken("3333"));
+
+        System.out.println(RandomStringUtils.randomAlphabetic(10));
+        System.out.println(RandomStringUtils.randomAlphanumeric(20));
     }
 
 
