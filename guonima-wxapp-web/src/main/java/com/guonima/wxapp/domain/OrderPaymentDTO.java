@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 /**
  * 订单支付前界面传输实体类
+ *
  * @author : guonima
  * @create : 2017-05-01-17:44
  */

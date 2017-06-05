@@ -15,7 +15,10 @@ public class PrintPhoto implements Serializable {
     private String storeUrl; //照片存储路径
     private Integer amount; // 打印数量
 
-    public PrintPhoto(){};
+    public PrintPhoto() {
+    }
+
+    ;
 
     public String getDescription() {
         return description;

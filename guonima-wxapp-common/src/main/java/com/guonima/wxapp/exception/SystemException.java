@@ -1,37 +1,35 @@
 package com.guonima.wxapp.exception;
 
 /**
- * 
  * @ClassName: SystemException
- * @Description: 系统异常,处理非ajax请求的Exception
- *
+ * @Description: 系统异常, 处理非ajax请求的Exception
  */
-public class SystemException extends RuntimeException{
+public class SystemException extends RuntimeException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2119718747432466934L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 2119718747432466934L;
 
-	public SystemException() {
-		super();
-	}
+    public SystemException() {
+        super();
+    }
 
-	public SystemException(String message) {
-		super(message);
-	}
+    public SystemException(String message) {
+        super(message);
+    }
 
-	public SystemException(Throwable cause) {
-		super(cause);
-	}
+    public SystemException(Throwable cause) {
+        super(cause);
+    }
 
-	public SystemException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public SystemException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public SystemException(String message, Throwable cause,
-            boolean enableSuppression,
-            boolean writableStackTrace) {
-    	super(message, cause, enableSuppression, writableStackTrace);
+    public SystemException(String message, Throwable cause,
+                           boolean enableSuppression,
+                           boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

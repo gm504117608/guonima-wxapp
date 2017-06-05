@@ -5,6 +5,7 @@ import java.util.Date;
 
 /**
  * 收货地址界面传输实体
+ *
  * @author guonima
  * @create 2017-04-25 9:19
  */

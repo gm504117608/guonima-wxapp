@@ -35,9 +35,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Map<String, Object> login(MemberDO memberDO) {
-        MemberDO member = getMemberInfoRedis(memberDO);
-        String token = null;
+    public Map<String, Object> login(MemberDO memberDO, String token) {
+        if (StringUtils.isEmpty(token)) {
+            token = SecurityUtil.createToken(memberDO.getOpenid());
+        }
+        MemberDO member = getMemberInfoRedis(memberDO, token);
         Long id = null;
         try {
             if (member == null) { // 新增
@@ -47,11 +49,11 @@ public class MemberServiceImpl implements MemberService {
                 dao.update("memberMapper.update", memberDO);
                 id = member.getId();
             }
-            token = getToken(memberDO.getOpenid());
+            setMemberInfoRedis(memberDO, token);
         } catch (Exception e) {
             throw new ServiceException("微信登录我方应用出现错误：" + e.getMessage());
         }
-        Map<String, Object>  result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<String, Object>();
         result.put("id", id);
         result.put("token", token);
         return result;
@@ -84,9 +86,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public int save(MemberDO memberDO) {
+    public int save(MemberDO memberDO, String token) {
         try {
-            return dao.update("memberMapper.update", memberDO);
+            int result = dao.update("memberMapper.update", memberDO);
+            setMemberInfoRedis(memberDO, token);
+            return result;
         } catch (Exception e) {
             throw new ServiceException("修改用户信息出现错误：", e.getCause());
         }
@@ -105,40 +109,36 @@ public class MemberServiceImpl implements MemberService {
     /**
      * 获取会员信息，带缓存功能
      *
-     * @param memberDO
+     * @param memberDO 用户信息对象
+     * @param token    回话唯一标识
      * @return
      */
-    private MemberDO getMemberInfoRedis(MemberDO memberDO) {
-        MemberDO mdo = RedisClient.get("member-" + memberDO.getOpenid(), MemberDO.class);
+    private MemberDO getMemberInfoRedis(MemberDO memberDO, String token) {
+        MemberDO mdo = RedisClient.get("member-" + token, MemberDO.class);
         if (null == mdo) {
             mdo = (MemberDO) dao.findForObject("memberMapper.findMemberInfo", memberDO);
             try {
-                RedisClient.set(String.valueOf("member-" + memberDO.getOpenid()), mdo);
-            } catch(Exception e) {
+                RedisClient.set("member-" + token, mdo);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return mdo;
     }
 
-
     /**
-     * 获取token
+     * 更新缓存中用户信息
      *
-     * @return token
+     * @param memberDO 用户信息对象
+     * @param token    回话唯一标识
+     * @return
      */
-    private String getToken(String openId) {
-        String token = (String) RedisClient.get("token-" + openId);
-        if (StringUtils.isEmpty(token)) {
-            // 生成一个token
-            token = SecurityUtil.createToken(openId);
-            try {
-                // 有效时间一天 24 * 60 * 60
-                RedisClient.set("token-" + openId, 86400, token);
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
+    private void setMemberInfoRedis(MemberDO memberDO, String token) {
+        try {
+            RedisClient.set("member-" + token, memberDO);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return token;
     }
+
 }

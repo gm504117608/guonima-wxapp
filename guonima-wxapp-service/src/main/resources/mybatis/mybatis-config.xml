@@ -10,6 +10,7 @@
     </settings>
 
     <typeAliases>
+        <typeAlias type="com.guonima.wxapp.domain.SysLogDO" alias="sysLogDO"/>
         <typeAlias type="com.guonima.wxapp.domain.MemberDO" alias="memberDO"/>
         <typeAlias type="com.guonima.wxapp.domain.ShopDO" alias="shopDO"/>
         <typeAlias type="com.guonima.wxapp.domain.ConsigneeAddressDO" alias="consigneeAddressDO"/>

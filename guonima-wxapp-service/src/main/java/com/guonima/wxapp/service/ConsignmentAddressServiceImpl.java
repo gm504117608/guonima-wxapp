@@ -42,7 +42,7 @@ public class ConsignmentAddressServiceImpl implements ConsignmentAddressService 
         Long id = consigneeAddressDO.getId();
         Integer isUsing = consigneeAddressDO.getIsUsing();
         // 是否默认地址处理 是否默认地址【1：是；0：否】
-        if(isUsing == 1){
+        if (isUsing == 1) {
             ConsigneeAddressDO temp = new ConsigneeAddressDO();
             temp.setIsUsing(0);
             temp.setMemberId(consigneeAddressDO.getMemberId());

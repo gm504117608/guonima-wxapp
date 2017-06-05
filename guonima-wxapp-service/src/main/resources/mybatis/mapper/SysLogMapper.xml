@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sysLogMapper">
+
+    <!-- 新增操作日记信息 -->
+    <insert id="insert" parameterType="memberDO" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_log (
+        member_id, member_name, content, operation, type,
+        exception, request_url, remote_addr, create_time
+        )values (
+        trim(#{memberId}), trim(#{memberName}), trim(#{content}), trim(#{operation}), trim(#{type}),
+        trim(#{exception}), trim(#{requestUrl}), trim(#{remoteAddr}), sysdate()
+        )
+    </insert>
+
+</mapper>

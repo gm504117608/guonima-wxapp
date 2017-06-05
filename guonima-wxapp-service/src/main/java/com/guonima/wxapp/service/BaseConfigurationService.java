@@ -12,6 +12,7 @@ public interface BaseConfigurationService {
 
     /**
      * 获取基本配置信息
+     *
      * @param type 配置类型
      * @return
      */
@@ -19,6 +20,7 @@ public interface BaseConfigurationService {
 
     /**
      * 获取基本配置信息
+     *
      * @param type 配置类型
      * @param code 代码值
      * @return

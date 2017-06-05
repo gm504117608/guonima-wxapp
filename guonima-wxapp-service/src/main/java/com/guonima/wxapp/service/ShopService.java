@@ -15,6 +15,7 @@ public interface ShopService {
 
     /**
      * 获取店铺信息
+     *
      * @param pageNum  当前页
      * @param pageSize 每页大小
      * @return
@@ -23,29 +24,33 @@ public interface ShopService {
 
     /**
      * 获取店铺信息
-     * @param id  店铺唯一标识id
+     *
+     * @param id 店铺唯一标识id
      * @return
      */
     public ShopDO getShopsInfo(Long id);
 
     /**
      * 保存图片打印的信息
+     *
      * @param printPhotographDO 图片打印信息实体
      */
     public int savePrintPhoto(PrintPhotographDO printPhotographDO);
 
     /**
      * 获取上图图片信息
-     * @param shopId 店铺唯一标识id
+     *
+     * @param shopId   店铺唯一标识id
      * @param memberId 会员唯一标识id
-     * @param pageNum 当前页号
+     * @param pageNum  当前页号
      * @param pageSize 每页显示数量
      * @return
      */
-    public Pageable findPrintPhotographInfo(Long shopId, Long memberId, int pageNum,  int pageSize);
+    public Pageable findPrintPhotographInfo(Long shopId, Long memberId, int pageNum, int pageSize);
 
     /**
      * 获取上图图片信息
+     *
      * @param id 打印图片唯一标识id
      * @return
      */
@@ -53,6 +58,7 @@ public interface ShopService {
 
     /**
      * 通过店铺ID获取店铺下面配置的打印花费信息
+     *
      * @param shopId
      * @return
      */
@@ -60,6 +66,7 @@ public interface ShopService {
 
     /**
      * 通过打印话费代码获取店铺下面配置的打印花费信息
+     *
      * @param code
      * @return
      */

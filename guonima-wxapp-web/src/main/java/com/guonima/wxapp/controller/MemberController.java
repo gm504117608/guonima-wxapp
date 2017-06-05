@@ -24,7 +24,7 @@ public class MemberController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/login")
-    public Response login(@RequestBody MemberDTO memberDTO) {
+    public Response login(@RequestBody MemberDTO memberDTO, @RequestHeader("token") String token) {
         StringBuffer sb = new StringBuffer();
         String code = memberDTO.getCode();
         if (StringUtils.isEmpty(code)) {
@@ -39,11 +39,11 @@ public class MemberController extends BaseController {
         if (StringUtils.isNotEmpty(result)) {
             return error(2000, result);
         }
-        return success(memberService.login(memberDO));
+        return success(memberService.login(memberDO, token));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/members")
-    public Response save(@RequestBody MemberDTO memberDTO) {
+    public Response save(@RequestBody MemberDTO memberDTO, @RequestHeader("token") String token) {
         StringBuilder sb = new StringBuilder();
         String signature = memberDTO.getSignature();
         if (StringUtils.isNotEmpty(signature)) {
@@ -70,7 +70,7 @@ public class MemberController extends BaseController {
         }
         MemberDO memberDO = new MemberDO();
         MemberDTO2MemberDO(memberDTO, memberDO);
-        return success(memberService.save(memberDO));
+        return success(memberService.save(memberDO, token));
     }
 
     /**

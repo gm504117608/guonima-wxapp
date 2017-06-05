@@ -5,6 +5,7 @@ import java.util.Date;
 
 /**
  * 收货地址实体
+ *
  * @author guonima
  * @create 2017-04-21 17:21
  */

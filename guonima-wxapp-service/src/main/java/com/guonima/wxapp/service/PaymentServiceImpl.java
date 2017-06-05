@@ -1,12 +1,24 @@
 package com.guonima.wxapp.service;
 
-import com.guonima.wxapp.config.WxPaymentConfig;
+import com.guonima.wxapp.Response;
 import com.guonima.wxapp.dao.DaoSupport;
+import com.guonima.wxapp.service.trade.wxpay.config.WxpayConfig;
+import com.guonima.wxapp.service.trade.wxpay.util.HttpsUtils;
+import com.guonima.wxapp.service.trade.wxpay.util.WXSignUtils;
+import com.guonima.wxapp.service.trade.wxpay.util.WxXmlParseUtil;
+import com.guonima.wxapp.util.DateUtil;
+import com.guonima.wxapp.util.HttpUtil;
+import com.guonima.wxapp.util.IPUtils;
+import com.guonima.wxapp.util.XmlParserUtil;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -23,39 +35,93 @@ public class PaymentServiceImpl implements PaymentService {
     private DaoSupport dao;
 
     @Override
-    public void unifiedOrder(){
+    public Response unifiedOrder(String orderNo, BigDecimal cost, String body) {
 
         SortedMap<String, String> param = new TreeMap<String, String>();
-        param.put("appid", WxPaymentConfig.WX_PAY_APPID); // 微信分配的小程序ID
-        param.put("mch_id", WxPaymentConfig.WX_PAY_MCHID); // 微信支付分配的商户号
-        param.put("device_info", ""); // 终端设备号
+        param.put("appid", WxpayConfig.APP_ID); // 微信分配的小程序ID
+        param.put("mch_id", WxpayConfig.MCH_ID); // 微信支付分配的商户号
+//        param.put("device_info", ""); // 终端设备号
         param.put("nonce_str", RandomStringUtils.randomAlphanumeric(28)); // 随机字符串
-        param.put("sign", ""); // 签名
         param.put("sign_type", "MD5"); // 签名类型
-        param.put("body", ""); // 商品描述
-        param.put("detail", ""); // 商品详情
-        param.put("attach", ""); // 附加数据
-        param.put("out_trade_no", ""); // 商户订单号
-        param.put("fee_type", ""); // 货币类型
-        param.put("total_fee", ""); // 总金额 （单位 分）
-        param.put("spbill_create_ip", ""); // 终端IP
-        param.put("time_start", ""); // 交易起始时间
-        param.put("time_expire", ""); // 交易结束时间
+        param.put("body", body); // 商品描述
+//        param.put("detail", ""); // 商品详情
+//        param.put("attach", ""); // 附加数据
+        param.put("out_trade_no", orderNo); // 商户订单号
+//        param.put("fee_type", ""); // 货币类型
+        cost = cost.multiply(new BigDecimal(100));
+        param.put("total_fee", cost.toString()); // 总金额 （单位 分）
+        param.put("spbill_create_ip", IPUtils.getClientAddress(HttpUtil.getHttpServletRequest())); // 终端IP
+        param.put("time_start", DateUtil.format(new Date(), DateUtil.FULL_NOT_LINE_DATE)); // 交易起始时间
+        param.put("time_expire", timeExpire()); // 交易结束时间
+        param.put("trade_type", "JSAPI"); // 交易类型
+        param.put("notify_url", WxpayConfig.NOTIFY_URL); // 通知地址
 
+        // 生成签名
+        String sign = WXSignUtils.createSign("UTF-8", param);
+        param.put("sign", sign); // 签名
 
+        return unifiedOrder(param);
+    }
 
+    /**
+     * 统一下单处理
+     *
+     * @param param 统一下单参数
+     * @return
+     */
+    private Response unifiedOrder(SortedMap<String, String> param) {
 
+        String xmlParam = WxXmlParseUtil.getUnifiedOrderParam(param);
+        String unifiedOrderResult = HttpsUtils.httpsRequest(WxpayConfig.UNIFIED_ORDER_URL, "POST", xmlParam).toString();
 
-//        		否	String(14)	20091225091010	订单生成时间，格式为yyyyMMddHHmmss，如2009年12月25日9点10分10秒表示为20091225091010。其他详见时间规则
-//        		否	String(14)	20091227091010
-//        订单失效时间，格式为yyyyMMddHHmmss，如2009年12月27日9点10分10秒表示为20091227091010。其他详见时间规则
-//        注意：最短失效时间间隔必须大于5分钟
-//        商品标记	goods_tag	否	String(32)	WXG	商品标记，代金券或立减优惠功能的参数，说明详见代金券或立减优惠
-//        通知地址	notify_url	是	String(256)	http://www.weixin.qq.com/wxpay/pay.php	接收微信支付异步通知回调地址，通知url必须为直接可访问的url，不能携带参数。
-//        交易类型	trade_type	是	String(16)	JSAPI	小程序取值如下：JSAPI，详细说明见参数规定
-//        指定支付方式	limit_pay	否	String(32)	no_credit	no_credit--指定不能使用信用卡支付
-//        用户标识	openid	否	String(128)	oUpF8uMuAJO_M2pxb1Q9zNjWeS6o	trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。openid如何获取，可参考【获取openid】。
+        Response response = new Response();
+        if (StringUtils.isEmpty(unifiedOrderResult)) {
+            log.warn("微信支付统一下单失败 ： 调用返回参数为空");
 
+            response.setCode(2000);
+            response.setMessage("微信支付统一下单失败");
+            return response;
+        }
+        String return_code = XmlParserUtil.getNodeValue(unifiedOrderResult, "/xml/return_code");
+        if (!"SUCCESS".equalsIgnoreCase(return_code)) {
+            log.warn("微信支付统一下单失败 ：  " + XmlParserUtil.getNodeValue(unifiedOrderResult, "/xml/return_msg"));
+
+            response.setCode(2000);
+            response.setMessage("微信支付统一下单失败");
+            return response;
+        }
+        String result_code = XmlParserUtil.getNodeValue(unifiedOrderResult, "/xml/result_code");
+        if (!"SUCCESS".equalsIgnoreCase(result_code)) {
+            log.warn("微信支付统一下单失败 ： " + XmlParserUtil.getNodeValue(unifiedOrderResult, "/xml/err_code_des"));
+
+            response.setCode(2000);
+            response.setMessage("微信支付统一下单失败");
+            return response;
+        }
+        String prepay_id = XmlParserUtil.getNodeValue(unifiedOrderResult, "/xml/prepay_id");
+        // 下单成功获取预支付交易id之后的参数：开始生成签名
+        SortedMap<String, String> orderParams = new TreeMap<String, String>();
+        orderParams.put("appid", WxpayConfig.APP_ID); // 微信开放平台审核通过的应用APPID
+        orderParams.put("partnerid", WxpayConfig.MCH_ID); // 微信支付分配的商户号
+        orderParams.put("prepayid", prepay_id); // 预支付交易会话ID
+        orderParams.put("package", "Sign=WXPay"); // 扩展字段
+        orderParams.put("noncestr", RandomStringUtils.randomAlphanumeric(28)); // 随机字符串
+        orderParams.put("timestamp", String.valueOf(new Date().getTime())); // 时间戳
+        orderParams.put("sign", WXSignUtils.createSign("UTF-8", orderParams)); // 签名
+
+        response.setCode(0);
+        response.setMessage("操作成功");
+        response.setData(orderParams);
+        return response;
+    }
+
+    /**
+     * 订单失效时间
+     */
+    private String timeExpire() {
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.MINUTE, WxpayConfig.TIMEOUT_EXPRESS);
+        return DateUtil.format(now.getTime(), DateUtil.FULL_NOT_LINE_DATE);
     }
 
 }

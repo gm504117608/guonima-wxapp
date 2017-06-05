@@ -1,6 +1,7 @@
 package com.guonima.wxapp.controller;
 
 import com.guonima.wxapp.Response;
+import com.guonima.wxapp.annotations.Log;
 import com.guonima.wxapp.domain.*;
 import com.guonima.wxapp.domain.common.Pageable;
 import com.guonima.wxapp.domain.reservation.PrintPhoto;
@@ -43,6 +44,7 @@ public class OrderController extends BaseController {
     private ConsignmentAddressService consignmentAddressService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/orders")
+    @Log("保存订单信息")
     public Response savePrintPhotoOrder(@RequestBody ReservationDTO reservationDTO) {
         StringBuilder sb = new StringBuilder();
         if (null == reservationDTO.getMemberId()) {
@@ -69,21 +71,22 @@ public class OrderController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/orders/payment")
-    public Response savePrintPhotoOrderPayment(@RequestBody OrderPaymentDTO orderPaymentDTO){
+    @Log("更新订单信息")
+    public Response savePrintPhotoOrderPayment(@RequestBody OrderPaymentDTO orderPaymentDTO) {
         String[] printPhotographIdArray = orderPaymentDTO.getIds().split(",");
-        if(null == printPhotographIdArray || printPhotographIdArray.length == 0){
+        if (null == printPhotographIdArray || printPhotographIdArray.length == 0) {
             return error(2000, "需要打印的照片信息获取不到，请重新操作");
         }
         String[] amount = orderPaymentDTO.getAmounts().split(",");
         PrintPhotographDO ppdo = null;
         ShopPrintCostConfigDO spccdo = null;
         BigDecimal result = new BigDecimal(0);
-        for(int i = 0, len = printPhotographIdArray.length; i < len; i++){
+        for (int i = 0, len = printPhotographIdArray.length; i < len; i++) {
             ppdo = shopService.findPrintPhotographInfo(Long.valueOf(printPhotographIdArray[i]));
             spccdo = shopService.getShopPrintCostConfig(ppdo.getType());
             result = result.add(spccdo.getPrice().multiply(new BigDecimal(amount[i])));
         }
-        if(!result.equals(orderPaymentDTO.getCost())){
+        if (!result.equals(orderPaymentDTO.getCost())) {
             return error(2000, "打印照片所花费的金额不正确");
         }
         // 更新订单金额
@@ -101,7 +104,7 @@ public class OrderController extends BaseController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/orders/config/{type}")
     public Response getBaseConfiguration(@PathVariable("type") String type) {
-       return success(baseConfigurationService.getBaseConfiguration(type));
+        return success(baseConfigurationService.getBaseConfiguration(type));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/orders/{orderNo}")
@@ -139,7 +142,7 @@ public class OrderController extends BaseController {
         PrintPhoto printPhoto = null;
         ShopPrintCostConfigDO spccdo = null;
         List<PrintPhoto> ppList = new ArrayList<PrintPhoto>();
-        for(Map<String, Object> map : list){
+        for (Map<String, Object> map : list) {
             printPhoto = new PrintPhoto();
             printPhoto.setDescription((String) map.get("description"));
             printPhoto.setStoreUrl((String) map.get("storeUrl"));
@@ -174,7 +177,7 @@ public class OrderController extends BaseController {
         ShopDO sdo = null;
         ConfigurationDO cdo = null;
         List<ReservationDTO> result = new ArrayList<ReservationDTO>();
-        for(ReservationDO rdo : list){
+        for (ReservationDO rdo : list) {
             rdto = new ReservationDTO();
             rdto.setId(rdo.getId());
             rdto.setMemberId(rdo.getMemberId());
@@ -197,10 +200,11 @@ public class OrderController extends BaseController {
 
     /**
      * 订单实体之间相互转换
+     *
      * @param rdto 界面传入实体
-     * @param rdo 数据库对应实体
+     * @param rdo  数据库对应实体
      */
-    private void reservationDTO2ReservationDO(ReservationDTO rdto, ReservationDO rdo){
+    private void reservationDTO2ReservationDO(ReservationDTO rdto, ReservationDO rdo) {
         rdo.setMemberId(rdto.getMemberId());
         rdo.setShopId(rdto.getShopId());
         rdo.setStatus("S01");
@@ -210,18 +214,19 @@ public class OrderController extends BaseController {
 
     /**
      * 计算下单打印照片信息需要花费的金额
+     *
      * @param printPhotographIds 打印照片信息唯一标识id串
      * @return
      */
-    private BigDecimal calculatePrintPhotoCost(String printPhotographIds){
+    private BigDecimal calculatePrintPhotoCost(String printPhotographIds) {
         String[] printPhotographIdArray = printPhotographIds.split(",");
-        if(null == printPhotographIdArray || printPhotographIdArray.length == 0){
+        if (null == printPhotographIdArray || printPhotographIdArray.length == 0) {
             return new BigDecimal(0);
         }
         PrintPhotographDO ppdo = null;
         ShopPrintCostConfigDO spccdo = null;
         BigDecimal result = new BigDecimal(0);
-        for(String id : printPhotographIdArray){
+        for (String id : printPhotographIdArray) {
             ppdo = shopService.findPrintPhotographInfo(Long.valueOf(id));
             spccdo = shopService.getShopPrintCostConfig(ppdo.getType());
             result = result.add(spccdo.getPrice()); // 默认值打印一张照片

@@ -18,6 +18,7 @@ import java.util.Map;
 
 /**
  * 订单相关信息service
+ *
  * @author : guonima
  * @create : 2017-04-30-00:10
  */
@@ -32,21 +33,21 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int saveReservationPrintPhotograph(String printPhotographIds, String orderNo) {
         String[] printPhotographIdArray = printPhotographIds.split(",");
-        if(null == printPhotographIdArray || printPhotographIdArray.length == 0){
+        if (null == printPhotographIdArray || printPhotographIdArray.length == 0) {
             return 0;
         }
         ReservationPrintPhotographDO rppdo = null;
         List<ReservationPrintPhotographDO> list = new ArrayList<ReservationPrintPhotographDO>();
-        for (String id : printPhotographIdArray){
+        for (String id : printPhotographIdArray) {
             rppdo = new ReservationPrintPhotographDO();
             rppdo.setAmount(1);
             rppdo.setOrderNo(orderNo);
             rppdo.setPrintPhotographId(Long.valueOf(id));
             list.add(rppdo);
         }
-        try{
+        try {
             dao.batchSave("reservationPrintPhotographMapper.insert", list);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new ServiceException("保存订单和照片打印信息关联出现错误： " + e.getMessage());
         }
         return 0;
@@ -55,22 +56,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int updateReservationPrintPhotograph(String printPhotographIds, String orderNo, String amounts) {
         String[] printPhotographIdArray = printPhotographIds.split(",");
-        if(null == printPhotographIdArray || printPhotographIdArray.length == 0){
+        if (null == printPhotographIdArray || printPhotographIdArray.length == 0) {
             return 0;
         }
         String[] amount = amounts.split(",");
         ReservationPrintPhotographDO rppdo = null;
         List<ReservationPrintPhotographDO> list = new ArrayList<ReservationPrintPhotographDO>();
-        for(int i = 0, len = printPhotographIdArray.length; i < len; i++){
+        for (int i = 0, len = printPhotographIdArray.length; i < len; i++) {
             rppdo = new ReservationPrintPhotographDO();
             rppdo.setAmount(Integer.valueOf(amount[i]));
             rppdo.setOrderNo(orderNo);
             rppdo.setPrintPhotographId(Long.valueOf(printPhotographIdArray[i]));
             list.add(rppdo);
         }
-        try{
+        try {
             dao.batchUpdate("reservationPrintPhotographMapper.update", list);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new ServiceException("更新订单和照片打印信息关联出现错误： " + e.getMessage());
         }
         return 0;
@@ -78,31 +79,31 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public int saveReservation(ReservationDO reservationDO) {
-        try{
+        try {
             return dao.save("reservationMapper.insert", reservationDO);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new ServiceException("保存订单信息出现错误： " + e.getMessage());
         }
     }
 
     @Override
     public int updateReservation(ReservationDO reservationDO) {
-        try{
+        try {
             return dao.save("reservationMapper.update", reservationDO);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new ServiceException("更新订单信息出现错误： " + e.getMessage());
         }
     }
 
     @Override
-    public ReservationDO findReservationInfo (String orderNo){
+    public ReservationDO findReservationInfo(String orderNo) {
         ReservationDO reservationDO = new ReservationDO();
         reservationDO.setOrderNo(orderNo);
         return (ReservationDO) dao.findForObject("reservationMapper.findReservationInfo", reservationDO);
     }
 
     @Override
-    public Pageable findReservationInfo (Long memberId, String status, int pageNum, int pageSize){
+    public Pageable findReservationInfo(Long memberId, String status, int pageNum, int pageSize) {
         ReservationDO reservationDO = new ReservationDO();
         reservationDO.setMemberId(memberId);
         reservationDO.setStatus(status);
@@ -119,10 +120,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Map<String, Object>> findReservationPrintPhotographInfo (String orderNo){
+    public List<Map<String, Object>> findReservationPrintPhotographInfo(String orderNo) {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("orderNo", orderNo);
-       return (List<Map<String, Object>>) dao.findForList("reservationMapper.findReservationPrintPhotographInfo", param);
+        return (List<Map<String, Object>>) dao.findForList("reservationMapper.findReservationPrintPhotographInfo", param);
     }
 
 }

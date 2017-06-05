@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * 店铺信息service类
+ *
  * @author guonima
  * @create 2017-04-20 14:03
  */
@@ -44,19 +45,19 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ShopDO getShopsInfo(Long id){
+    public ShopDO getShopsInfo(Long id) {
         ShopDO sdo = new ShopDO();
         sdo.setId(id);
-        return (ShopDO)dao.findForObject("shopMapper.findShopInfo", sdo);
+        return (ShopDO) dao.findForObject("shopMapper.findShopInfo", sdo);
     }
 
     @Override
     public int savePrintPhoto(PrintPhotographDO printPhotographDO) {
         Long id = printPhotographDO.getId();
         try {
-            if(id == null){
+            if (id == null) {
                 return dao.save("printPhotographMapper.insert", printPhotographDO);
-            }else {
+            } else {
                 return dao.update("printPhotographMapper.update", printPhotographDO);
             }
         } catch (Exception e) {
@@ -65,12 +66,12 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public Pageable findPrintPhotographInfo(Long shopId, Long memberId, int pageNum,  int pageSize) {
+    public Pageable findPrintPhotographInfo(Long shopId, Long memberId, int pageNum, int pageSize) {
         PrintPhotographDO printPhotographDO = new PrintPhotographDO();
         printPhotographDO.setMemberId(memberId);
         printPhotographDO.setShopId(shopId);
         Page<PrintPhotographDO> page = PageHelper.startPage(pageNum, pageSize);
-        List<PrintPhotographDO> list =(List<PrintPhotographDO>) dao.findForList("printPhotographMapper.findPrintPhotographInfo", printPhotographDO);
+        List<PrintPhotographDO> list = (List<PrintPhotographDO>) dao.findForList("printPhotographMapper.findPrintPhotographInfo", printPhotographDO);
         // 取分页信息
         Pageable result = new Pageable();
         result.setPageNum(page.getPageNum());

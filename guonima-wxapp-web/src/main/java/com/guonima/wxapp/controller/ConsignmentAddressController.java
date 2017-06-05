@@ -56,35 +56,35 @@ public class ConsignmentAddressController extends BaseController {
         if (StringUtils.isEmpty(name)) {
             sb.append("【姓名】不能为空;");
         } else {
-            if(!CommonUtil.checkLength(name, 1, 40)){
+            if (!CommonUtil.checkLength(name, 1, 40)) {
                 sb.append("【姓名】长度在1到40之间;");
             }
         }
         String mobile = consigneeAddressDO.getMobile();
-        if(StringUtils.isEmpty(mobile)){
+        if (StringUtils.isEmpty(mobile)) {
             sb.append("【联系电话】不能为空;");
-        }else{
-            if(!CommonUtil.isPhoneNum(mobile)){
+        } else {
+            if (!CommonUtil.isPhoneNum(mobile)) {
                 sb.append("【联系电话】格式不正确;");
             }
         }
         String address = consigneeAddressDO.getAddress();
-        if(StringUtils.isEmpty(address)){
+        if (StringUtils.isEmpty(address)) {
             sb.append("【详细地址】不能为空;");
-        }else{
-            if(!CommonUtil.checkLength(address, 1, 90)){
+        } else {
+            if (!CommonUtil.checkLength(address, 1, 90)) {
                 sb.append("【详细地址】长度在1到90之间;");
             }
         }
         String postcode = consigneeAddressDO.getPostcode();
-        if(StringUtils.isEmpty(postcode)){
+        if (StringUtils.isEmpty(postcode)) {
             sb.append("【邮编】不能为空;");
-        }else{
-            if(!CommonUtil.checkLength(postcode, 0, 6)){
+        } else {
+            if (!CommonUtil.checkLength(postcode, 0, 6)) {
                 sb.append("【邮编】长度在0到6之间;");
             }
         }
-        if(sb.length() != 0){
+        if (sb.length() != 0) {
             return error(2000, sb.toString());
         }
         return success(consignmentAddressService.save(consigneeAddressDO));

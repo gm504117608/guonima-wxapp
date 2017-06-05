@@ -209,10 +209,10 @@ public class ShopController extends BaseController {
             result.add(ppdto);
         }
         // 收货地址默认
-        ConsigneeAddressDO consigneeAddressDO= null;
+        ConsigneeAddressDO consigneeAddressDO = null;
         List<ConsigneeAddressDO> list = consignmentAddressService.getConsignmentAddressByMemberId(ppdo.getMemberId());
-        for(ConsigneeAddressDO cado : list){
-            if(cado.getIsUsing() == 1){
+        for (ConsigneeAddressDO cado : list) {
+            if (cado.getIsUsing() == 1) {
                 consigneeAddressDO = cado;
             }
         }

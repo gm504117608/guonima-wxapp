@@ -1,8 +1,8 @@
-package com.guonima.wxapp.util;
+package com.guonima.wxapp.service.trade.wxpay.util;
 
 import org.apache.commons.collections.MapUtils;
 
-import java.util.TreeMap;
+import java.util.SortedMap;
 
 /**
  * @author : guonima
@@ -17,7 +17,7 @@ public class WxXmlParseUtil {
      * @param param 微信统一下单参数集合
      * @return
      */
-    public static String getUnifiedOrderParam(TreeMap<String, String> param) {
+    public static String getUnifiedOrderParam(SortedMap<String, String> param) {
         if (MapUtils.isEmpty(param)) {
             return null;
         }

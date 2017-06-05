@@ -17,7 +17,7 @@ public class ReservationPrintPhotographDO implements Serializable {
     private Integer amount; // 打印数量
     private Date createTime; // 创建时间
 
-    public ReservationPrintPhotographDO(){
+    public ReservationPrintPhotographDO() {
 
     }
 

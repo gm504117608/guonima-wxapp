@@ -111,7 +111,7 @@ public class XmlParserUtil {
     /**
      * 获取结点List
      *
-     * @param node xml节点对象
+     * @param node  xml节点对象
      * @param xpath xpath表达式
      * @return
      * @throws XPathExpressionException
@@ -127,7 +127,7 @@ public class XmlParserUtil {
     /**
      * 获取单个结点
      *
-     * @param node xml节点对象
+     * @param node  xml节点对象
      * @param xpath xpath表达式
      * @return
      * @throws XPathExpressionException
@@ -143,7 +143,7 @@ public class XmlParserUtil {
     /**
      * 获取单个结点的值
      *
-     * @param node xml节点对象
+     * @param node  xml节点对象
      * @param xpath xpath表达式
      * @return
      * @throws XPathExpressionException
@@ -159,21 +159,26 @@ public class XmlParserUtil {
     /**
      * 获取单个结点的值
      *
-     * @param xml xml字符串
+     * @param xml   xml字符串
      * @param xpath xpath表达式
      * @return
      * @throws XPathExpressionException
      */
-    public static String getNodeValue(String xml, String xpath) throws Exception {
+    public static String getNodeValue(String xml, String xpath) {
         if (StringUtils.isEmpty(xml) || StringUtils.isEmpty(xpath)) {
             return null;
         }
-        Document doc = parseString(xml);
-        if (null == doc) {
-            return null;
+        try {
+            Document doc = parseString(xml);
+            if (null == doc) {
+                return null;
+            }
+            Node nodeRet = (Node) oXpath.evaluate(xpath, doc.getFirstChild(), XPathConstants.NODE);
+            return nodeRet.getTextContent();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        Node nodeRet = (Node) oXpath.evaluate(xpath, doc.getFirstChild(), XPathConstants.NODE);
-        return nodeRet.getTextContent();
+        return null;
     }
 
     public static void main(String[] args) throws Exception {

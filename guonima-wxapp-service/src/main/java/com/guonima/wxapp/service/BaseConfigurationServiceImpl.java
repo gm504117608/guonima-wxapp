@@ -29,8 +29,8 @@ public class BaseConfigurationServiceImpl implements BaseConfigurationService {
     @Override
     public ConfigurationDO getBaseConfiguration(String type, String code) {
         List<ConfigurationDO> list = getBaseConfigurationInfoRedis(type);
-        for(ConfigurationDO cdo : list){
-            if(cdo.getCode().equals(code)){
+        for (ConfigurationDO cdo : list) {
+            if (cdo.getCode().equals(code)) {
                 return cdo;
             }
         }
@@ -52,7 +52,7 @@ public class BaseConfigurationServiceImpl implements BaseConfigurationService {
             list = (List<ConfigurationDO>) dao.findForList("configurationMapper.findBaseConfigurationData", cdo);
             try {
                 RedisClient.set(type, list);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
