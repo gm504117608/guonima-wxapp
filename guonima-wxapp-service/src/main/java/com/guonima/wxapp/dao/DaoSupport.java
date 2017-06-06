@@ -23,7 +23,7 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public int save(String str, Object obj) throws Exception {
+    public int insert(String str, Object obj) throws Exception {
         return sqlSessionTemplate.insert(str, obj);
     }
 
@@ -35,7 +35,7 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public void batchSave(String str, List objs) throws Exception {
+    public void batchInsert(String str, List objs) throws Exception {
         SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
         //批量执行器
         SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH, false);

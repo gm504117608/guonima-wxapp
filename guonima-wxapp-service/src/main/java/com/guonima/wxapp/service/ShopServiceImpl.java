@@ -56,7 +56,7 @@ public class ShopServiceImpl implements ShopService {
         Long id = printPhotographDO.getId();
         try {
             if (id == null) {
-                return dao.save("printPhotographMapper.insert", printPhotographDO);
+                return dao.insert("printPhotographMapper.insert", printPhotographDO);
             } else {
                 return dao.update("printPhotographMapper.update", printPhotographDO);
             }

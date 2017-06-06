@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
         Long id = null;
         try {
             if (member == null) { // 新增
-                dao.save("memberMapper.insert", memberDO);
+                dao.insert("memberMapper.insert", memberDO);
                 id = memberDO.getId();
             } else { // 修改
                 dao.update("memberMapper.update", memberDO);

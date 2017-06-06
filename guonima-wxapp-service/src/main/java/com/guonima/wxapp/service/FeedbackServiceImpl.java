@@ -25,7 +25,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         try {
             feedbackDO.setCreateUser(feedbackDO.getMemberId());
             feedbackDO.setModifyUser(feedbackDO.getMemberId());
-            return dao.save("feedbackMapper.insert", feedbackDO);
+            return dao.insert("feedbackMapper.insert", feedbackDO);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException("用户反馈信息保存出现错误： " + e.getMessage());

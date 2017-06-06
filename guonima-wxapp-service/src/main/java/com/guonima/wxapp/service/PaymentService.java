@@ -3,6 +3,7 @@ package com.guonima.wxapp.service;
 import com.guonima.wxapp.Response;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * @author : guonima
@@ -19,4 +20,12 @@ public interface PaymentService {
      * @return
      */
     public Response unifiedOrder(String orderNo, BigDecimal cost, String body);
+
+    /**
+     * 订单支付成功回调函数
+     *
+     * @param param 回调参数
+     * @return
+     */
+    public String wxpayCallback(Map<String, String> param);
 }

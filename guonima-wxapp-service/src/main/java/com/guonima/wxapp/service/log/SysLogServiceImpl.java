@@ -106,7 +106,7 @@ public class SysLogServiceImpl implements SysLogService, LogPoint {
     @Override
     public int insert(SysLogDO SysLogDO) {
         try {
-            return dao.save("configurationMapper.findBaseConfigurationData", SysLogDO);
+            return dao.insert("configurationMapper.findBaseConfigurationData", SysLogDO);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException("aop记录操作日志保存出现错误： " + e.getMessage());

@@ -20,6 +20,7 @@
         <typeAlias type="com.guonima.wxapp.domain.PrintPhotographDO" alias="printPhotographDO"/>
         <typeAlias type="com.guonima.wxapp.domain.ShopPrintCostConfigDO" alias="shopPrintCostConfigDO"/>
         <typeAlias type="com.guonima.wxapp.domain.ReservationDO" alias="reservationDO"/>
+        <typeAlias type="com.guonima.wxapp.domain.PaymentDO" alias="paymentDO"/>
         <typeAlias type="com.guonima.wxapp.domain.ReservationPrintPhotographDO" alias="reservationPrintPhotographDO"/>
     </typeAliases>
 

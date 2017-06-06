@@ -46,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
             list.add(rppdo);
         }
         try {
-            dao.batchSave("reservationPrintPhotographMapper.insert", list);
+            dao.batchInsert("reservationPrintPhotographMapper.insert", list);
         } catch (Exception e) {
             throw new ServiceException("保存订单和照片打印信息关联出现错误： " + e.getMessage());
         }
@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int saveReservation(ReservationDO reservationDO) {
         try {
-            return dao.save("reservationMapper.insert", reservationDO);
+            return dao.insert("reservationMapper.insert", reservationDO);
         } catch (Exception e) {
             throw new ServiceException("保存订单信息出现错误： " + e.getMessage());
         }
@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int updateReservation(ReservationDO reservationDO) {
         try {
-            return dao.save("reservationMapper.update", reservationDO);
+            return dao.insert("reservationMapper.update", reservationDO);
         } catch (Exception e) {
             throw new ServiceException("更新订单信息出现错误： " + e.getMessage());
         }

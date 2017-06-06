@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="paymentMapper">
+
+    <sql id="paymentColumns">
+        id, order_no, coupon_no, cost, finish_time, remark, create_time
+    </sql>
+
+    <resultMap id="paymentResultMap" type="paymentDO">
+        <id column="id" property="id"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="coupon_no" property="couponNo"/>
+        <result column="cost" property="cost"/>
+        <result column="remark" property="remark"/>
+        <result column="finish_time" property="finishTime"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 新增订单支付信息 -->
+    <insert id="insert" parameterType="paymentDO" useGeneratedKeys="true" keyProperty="id">
+        insert into payment (
+            order_no, coupon_no, cost, finish_time, remark, create_time
+        )values (
+            trim(#{orderNo}), trim(#{couponNo}), trim(#{cost}), trim(#{finishTime}), trim(#{remark}), sysdate()
+        )
+    </insert>
+
+    <!-- 获取订单支付数据 -->
+    <select id="findPaymentInfo" parameterType="paymentDO" resultMap="paymentResultMap">
+        select
+        <include refid="paymentColumns"/>
+        from payment
+        <where>
+            <if test="id != null">
+                and id = trim(#{id})
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+                and order_no = trim(#{orderNo})
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -58,7 +58,7 @@ public class ConsignmentAddressServiceImpl implements ConsignmentAddressService 
 
     private int insert(ConsigneeAddressDO consigneeAddressDO) {
         try {
-            return dao.save("consignmentAddressMapper.insert", consigneeAddressDO);
+            return dao.insert("consignmentAddressMapper.insert", consigneeAddressDO);
         } catch (Exception e) {
             e.printStackTrace();
         }

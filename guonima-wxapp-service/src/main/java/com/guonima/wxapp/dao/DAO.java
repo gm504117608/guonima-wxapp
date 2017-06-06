@@ -10,7 +10,7 @@ public interface DAO {
      * @return
      * @throws Exception
      */
-    public int save(String str, Object obj) throws Exception;
+    public int insert(String str, Object obj) throws Exception;
 
     /**
      * 修改对象

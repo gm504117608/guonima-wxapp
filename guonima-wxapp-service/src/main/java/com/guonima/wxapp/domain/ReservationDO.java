@@ -18,7 +18,7 @@ public class ReservationDO implements Serializable {
     private Long shopId; // 店铺唯一标识
     private Long consignmentId; // 收货地址唯一标识
     private String orderNo; // 订单号
-    private BigDecimal cost; // 话费金额
+    private BigDecimal cost; // 花费金额
     private String status; // 订单状态
     private String dispatchingWay; // 配送方式
     private String remark; // 备注
