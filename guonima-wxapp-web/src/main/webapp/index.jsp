@@ -12,6 +12,6 @@
 </head>
 <body>
 Hello word! This is api Server !
-http://ip:8080/wxapp/api/members/123
+http://ip:8080/api/members/123
 </body>
 </html>

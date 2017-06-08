@@ -40,21 +40,18 @@ public class MemberServiceImpl implements MemberService {
             token = SecurityUtil.createToken(memberDO.getOpenid());
         }
         MemberDO member = getMemberInfoRedis(memberDO, token);
-        Long id = null;
         try {
             if (member == null) { // 新增
                 dao.insert("memberMapper.insert", memberDO);
-                id = memberDO.getId();
             } else { // 修改
                 dao.update("memberMapper.update", memberDO);
-                id = member.getId();
             }
             setMemberInfoRedis(memberDO, token);
         } catch (Exception e) {
             throw new ServiceException("微信登录我方应用出现错误：" + e.getMessage());
         }
         Map<String, Object> result = new HashMap<String, Object>();
-        result.put("id", id);
+        result.put("id", memberDO.getId());
         result.put("token", token);
         return result;
     }
