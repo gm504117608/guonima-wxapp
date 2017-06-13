@@ -156,22 +156,23 @@ public class OrderController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/orders")
-    public Response getPrintPhotoOrderInfo(@RequestParam Long memberId, @RequestParam String status,
-                                           @RequestParam int pageNum, @RequestParam int pageSize) {
-        if (pageNum == 0) {
-            pageNum = 1;
+    public Response getPrintPhotoOrderInfo(@RequestParam String memberId, @RequestParam String status,
+                                           @RequestParam String pageNum, @RequestParam String pageSize) {
+        if (StringUtils.isEmpty(pageNum) || "0".equals(pageNum)) {
+            pageNum = "1";
         }
-        if (pageSize == 0) {
-            pageSize = 10;
+        if (StringUtils.isEmpty(pageSize) || "0".equals(pageSize)) {
+            pageSize = "10";
         }
         StringBuilder sb = new StringBuilder();
-        if (memberId == null) {
+        if (StringUtils.isEmpty(memberId)) {
             sb.append("会员id不能为空;");
         }
         if (sb.length() != 0) {
             error(2000, sb.toString());
         }
-        Pageable page = orderService.findReservationInfo(memberId, status, pageNum, pageSize);
+        Pageable page = orderService.findReservationInfo(Long.valueOf(memberId), status, Integer.valueOf(pageNum).intValue(),
+                Integer.valueOf(pageSize).intValue());
         List<ReservationDO> list = page.getResult();
         ReservationDTO rdto = null;
         ShopDO sdo = null;

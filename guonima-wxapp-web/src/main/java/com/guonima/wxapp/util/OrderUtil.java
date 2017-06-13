@@ -12,14 +12,14 @@ public class OrderUtil {
 
     /**
      * 生成订单号
-     * 规则 ： R开头，000【标志位预留以后使用，比如分表分库等】 + 日期（年月日时分秒毫秒） +
+     * 规则 ： 000【标志位预留以后使用，比如分表分库等】 + 日期（年月日时分秒毫秒） +
      * System.currentTimeMillis()中的5位 +
      * System.nanoTime()时间纳秒中5位
      *
      * @return 订单号
      */
     public static String createOrderNo() {
-        StringBuilder orderNo = new StringBuilder("R000");
+        StringBuilder orderNo = new StringBuilder("000");
         // jdk1.8的时间类是线程安全的
         orderNo.append(ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")));
         orderNo.append((System.currentTimeMillis() / 1000 + "").substring(5));

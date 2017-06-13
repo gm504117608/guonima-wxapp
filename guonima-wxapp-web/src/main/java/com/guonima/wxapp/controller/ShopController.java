@@ -38,14 +38,14 @@ public class ShopController extends BaseController {
     private BaseConfigurationService baseConfigurationService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/shops")
-    public Response getShopInfo(@RequestParam int pageNum, @RequestParam int pageSize) {
-        if (pageNum == 0) {
-            pageNum = 1;
+    public Response getShopInfo(@RequestParam String pageNum, @RequestParam String pageSize) {
+        if (StringUtils.isEmpty(pageNum) || "0".equals(pageNum)) {
+            pageNum = "1";
         }
-        if (pageSize == 0) {
-            pageSize = 10;
+        if (StringUtils.isEmpty(pageSize) || "0".equals(pageSize)) {
+            pageSize = "10";
         }
-        Pageable page = shopService.getShopsInfo(pageNum, pageSize);
+        Pageable page = shopService.getShopsInfo(Integer.valueOf(pageNum).intValue(), Integer.valueOf(pageSize).intValue());
         List<ShopDO> list = page.getResult();
         ShopDTO sdto = null;
         List<ShopDTO> result = new ArrayList<ShopDTO>();
@@ -162,14 +162,15 @@ public class ShopController extends BaseController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/shops/photos")
     public Response getPrintPhotographInfo(@RequestParam("shopId") Long shopId, @RequestParam("memberId") Long memberId,
-                                           @RequestParam("pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
-        if (pageNum == 0) {
-            pageNum = 1;
+                                           @RequestParam("pageNum") String pageNum, @RequestParam("pageSize") String pageSize) {
+        if (StringUtils.isEmpty(pageNum) || "0".equals(pageNum)) {
+            pageNum = "1";
         }
-        if (pageSize == 0) {
-            pageSize = 10;
+        if (StringUtils.isEmpty(pageSize) || "0".equals(pageSize)) {
+            pageSize = "10";
         }
-        Pageable page = shopService.findPrintPhotographInfo(shopId, memberId, pageNum, pageSize);
+        Pageable page = shopService.findPrintPhotographInfo(shopId, memberId, Integer.valueOf(pageNum).intValue(),
+                Integer.valueOf(pageSize).intValue());
         List<PrintPhotographDO> list = page.getResult();
         List<PrintPhotographDTO> result = new ArrayList<PrintPhotographDTO>();
         PrintPhotographDTO ppdto = null;
