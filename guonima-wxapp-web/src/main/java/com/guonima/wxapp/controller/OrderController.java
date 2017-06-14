@@ -57,7 +57,7 @@ public class OrderController extends BaseController {
             sb.append("没有选择需要打印的照片信息;");
         }
         if (sb.length() != 0) {
-            error(2000, sb.toString());
+            return error(2000, sb.toString());
         }
         String orderNo = OrderUtil.createOrderNo();
         // 处理订单和照片关联信息
@@ -169,7 +169,7 @@ public class OrderController extends BaseController {
             sb.append("会员id不能为空;");
         }
         if (sb.length() != 0) {
-            error(2000, sb.toString());
+            return error(2000, sb.toString());
         }
         Pageable page = orderService.findReservationInfo(Long.valueOf(memberId), status, Integer.valueOf(pageNum).intValue(),
                 Integer.valueOf(pageSize).intValue());

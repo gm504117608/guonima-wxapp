@@ -36,8 +36,7 @@ public interface MemberService {
      * 保存用户一些可修改数据
      *
      * @param memberDO 会员信息实体
-     * @param token    回话唯一标识
      */
-    public int save(MemberDO memberDO, String token);
+    public int save(MemberDO memberDO);
 
 }

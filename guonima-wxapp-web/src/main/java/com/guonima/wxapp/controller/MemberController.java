@@ -70,7 +70,7 @@ public class MemberController extends BaseController {
         }
         MemberDO memberDO = new MemberDO();
         MemberDTO2MemberDO(memberDTO, memberDO);
-        return success(memberService.save(memberDO, token));
+        return success(memberService.save(memberDO));
     }
 
     /**
