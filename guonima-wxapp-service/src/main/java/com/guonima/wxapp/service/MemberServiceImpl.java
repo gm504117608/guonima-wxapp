@@ -52,7 +52,7 @@ public class MemberServiceImpl implements MemberService {
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("id", id);
         // 缓存token处理
-        result.put("token", cacheToken(token, memberDO.getOpenid()));
+        result.put("token", cacheToken(token, memberDO.getOpenid(), id));
         return result;
     }
 
@@ -107,8 +107,9 @@ public class MemberServiceImpl implements MemberService {
      *
      * @param token 回话token值
      * @param openId 微信openid
+     * @param id 用户id
      */
-    private String cacheToken(String token, String openId){
+    private String cacheToken(String token, String openId, Long id){
 
         if (StringUtils.isNotEmpty(token)) {
             String str = RedisClient.get(token, String.class);
@@ -119,7 +120,7 @@ public class MemberServiceImpl implements MemberService {
         token = SecurityUtil.createToken(openId);
         // 24 * 60 * 60
         try {
-            RedisClient.set(token, 86400, "token");
+            RedisClient.set(token, 86400, String.valueOf(id));
         } catch (Exception e) {
             e.printStackTrace();
         }

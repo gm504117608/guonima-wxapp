@@ -157,8 +157,8 @@ public class SysLogServiceImpl implements SysLogService, LogPoint {
      */
     private void getMemberInfo(SysLogDO log, HttpServletRequest request) {
         String token = request.getHeader("token");
-        MemberDO me = RedisClient.get("member-" + token, MemberDO.class);
-        log.setMemberId(me.getId());
-        log.setMemberName(me.getNickName());
+        String id = RedisClient.get(token, String.class);
+        log.setMemberId(Long.valueOf(id));
+//        log.setMemberName(me.getNickName());
     }
 }
