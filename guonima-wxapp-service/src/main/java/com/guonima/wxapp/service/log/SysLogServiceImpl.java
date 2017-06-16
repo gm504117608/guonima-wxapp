@@ -60,12 +60,15 @@ public class SysLogServiceImpl implements SysLogService, LogPoint {
         Object[] params = joinPoint.getArgs();
         StringBuffer bf = new StringBuffer();
         if (params != null && params.length > 0) {
-            Enumeration<String> paraNames = request.getParameterNames();
-            while (paraNames.hasMoreElements()) {
-                String key = paraNames.nextElement();
-                bf.append(key).append("=");
-                bf.append(request.getParameter(key)).append("&");
+            for (Object obj : params) {
+                bf.append(obj.toString());
             }
+//            Enumeration<String> paraNames = request.getParameterNames();
+//            while (paraNames.hasMoreElements()) {
+//                String key = paraNames.nextElement();
+//                bf.append(key).append("=");
+//                bf.append(request.getParameter(key)).append("&");
+//            }
             if (StringUtils.isBlank(bf.toString())) {
                 bf.append(request.getQueryString());
             }
@@ -75,38 +78,34 @@ public class SysLogServiceImpl implements SysLogService, LogPoint {
 
     @Override
     public void saveLog(JoinPoint joinPoint, String methodName, Throwable e) {
-        try {
-            HttpServletRequest request = HttpUtil.getHttpServletRequest();
-            SysLogDO log = new SysLogDO();
-            log.setContent(adminOptionContent(joinPoint, methodName, request));
-            // 处理用户信息
-            getMemberInfo(log, request);
-            log.setOperation("异常");
-            log.setCreateTime(new Date(System.currentTimeMillis()));
-            log.setRemoteAddr(IPUtils.getClientAddress(request));
-            log.setRequestUrl(request.getRequestURI());
-            log.setException(e == null ? null : e.toString());
-            log.setType(e == null ? SysLogDO.TYPE_ACCESS : SysLogDO.TYPE_EXCEPTION);
 
-            /*========日志文件记录=========*/
-            logger.error("=====异常通知开始=====");
-            logger.error("异常代码:" + e.getClass().getName());
-            logger.error("异常信息:" + e.getMessage());
-            logger.error("异常方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
-            logger.error("请求参数:" + log.getContent());
-            logger.error("=====异常通知结束=====");
+        SysLogDO log = new SysLogDO();
+        HttpServletRequest request = HttpUtil.getHttpServletRequest();
+        log.setContent(adminOptionContent(joinPoint, methodName, request));
+        // 处理用户信息
+        getMemberInfo(log, request);
+        log.setOperation("异常");
+        log.setCreateTime(new Date(System.currentTimeMillis()));
+        log.setRemoteAddr(IPUtils.getClientAddress(request));
+        log.setRequestUrl(request.getRequestURI());
+        log.setException(e == null ? null : e.toString());
+        log.setType(e == null ? SysLogDO.TYPE_ACCESS : SysLogDO.TYPE_EXCEPTION);
 
-            insert(log);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage());
-        }
+        /*========日志文件记录=========*/
+        logger.error("=====异常通知开始=====");
+        logger.error("异常代码:" + e.getClass().getName());
+        logger.error("异常信息:" + e.getMessage());
+        logger.error("异常方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
+        logger.error("请求参数:" + log.getContent());
+        logger.error("=====异常通知结束=====");
 
+        insert(log);
     }
 
     @Override
-    public int insert(SysLogDO SysLogDO) {
+    public int insert(SysLogDO sysLogDO) {
         try {
-            return dao.insert("configurationMapper.findBaseConfigurationData", SysLogDO);
+            return dao.insert("sysLogMapper.insert", sysLogDO);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException("aop记录操作日志保存出现错误： " + e.getMessage());
