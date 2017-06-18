@@ -17,6 +17,7 @@ public class ReservationDetailDTO implements Serializable {
     private String orderNo; // 订单号
     private BigDecimal cost; // 花费金额
     private String statusName; // 订单状态名称
+    private String status; // 订单状态
     private String dispatchingWay; // 配送方式
     private String remark; // 备注
     private Date createTime; // 创建时间
@@ -57,6 +58,14 @@ public class ReservationDetailDTO implements Serializable {
 
     public void setStatusName(String statusName) {
         this.statusName = statusName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getDispatchingWay() {
@@ -122,6 +131,7 @@ public class ReservationDetailDTO implements Serializable {
                 ", orderNo='" + orderNo + '\'' +
                 ", cost=" + cost +
                 ", statusName='" + statusName + '\'' +
+                ", status='" + status + '\'' +
                 ", dispatchingWay='" + dispatchingWay + '\'' +
                 ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +

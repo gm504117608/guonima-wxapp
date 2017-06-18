@@ -14,11 +14,10 @@ public class PrintPhoto implements Serializable {
     private String type; //打印类型
     private String storeUrl; //照片存储路径
     private Integer amount; // 打印数量
+    private String remark; // 备注
 
     public PrintPhoto() {
     }
-
-    ;
 
     public String getDescription() {
         return description;
@@ -52,10 +51,19 @@ public class PrintPhoto implements Serializable {
         this.amount = amount;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     @Override
     public String toString() {
         return "PrintPhoto{" +
                 "description='" + description + '\'' +
+                "remark='" + remark + '\'' +
                 ", type='" + type + '\'' +
                 ", storeUrl='" + storeUrl + '\'' +
                 ", amount=" + amount +

@@ -91,7 +91,7 @@
 
     <!-- 获取订单详细数据 -->
     <select id="findReservationPrintPhotographInfo" parameterType="java.util.Map" resultType="java.util.Map">
-        select a.amount amount, b.description description, b.type type, b.store_url storeUrl
+        select a.amount amount, b.description description, b.type type, b.store_url storeUrl, b.remark remark
         from reservation_print_photograph a, print_photograph b
         <where>
             a.print_photograph_id = b.id

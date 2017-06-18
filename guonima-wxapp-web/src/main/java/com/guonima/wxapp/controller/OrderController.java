@@ -124,6 +124,7 @@ public class OrderController extends BaseController {
         reservationDetailDTO.setCost(rdo.getCost());
         ConfigurationDO cdo = baseConfigurationService.getBaseConfiguration("orderStatus", rdo.getStatus());
         reservationDetailDTO.setStatusName(cdo.getDescription());
+        reservationDetailDTO.setStatus(rdo.getStatus());
         reservationDetailDTO.setRemark(rdo.getRemark());
         reservationDetailDTO.setCreateTime(rdo.getCreateTime());
         reservationDetailDTO.setShopName(sdo.getName());
@@ -145,6 +146,7 @@ public class OrderController extends BaseController {
         for (Map<String, Object> map : list) {
             printPhoto = new PrintPhoto();
             printPhoto.setDescription((String) map.get("description"));
+            printPhoto.setRemark((String) map.get("remark"));
             printPhoto.setStoreUrl((String) map.get("storeUrl"));
             spccdo = shopService.getShopPrintCostConfig((String) map.get("type"));
             printPhoto.setType(spccdo.getRemark());
