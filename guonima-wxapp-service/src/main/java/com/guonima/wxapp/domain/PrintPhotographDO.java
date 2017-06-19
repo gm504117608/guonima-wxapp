@@ -20,6 +20,7 @@ public class PrintPhotographDO implements Serializable {
     private String clipping; //裁剪方式
     private String typesetting; //排版方式
     private Integer isPrint; // 是否已经打印【1：是；0：否】
+    private Integer isDelete; // 是否删除【1：是；0：否】
     private String remark; // 备注
     private Date createTime;
     private Date modifyTime;
@@ -99,6 +100,14 @@ public class PrintPhotographDO implements Serializable {
         this.isPrint = isPrint;
     }
 
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -135,6 +144,7 @@ public class PrintPhotographDO implements Serializable {
                 ", clipping='" + clipping + '\'' +
                 ", typesetting='" + typesetting + '\'' +
                 ", isPrint=" + isPrint +
+                ", isDelete=" + isDelete +
                 ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +
                 ", modifyTime=" + modifyTime +

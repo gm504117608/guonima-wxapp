@@ -57,7 +57,7 @@ public class OrderController extends BaseController {
             sb.append("没有选择需要打印的照片信息;");
         }
         if (sb.length() != 0) {
-            return error(2000, sb.toString());
+            return error(1000, sb.toString());
         }
         String orderNo = OrderUtil.createOrderNo();
         // 处理订单和照片关联信息
@@ -75,7 +75,7 @@ public class OrderController extends BaseController {
     public Response savePrintPhotoOrderPayment(@RequestBody OrderPaymentDTO orderPaymentDTO) {
         String[] printPhotographIdArray = orderPaymentDTO.getIds().split(",");
         if (null == printPhotographIdArray || printPhotographIdArray.length == 0) {
-            return error(2000, "需要打印的照片信息获取不到，请重新操作");
+            return error(1000, "需要打印的照片信息获取不到，请重新操作");
         }
         String[] amount = orderPaymentDTO.getAmounts().split(",");
         PrintPhotographDO ppdo = null;
@@ -87,7 +87,7 @@ public class OrderController extends BaseController {
             result = result.add(spccdo.getPrice().multiply(new BigDecimal(amount[i])));
         }
         if (!result.equals(orderPaymentDTO.getCost())) {
-            return error(2000, "打印照片所花费的金额不正确");
+            return error(1000, "打印照片所花费的金额不正确");
         }
         // 更新订单金额
         ReservationDO rdo = new ReservationDO();
@@ -171,7 +171,7 @@ public class OrderController extends BaseController {
             sb.append("会员id不能为空;");
         }
         if (sb.length() != 0) {
-            return error(2000, sb.toString());
+            return error(1000, sb.toString());
         }
         Pageable page = orderService.findReservationInfo(Long.valueOf(memberId), status, Integer.valueOf(pageNum).intValue(),
                 Integer.valueOf(pageSize).intValue());

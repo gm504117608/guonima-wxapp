@@ -71,6 +71,11 @@
         </where>
     </update>
 
+    <!-- 删除上传照片打印信息 -->
+    <update id="delete" parameterType="java.lang.Long">
+        update print_photograph set is_delete = 1 where id = #{id}
+    </update>
+
     <!-- 获取打印照片信息数据 -->
     <select id="findPrintPhotographInfo" parameterType="printPhotographDO" resultMap="printPhotographResultMap">
         select
@@ -86,6 +91,7 @@
             <if test="shopId != null">
                 and shop_id = trim(#{shopId})
             </if>
+            and is_delete = 0
             order by create_time desc
         </where>
     </select>

@@ -38,6 +38,13 @@ public interface ShopService {
     public int savePrintPhoto(PrintPhotographDO printPhotographDO);
 
     /**
+     * 删除图片打印的信息
+     *
+     * @param id 图片打印信息实体唯一标识
+     */
+    public int deletePrintPhoto(Long id);
+
+    /**
      * 获取上图图片信息
      *
      * @param shopId   店铺唯一标识id

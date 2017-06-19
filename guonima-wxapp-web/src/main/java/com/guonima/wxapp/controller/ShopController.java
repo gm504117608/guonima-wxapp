@@ -100,7 +100,7 @@ public class ShopController extends BaseController {
             sb.append("店铺信息获取不到;");
         }
         if (sb.length() != 0) {
-            return error(2000, sb.toString());
+            return error(1000, sb.toString());
         }
         String path = FileUploadUtil.fileUploadAndGetPath(request, "file", (shopId + "/" + memberId + "/"));
         if (StringUtils.isEmpty(path)) {
@@ -111,7 +111,7 @@ public class ShopController extends BaseController {
             sb.append("打印类型不能为空;");
         }
         if (sb.length() != 0) {
-            return error(2000, sb.toString());
+            return error(1000, sb.toString());
         }
         // 构造 打印照片信息实体
         PrintPhotographDO printPhotographDO = new PrintPhotographDO();
@@ -129,6 +129,26 @@ public class ShopController extends BaseController {
         printPhotographDO.setStoreUrl(path);
 
         return success(shopService.savePrintPhoto(printPhotographDO));
+    }
+
+    /**
+     * 删除上传图片信息
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/shops/photo/delete/{id}")
+    public Response photoDelete(@PathVariable("id") Long id) {
+
+        StringBuilder sb = new StringBuilder();
+        if (id == null) {
+            sb.append("照片信息获取不到，不能删除操作");
+        }
+        if (sb.length() != 0) {
+            return error(1000, sb.toString());
+        }
+        PrintPhotographDO ppd = shopService.findPrintPhotographInfo(id);
+        if (ppd.getIsPrint() == 1) {
+            return error(2000, "已经打印过的照片信息不能删除");
+        }
+        return success(shopService.deletePrintPhoto(id));
     }
 
     /**
@@ -155,7 +175,7 @@ public class ShopController extends BaseController {
             sb.append("打印类型不能为空;");
         }
         if (sb.length() != 0) {
-            return error(2000, sb.toString());
+            return error(1000, sb.toString());
         }
         return success(shopService.savePrintPhoto(printPhotographDO));
     }
@@ -197,7 +217,7 @@ public class ShopController extends BaseController {
     public Response getPaymentPrintPhoto(@PathVariable("ids") String ids) {
         String[] idArray = ids.split(",");
         if (null == idArray || idArray.length == 0) {
-            return error(2000, "获取打印照片信息的唯一标识不存在");
+            return error(1000, "获取打印照片信息的唯一标识不存在");
         }
         // 打印照片信息
         List<PrintPhotographDTO> result = new ArrayList<PrintPhotographDTO>();

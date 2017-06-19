@@ -85,7 +85,7 @@ public class ConsignmentAddressController extends BaseController {
             }
         }
         if (sb.length() != 0) {
-            return error(2000, sb.toString());
+            return error(1000, sb.toString());
         }
         return success(consignmentAddressService.save(consigneeAddressDO));
     }

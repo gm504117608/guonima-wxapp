@@ -65,6 +65,14 @@ public class ShopServiceImpl implements ShopService {
         }
     }
 
+    public int deletePrintPhoto(Long id) {
+        try {
+            return dao.update("printPhotographMapper.delete", id);
+        } catch (Exception e) {
+            throw new ServiceException("上传图片信息删除出现错误： " + e.getMessage());
+        }
+    }
+
     @Override
     public Pageable findPrintPhotographInfo(Long shopId, Long memberId, int pageNum, int pageSize) {
         PrintPhotographDO printPhotographDO = new PrintPhotographDO();
