@@ -111,7 +111,7 @@ public class ConsignmentAddressController extends BaseController {
      * @param cado
      * @param cadto
      */
-    private void consigneeAddressDO2consigneeAddressDTO(ConsigneeAddressDO cado, ConsigneeAddressDTO cadto) {
+    public void consigneeAddressDO2consigneeAddressDTO(ConsigneeAddressDO cado, ConsigneeAddressDTO cadto) {
         cadto.setId(cado.getId());// 唯一标识id
         cadto.setMemberId(cado.getMemberId()); //会员唯一标识id
         cadto.setName(cado.getName()); //收件人

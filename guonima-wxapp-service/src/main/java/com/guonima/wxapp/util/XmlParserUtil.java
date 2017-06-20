@@ -91,7 +91,7 @@ public class XmlParserUtil {
         if (StringUtils.isEmpty(xml)) {
             return null;
         }
-        InputStream in = new ByteArrayInputStream(xml.getBytes());
+        InputStream in = new ByteArrayInputStream(xml.getBytes("utf-8"));
         return xPathParseXml(in);
     }
 
@@ -183,14 +183,15 @@ public class XmlParserUtil {
 
     public static void main(String[] args) throws Exception {
 
-        String xml = "<xml><appid>123</appid><openid>openid</openid></xml>";
+        String xml = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[商户号mch_id或sub_mch_id不存在]]></return_msg></xml>";
+//        String xml = "<xml><appid>123</appid><openid>openid</openid></xml>";
         Document doc = XmlParserUtil.parseString(xml);
         System.out.println(
-                XmlParserUtil.getNodeValue(doc.getFirstChild(), "//xml/openid"));
+                XmlParserUtil.getNodeValue(doc.getFirstChild(), "//xml/return_code"));
         System.out.println(
-                XmlParserUtil.getNodeValue(doc.getFirstChild(), "//xml/appid"));
+                XmlParserUtil.getNodeValue(doc.getFirstChild(), "//xml/return_code"));
 
-        System.out.println(XmlParserUtil.getNodeValue(xml, "//xml/appid"));
+        System.out.println(XmlParserUtil.getNodeValue(xml, "//xml/return_msg"));
 
     }
 

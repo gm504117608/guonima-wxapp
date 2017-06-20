@@ -26,4 +26,13 @@ public interface BaseConfigurationService {
      * @return
      */
     public ConfigurationDO getBaseConfiguration(String type, String code);
+
+    /**
+     * 获取基本配置信息名称
+     *
+     * @param type 配置类型
+     * @param code 代码值
+     * @return
+     */
+    public String getBaseConfigurationName(String type, String code);
 }

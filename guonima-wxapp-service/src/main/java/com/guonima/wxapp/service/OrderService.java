@@ -13,23 +13,16 @@ import java.util.Map;
 public interface OrderService {
 
     /**
-     * 保存订单和打印照片信息之间的关联信息
-     *
-     * @param printPhotographIds 打印照片信息id串
-     * @param orderNo            订单号
-     * @return
-     */
-    public int saveReservationPrintPhotograph(String printPhotographIds, String orderNo);
-
-    /**
      * 更新订单和打印照片信息之间的关联信息
      *
      * @param printPhotographIds 打印照片信息id串 格式 xx,xx,xx
      * @param orderNo            订单号
      * @param amounts            打印数量串 格式 xx,xx,xx
+     * @param flag               新增（insert） 修改（update）
      * @return
      */
-    public int updateReservationPrintPhotograph(String printPhotographIds, String orderNo, String amounts);
+    public int insertOrUpdateReservationPrintPhotograph(String printPhotographIds, String orderNo,
+                                                        String amounts, String flag);
 
 
     /**

@@ -37,6 +37,9 @@ public class ShopController extends BaseController {
     @Autowired
     private BaseConfigurationService baseConfigurationService;
 
+    @Autowired
+    private ConsignmentAddressController consignmentAddressController;
+
     @RequestMapping(method = RequestMethod.GET, value = "/shops")
     public Response getShopInfo(@RequestParam String pageNum, @RequestParam String pageSize) {
         if (StringUtils.isEmpty(pageNum) || "0".equals(pageNum)) {
@@ -47,33 +50,9 @@ public class ShopController extends BaseController {
         }
         Pageable page = shopService.getShopsInfo(Integer.valueOf(pageNum).intValue(), Integer.valueOf(pageSize).intValue());
         List<ShopDO> list = page.getResult();
-        ShopDTO sdto = null;
         List<ShopDTO> result = new ArrayList<ShopDTO>();
-        DistrictDO ddo = new DistrictDO();
         for (ShopDO sdo : list) {
-            sdto = new ShopDTO();
-            sdto.setId(sdo.getId()); // 唯一标识id
-            sdto.setName(sdo.getName()); // 店铺名称
-            sdto.setMobile(sdo.getMobile()); // 手机号码
-            sdto.setProvince(sdo.getProvince()); // 省份
-            ddo = consignmentAddressService.getDistrictDatas(sdo.getProvince());
-            sdto.setProvinceName(ddo.getDescription()); // 省份名称
-            sdto.setCity(sdo.getCity()); // 城市
-            ddo = consignmentAddressService.getDistrictDatas(sdo.getCity());
-            sdto.setCityName(ddo.getDescription()); // 城市名称
-            sdto.setArea(sdo.getArea()); // 行政区
-            ddo = consignmentAddressService.getDistrictDatas(sdo.getArea());
-            sdto.setAreaName(ddo.getDescription()); // 行政区名称
-            sdto.setAddress(sdo.getAddress()); // 详细地址
-            sdto.setIconUrl(sdo.getIconUrl()); // 展示店铺图片地址
-            sdto.setRemark(sdo.getRemark()); // 备注
-            sdto.setEnabled(sdo.getEnabled()); // 是否激活【1（可用）；0（不可用）】
-            sdto.setCreateTime(sdo.getCreateTime());
-            sdto.setCreateUser(sdo.getCreateUser());
-            sdto.setModifyTime(sdo.getModifyTime());
-            sdto.setModifyUser(sdo.getModifyUser());
-
-            result.add(sdto);
+            result.add(shopDO2ShopDTO(sdo));
         }
         page.setResult(result);
         return success(page);
@@ -197,7 +176,7 @@ public class ShopController extends BaseController {
         ConfigurationDO cd = null;
         for (PrintPhotographDO ppdo : list) {
             ppdto = new PrintPhotographDTO();
-            PrintPhotographDO2PrintPhotographDTO(ppdo, ppdto);
+            printPhotographDO2PrintPhotographDTO(ppdo, ppdto);
             result.add(ppdto);
         }
         page.setResult(result);
@@ -209,7 +188,7 @@ public class ShopController extends BaseController {
         // 打印照片信息
         PrintPhotographDO ppdo = shopService.findPrintPhotographInfo(id);
         PrintPhotographDTO ppdto = new PrintPhotographDTO();
-        PrintPhotographDO2PrintPhotographDTO(ppdo, ppdto);
+        printPhotographDO2PrintPhotographDTO(ppdo, ppdto);
         return success(ppdto);
     }
 
@@ -226,22 +205,22 @@ public class ShopController extends BaseController {
         for (String id : idArray) {
             ppdo = shopService.findPrintPhotographInfo(Long.valueOf(id));
             ppdto = new PrintPhotographDTO();
-            PrintPhotographDO2PrintPhotographDTO(ppdo, ppdto);
+            printPhotographDO2PrintPhotographDTO(ppdo, ppdto);
             result.add(ppdto);
         }
         // 收货地址默认
-        ConsigneeAddressDO consigneeAddressDO = null;
+        ConsigneeAddressDTO consigneeAddressDTO = new ConsigneeAddressDTO();
         List<ConsigneeAddressDO> list = consignmentAddressService.getConsignmentAddressByMemberId(ppdo.getMemberId());
         for (ConsigneeAddressDO cado : list) {
             if (cado.getIsUsing() == 1) {
-                consigneeAddressDO = cado;
+                consignmentAddressController.consigneeAddressDO2consigneeAddressDTO(cado, consigneeAddressDTO);
             }
         }
         // 配送方式
         List<ConfigurationDO> cdoList = baseConfigurationService.getBaseConfiguration("dispatchingWay");
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("printPhoto", result);
-        map.put("consigneeAddress", consigneeAddressDO);
+        map.put("consigneeAddress", consigneeAddressDTO);
         map.put("dispatchingWays", cdoList);
         return success(map);
     }
@@ -252,7 +231,7 @@ public class ShopController extends BaseController {
      * @param printPhotographDO  打印照片数据库实体
      * @param printPhotographDTO 打印照片界面展示实体
      */
-    private void PrintPhotographDO2PrintPhotographDTO(PrintPhotographDO printPhotographDO, PrintPhotographDTO printPhotographDTO) {
+    private void printPhotographDO2PrintPhotographDTO(PrintPhotographDO printPhotographDO, PrintPhotographDTO printPhotographDTO) {
         printPhotographDTO.setId(printPhotographDO.getId());
         printPhotographDTO.setMemberId(printPhotographDO.getMemberId());
         printPhotographDTO.setShopId(printPhotographDO.getShopId());
@@ -269,6 +248,38 @@ public class ShopController extends BaseController {
         printPhotographDTO.setRemark(printPhotographDO.getRemark());
         printPhotographDTO.setCreateTime(printPhotographDO.getCreateTime());
         printPhotographDTO.setModifyTime(printPhotographDO.getModifyTime());
+    }
+
+    /**
+     * 复制酒店信息数据
+     *
+     * @param sdo 数据库获取酒店信息
+     * @return
+     */
+    private ShopDTO shopDO2ShopDTO(ShopDO sdo){
+        ShopDTO sdto = new ShopDTO();
+        DistrictDO ddo = new DistrictDO();
+        sdto.setId(sdo.getId()); // 唯一标识id
+        sdto.setName(sdo.getName()); // 店铺名称
+        sdto.setMobile(sdo.getMobile()); // 手机号码
+        sdto.setProvince(sdo.getProvince()); // 省份
+        ddo = consignmentAddressService.getDistrictDatas(sdo.getProvince());
+        sdto.setProvinceName(ddo.getDescription()); // 省份名称
+        sdto.setCity(sdo.getCity()); // 城市
+        ddo = consignmentAddressService.getDistrictDatas(sdo.getCity());
+        sdto.setCityName(ddo.getDescription()); // 城市名称
+        sdto.setArea(sdo.getArea()); // 行政区
+        ddo = consignmentAddressService.getDistrictDatas(sdo.getArea());
+        sdto.setAreaName(ddo.getDescription()); // 行政区名称
+        sdto.setAddress(sdo.getAddress()); // 详细地址
+        sdto.setIconUrl(sdo.getIconUrl()); // 展示店铺图片地址
+        sdto.setRemark(sdo.getRemark()); // 备注
+        sdto.setEnabled(sdo.getEnabled()); // 是否激活【1（可用）；0（不可用）】
+        sdto.setCreateTime(sdo.getCreateTime());
+        sdto.setCreateUser(sdo.getCreateUser());
+        sdto.setModifyTime(sdo.getModifyTime());
+        sdto.setModifyUser(sdo.getModifyUser());
+        return sdto;
     }
 
 }

@@ -16,9 +16,12 @@ public class OrderPaymentDTO implements Serializable {
     private String ids; // 需要打印照片信息唯一标识id 拼串 格式 xxx,xxx,xxx
     private String amounts; // 打印照片数量 拼串 格式 xxx,xxx,xxx
     private String orderNo; // 订单号
+    private Long memberId; // 会员唯一的标识
+    private Long shopId; // 店铺唯一标识
     private BigDecimal cost; // 需要支付金额
     private Long consignmentId; // 收件人地址唯一标识id
     private String dispatchingWay; // 配送方式
+
 
 
     public OrderPaymentDTO() {
@@ -47,6 +50,22 @@ public class OrderPaymentDTO implements Serializable {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
+
+    public Long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
     }
 
     public BigDecimal getCost() {
@@ -79,6 +98,8 @@ public class OrderPaymentDTO implements Serializable {
                 "ids='" + ids + '\'' +
                 ", amounts='" + amounts + '\'' +
                 ", orderNo='" + orderNo + '\'' +
+                ", memberId=" + memberId +
+                ", shopId=" + shopId +
                 ", cost=" + cost +
                 ", consignmentId=" + consignmentId +
                 ", dispatchingWay='" + dispatchingWay + '\'' +

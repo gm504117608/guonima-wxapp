@@ -84,21 +84,21 @@ public class PaymentServiceImpl implements PaymentService {
             response.setMessage("微信支付统一下单失败");
             return response;
         }
-        String return_code = XmlParserUtil.getNodeValue(unifiedOrderResult, "/xml/return_code");
+        String return_code = XmlParserUtil.getNodeValue(unifiedOrderResult, "//xml/return_code");
         if (!"SUCCESS".equalsIgnoreCase(return_code)) {
-            log.warn("微信支付统一下单失败 ：  " + XmlParserUtil.getNodeValue(unifiedOrderResult, "/xml/return_msg"));
+            log.warn("微信支付统一下单失败 ：  " + XmlParserUtil.getNodeValue(unifiedOrderResult, "//xml/return_msg"));
             response.setCode(2000);
             response.setMessage("微信支付统一下单失败");
             return response;
         }
-        String result_code = XmlParserUtil.getNodeValue(unifiedOrderResult, "/xml/result_code");
+        String result_code = XmlParserUtil.getNodeValue(unifiedOrderResult, "//xml/result_code");
         if (!"SUCCESS".equalsIgnoreCase(result_code)) {
-            log.warn("微信支付统一下单失败 ： " + XmlParserUtil.getNodeValue(unifiedOrderResult, "/xml/err_code_des"));
+            log.warn("微信支付统一下单失败 ： " + XmlParserUtil.getNodeValue(unifiedOrderResult, "//xml/err_code_des"));
             response.setCode(2000);
             response.setMessage("微信支付统一下单失败");
             return response;
         }
-        String prepay_id = XmlParserUtil.getNodeValue(unifiedOrderResult, "/xml/prepay_id");
+        String prepay_id = XmlParserUtil.getNodeValue(unifiedOrderResult, "//xml/prepay_id");
         response.setCode(0);
         response.setMessage("操作成功");
         response.setData(getPaymentParam(prepay_id));

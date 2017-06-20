@@ -19,6 +19,7 @@ public class ReservationDetailDTO implements Serializable {
     private String statusName; // 订单状态名称
     private String status; // 订单状态
     private String dispatchingWay; // 配送方式
+    private String dispatchingWayName; // 配送方式名称
     private String remark; // 备注
     private Date createTime; // 创建时间
 
@@ -74,6 +75,14 @@ public class ReservationDetailDTO implements Serializable {
 
     public void setDispatchingWay(String dispatchingWay) {
         this.dispatchingWay = dispatchingWay;
+    }
+
+    public String getDispatchingWayName() {
+        return dispatchingWayName;
+    }
+
+    public void setDispatchingWayName(String dispatchingWayName) {
+        this.dispatchingWayName = dispatchingWayName;
     }
 
     public String getRemark() {
@@ -133,6 +142,7 @@ public class ReservationDetailDTO implements Serializable {
                 ", statusName='" + statusName + '\'' +
                 ", status='" + status + '\'' +
                 ", dispatchingWay='" + dispatchingWay + '\'' +
+                ", dispatchingWayName='" + dispatchingWayName + '\'' +
                 ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +
                 ", name='" + name + '\'' +

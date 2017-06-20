@@ -44,38 +44,22 @@ public class OrderController extends BaseController {
     private ConsignmentAddressService consignmentAddressService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/orders")
-    @Log("保存订单信息")
-    public Response savePrintPhotoOrder(@RequestBody ReservationDTO reservationDTO) {
+    @Log("保存/更新订单信息")
+    public Response savePrintPhotoOrderPayment(@RequestBody OrderPaymentDTO orderPaymentDTO) {
+
         StringBuilder sb = new StringBuilder();
-        if (null == reservationDTO.getMemberId()) {
+        String[] printPhotographIdArray = orderPaymentDTO.getIds().split(",");
+        if (null == printPhotographIdArray || printPhotographIdArray.length == 0) {
+            sb.append("需要打印的照片信息获取不到，请重新操作");
+        }
+        if (null == orderPaymentDTO.getMemberId()) {
             sb.append("会员id不能为空;");
         }
-        if (null == reservationDTO.getShopId()) {
+        if (null == orderPaymentDTO.getShopId()) {
             sb.append("店铺id不能为空;");
-        }
-        if (StringUtils.isEmpty(reservationDTO.getPrintPhotographIds())) {
-            sb.append("没有选择需要打印的照片信息;");
         }
         if (sb.length() != 0) {
             return error(1000, sb.toString());
-        }
-        String orderNo = OrderUtil.createOrderNo();
-        // 处理订单和照片关联信息
-        orderService.saveReservationPrintPhotograph(reservationDTO.getPrintPhotographIds(), orderNo);
-        // 处理订单信息
-        ReservationDO rdo = new ReservationDO();
-        reservationDTO2ReservationDO(reservationDTO, rdo);
-        rdo.setOrderNo(orderNo);
-        orderService.saveReservation(rdo);
-        return success(orderNo);
-    }
-
-    @RequestMapping(method = RequestMethod.POST, value = "/orders/payment")
-    @Log("更新订单信息")
-    public Response savePrintPhotoOrderPayment(@RequestBody OrderPaymentDTO orderPaymentDTO) {
-        String[] printPhotographIdArray = orderPaymentDTO.getIds().split(",");
-        if (null == printPhotographIdArray || printPhotographIdArray.length == 0) {
-            return error(1000, "需要打印的照片信息获取不到，请重新操作");
         }
         String[] amount = orderPaymentDTO.getAmounts().split(",");
         PrintPhotographDO ppdo = null;
@@ -86,20 +70,20 @@ public class OrderController extends BaseController {
             spccdo = shopService.getShopPrintCostConfig(ppdo.getType());
             result = result.add(spccdo.getPrice().multiply(new BigDecimal(amount[i])));
         }
-        if (!result.equals(orderPaymentDTO.getCost())) {
+        if (result.compareTo(orderPaymentDTO.getCost()) != 0) {
             return error(1000, "打印照片所花费的金额不正确");
         }
-        // 更新订单金额
+        String orderNo = OrderUtil.createOrderNo();
+        // 处理订单和照片关联信息
+        orderService.insertOrUpdateReservationPrintPhotograph(orderPaymentDTO.getIds(),
+                orderNo, orderPaymentDTO.getAmounts(), "insert");
+        // 处理订单信息
         ReservationDO rdo = new ReservationDO();
-        rdo.setOrderNo(orderPaymentDTO.getOrderNo());
-        rdo.setCost(result);
-        rdo.setConsignmentId(orderPaymentDTO.getConsignmentId());
-        rdo.setDispatchingWay(orderPaymentDTO.getDispatchingWay());
-        orderService.updateReservation(rdo);
-        // 更新打印照片数量
-        orderService.updateReservationPrintPhotograph(orderPaymentDTO.getIds(),
-                orderPaymentDTO.getOrderNo(), orderPaymentDTO.getAmounts());
-        return success(null);
+        orderPaymentDTO.setCost(result);
+        orderPaymentDTO.setOrderNo(orderNo);
+        reservationDTO2ReservationDO(orderPaymentDTO, rdo);
+        orderService.saveReservation(rdo);
+        return success(orderNo);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/orders/config/{type}")
@@ -129,6 +113,7 @@ public class OrderController extends BaseController {
         reservationDetailDTO.setCreateTime(rdo.getCreateTime());
         reservationDetailDTO.setShopName(sdo.getName());
         reservationDetailDTO.setDispatchingWay(rdo.getDispatchingWay());
+        reservationDetailDTO.setDispatchingWayName(baseConfigurationService.getBaseConfigurationName("dispatchingWay", rdo.getDispatchingWay()));
 
         reservationDetailDTO.setName(cado.getName());
         reservationDetailDTO.setMobile(cado.getMobile());
@@ -204,37 +189,18 @@ public class OrderController extends BaseController {
     /**
      * 订单实体之间相互转换
      *
-     * @param rdto 界面传入实体
+     * @param orderPaymentDTO 界面传入实体
      * @param rdo  数据库对应实体
      */
-    private void reservationDTO2ReservationDO(ReservationDTO rdto, ReservationDO rdo) {
-        rdo.setMemberId(rdto.getMemberId());
-        rdo.setShopId(rdto.getShopId());
+    private void reservationDTO2ReservationDO(OrderPaymentDTO orderPaymentDTO, ReservationDO rdo) {
+        rdo.setMemberId(orderPaymentDTO.getMemberId());
+        rdo.setShopId(orderPaymentDTO.getShopId());
         rdo.setStatus("S01");
-        rdo.setCost(calculatePrintPhotoCost(rdto.getPrintPhotographIds()));
-        rdo.setRemark("照片打印订单信息生成");
-    }
-
-    /**
-     * 计算下单打印照片信息需要花费的金额
-     *
-     * @param printPhotographIds 打印照片信息唯一标识id串
-     * @return
-     */
-    private BigDecimal calculatePrintPhotoCost(String printPhotographIds) {
-        String[] printPhotographIdArray = printPhotographIds.split(",");
-        if (null == printPhotographIdArray || printPhotographIdArray.length == 0) {
-            return new BigDecimal(0);
-        }
-        PrintPhotographDO ppdo = null;
-        ShopPrintCostConfigDO spccdo = null;
-        BigDecimal result = new BigDecimal(0);
-        for (String id : printPhotographIdArray) {
-            ppdo = shopService.findPrintPhotographInfo(Long.valueOf(id));
-            spccdo = shopService.getShopPrintCostConfig(ppdo.getType());
-            result = result.add(spccdo.getPrice()); // 默认值打印一张照片
-        }
-        return result;
+        rdo.setCost(orderPaymentDTO.getCost());
+        rdo.setOrderNo(orderPaymentDTO.getOrderNo());
+        rdo.setConsignmentId(orderPaymentDTO.getConsignmentId());
+        rdo.setDispatchingWay(orderPaymentDTO.getDispatchingWay());
+        rdo.setRemark("小程序照片打印订单信息生成");
     }
 
 }

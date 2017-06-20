@@ -37,6 +37,15 @@ public class BaseConfigurationServiceImpl implements BaseConfigurationService {
         return null;
     }
 
+    @Override
+    public String getBaseConfigurationName(String type, String code) {
+        ConfigurationDO cdo = getBaseConfiguration(type, code);
+        if(cdo != null){
+            return cdo.getDescription();
+        }
+        return null;
+    }
+
     /**
      * 获取基础配置信息表中指定 类型 的信息
      *

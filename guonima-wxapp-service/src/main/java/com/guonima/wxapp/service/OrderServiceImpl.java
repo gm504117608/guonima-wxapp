@@ -31,30 +31,7 @@ public class OrderServiceImpl implements OrderService {
     private DaoSupport dao;
 
     @Override
-    public int saveReservationPrintPhotograph(String printPhotographIds, String orderNo) {
-        String[] printPhotographIdArray = printPhotographIds.split(",");
-        if (null == printPhotographIdArray || printPhotographIdArray.length == 0) {
-            return 0;
-        }
-        ReservationPrintPhotographDO rppdo = null;
-        List<ReservationPrintPhotographDO> list = new ArrayList<ReservationPrintPhotographDO>();
-        for (String id : printPhotographIdArray) {
-            rppdo = new ReservationPrintPhotographDO();
-            rppdo.setAmount(1);
-            rppdo.setOrderNo(orderNo);
-            rppdo.setPrintPhotographId(Long.valueOf(id));
-            list.add(rppdo);
-        }
-        try {
-            dao.batchInsert("reservationPrintPhotographMapper.insert", list);
-        } catch (Exception e) {
-            throw new ServiceException("保存订单和照片打印信息关联出现错误： " + e.getMessage());
-        }
-        return 0;
-    }
-
-    @Override
-    public int updateReservationPrintPhotograph(String printPhotographIds, String orderNo, String amounts) {
+    public int insertOrUpdateReservationPrintPhotograph(String printPhotographIds, String orderNo, String amounts, String flag) {
         String[] printPhotographIdArray = printPhotographIds.split(",");
         if (null == printPhotographIdArray || printPhotographIdArray.length == 0) {
             return 0;
@@ -70,9 +47,15 @@ public class OrderServiceImpl implements OrderService {
             list.add(rppdo);
         }
         try {
-            dao.batchUpdate("reservationPrintPhotographMapper.update", list);
+            if ("insert".equals(flag)) {
+                dao.batchInsert("reservationPrintPhotographMapper.insert", list);
+            }
+            if ("update".equals(flag)) {
+                dao.batchUpdate("reservationPrintPhotographMapper.update", list);
+            }
         } catch (Exception e) {
-            throw new ServiceException("更新订单和照片打印信息关联出现错误： " + e.getMessage());
+            log.error("保存/更新订单和照片打印信息关联出现错误： " + e.getMessage());
+            throw new ServiceException("保存/更新订单和照片打印信息关联出现错误： " + e.getMessage());
         }
         return 0;
     }
