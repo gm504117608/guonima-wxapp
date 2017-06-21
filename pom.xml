@@ -66,6 +66,8 @@
         <fastjson.version>1.2.28</fastjson.version>
         <!-- redis 缓存 -->
         <redis.clients.version>2.9.0</redis.clients.version>
+        <!-- 开源的加解密解决方案 -->
+        <bouncycastle.version>1.57</bouncycastle.version>
     </properties>
 
     <dependencyManagement>
@@ -137,6 +139,12 @@
             </dependency>
             <!-- 处理请求 end -->
 
+            <!-- 开源的加解密解决方案 -->
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>${bouncycastle.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

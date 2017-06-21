@@ -90,15 +90,8 @@
 
     <!-- 获取指定id的收货地址数据 -->
     <select id="getConsignmentAddressById" parameterType="consigneeAddressDO" resultMap="consigneeAddressResultMap">
-        select
-        <include refid="consignmentAddressColumns"/>
-        from consignee_address
-        <where>
-            <if test="id != null">
-                and id = trim(#{id})
-            </if>
-            limit 1
-        </where>
+        select <include refid="consignmentAddressColumns"/>
+        from consignee_address where id = trim(#{id})
     </select>
 
 </mapper>

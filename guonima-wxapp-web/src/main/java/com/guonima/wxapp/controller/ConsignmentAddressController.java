@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/consignment/")
-public class ConsignmentAddressController extends BaseController {
+public class ConsignmentAddressController extends BaseController implements ConsignmentAddress {
     @Autowired
     private ConsignmentAddressService consignmentAddressService;
 
@@ -34,7 +34,7 @@ public class ConsignmentAddressController extends BaseController {
         while (it.hasNext()) {
             cado = it.next();
             cadto = new ConsigneeAddressDTO();
-            consigneeAddressDO2consigneeAddressDTO(cado, cadto);
+            consigneeAddressDO2consigneeAddressDTO(cado, cadto, consignmentAddressService);
             result.add(cadto);
         }
         return success(result);
@@ -44,7 +44,7 @@ public class ConsignmentAddressController extends BaseController {
     public Response getConsignmentAddressById(@PathVariable("id") Long id) {
         ConsigneeAddressDO cado = consignmentAddressService.getConsignmentAddressById(id);
         ConsigneeAddressDTO cadto = new ConsigneeAddressDTO();
-        consigneeAddressDO2consigneeAddressDTO(cado, cadto);
+        consigneeAddressDO2consigneeAddressDTO(cado, cadto, consignmentAddressService);
         return success(cadto);
     }
 
@@ -103,32 +103,5 @@ public class ConsignmentAddressController extends BaseController {
     @RequestMapping(method = RequestMethod.GET, value = "/area/{code}")
     public Response getAreaDatas(@PathVariable("code") String code) {
         return success(consignmentAddressService.getAreaDatas(code));
-    }
-
-    /**
-     * 将收货地址数据库实体转成界面传输实体
-     *
-     * @param cado
-     * @param cadto
-     */
-    public void consigneeAddressDO2consigneeAddressDTO(ConsigneeAddressDO cado, ConsigneeAddressDTO cadto) {
-        cadto.setId(cado.getId());// 唯一标识id
-        cadto.setMemberId(cado.getMemberId()); //会员唯一标识id
-        cadto.setName(cado.getName()); //收件人
-        cadto.setMobile(cado.getMobile()); //手机号码
-        cadto.setProvince(cado.getProvince()); //省份
-        DistrictDO ddo = consignmentAddressService.getDistrictDatas(cado.getProvince());
-        cadto.setProvinceName(ddo.getDescription()); //省份名称
-        cadto.setCity(cado.getCity()); //城市
-        ddo = consignmentAddressService.getDistrictDatas(cado.getCity());
-        cadto.setCityName(ddo.getDescription()); //城市名称
-        cadto.setArea(cado.getArea()); //区域
-        ddo = consignmentAddressService.getDistrictDatas(cado.getArea());
-        cadto.setAreaName(ddo.getDescription()); //区域名称
-        cadto.setAddress(cado.getAddress()); //详细地址
-        cadto.setPostcode(cado.getPostcode()); //邮编
-        cadto.setIsUsing(cado.getIsUsing()); //是否默认地址【1：是；0：否】
-        cadto.setCreateTime(cado.getCreateTime());
-        cadto.setModifyTime(cado.getModifyTime());
     }
 }

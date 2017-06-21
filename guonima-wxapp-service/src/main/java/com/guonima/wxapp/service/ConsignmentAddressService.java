@@ -62,4 +62,5 @@ public interface ConsignmentAddressService {
      * @return
      */
     public DistrictDO getDistrictDatas(String code);
+
 }

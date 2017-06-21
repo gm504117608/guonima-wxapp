@@ -110,7 +110,7 @@ public class PaymentServiceImpl implements PaymentService {
      *
      * @param prepay_id 预支付id
      */
-    private SortedMap<String, String> getPaymentParam(String prepay_id){
+    private SortedMap<String, String> getPaymentParam(String prepay_id) {
         SortedMap<String, String> orderParams = new TreeMap<String, String>();
         // 下单成功获取预支付交易id之后的参数：开始生成签名
         orderParams.put("appid", WxpayConfig.APP_ID); // 微信开放平台审核通过的应用APPID
@@ -165,6 +165,7 @@ public class PaymentServiceImpl implements PaymentService {
             dao.insert("paymentMapper.insert", pd);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("微信支付回调处理支付结果出现错误：" + e.getMessage());
             return "FAIL";
         }
         return "SUCCESS";

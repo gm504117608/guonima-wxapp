@@ -9,6 +9,7 @@ public class MemberDO implements Serializable {
 
     private Long id; // 用户id
     private String openid; // openid是公众号的普通用户的唯一的标识
+    private String unionid; // 微信下同一企业下面小程序、公众号关联id
     private String nickName; // 用户名称
     private String mobile; // 联系号码
     private String email; // 邮箱
@@ -36,6 +37,14 @@ public class MemberDO implements Serializable {
 
     public void setOpenid(String openid) {
         this.openid = openid;
+    }
+
+    public String getUnionid() {
+        return unionid;
+    }
+
+    public void setUnionid(String unionid) {
+        this.unionid = unionid;
     }
 
     public String getNickName() {
@@ -139,6 +148,7 @@ public class MemberDO implements Serializable {
         return "MemberDO{" +
                 "id=" + id +
                 ", openid='" + openid + '\'' +
+                ", unionid='" + unionid + '\'' +
                 ", nickName='" + nickName + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", email='" + email + '\'' +

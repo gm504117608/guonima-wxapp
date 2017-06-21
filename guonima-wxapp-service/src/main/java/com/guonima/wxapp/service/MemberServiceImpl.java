@@ -6,6 +6,7 @@ import com.guonima.wxapp.dao.DaoSupport;
 import com.guonima.wxapp.domain.MemberDO;
 import com.guonima.wxapp.exception.ServiceException;
 import com.guonima.wxapp.redis.RedisClient;
+import com.guonima.wxapp.util.AESUtil;
 import com.guonima.wxapp.util.HttpUtil;
 import com.guonima.wxapp.util.SecurityUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -57,7 +58,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String getWxOpenidSessionKey(MemberDO memberDO, String code) {
+    public String getWxOpenidSessionKey(MemberDO memberDO, String code, String encryptedData, String iv) {
 
         String url = Environment.WX_CODE_URL +
                 "?appid=" + Environment.WX_APPID +
@@ -73,11 +74,13 @@ public class MemberServiceImpl implements MemberService {
         JSONObject wxInfo = JSONObject.parseObject(result);
         Integer errCode = (Integer) wxInfo.get("errcode");
         if (null == errCode) {
-            // 通过sessionKey 和 iv 来解密 encryptedData 数据获取 UnionID(小程绑定公众号之后的关联值) 。
-//            String session_key = (String) wxInfo.get("session_key"); //
+            // 通过sessionKey 和 iv 来解密 encryptedData 数据获取 UnionID (小程序绑定公众号之后的关联值) 。
+            String session_key = (String) wxInfo.get("session_key"); //
             String openid = (String) wxInfo.get("openid");
-//            Integer expires_in = (Integer) wxInfo.get("expires_in");
+            Integer expires_in = (Integer) wxInfo.get("expires_in");
             memberDO.setOpenid(openid);
+            // 对encryptedData加密数据进行AES解密
+            decryptEncryptedData(memberDO, encryptedData, session_key, iv);
         }
         return (String) wxInfo.get("errmsg");
     }
@@ -85,8 +88,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int save(MemberDO memberDO) {
         try {
-            int result = dao.update("memberMapper.update", memberDO);
-            return result;
+            return dao.update("memberMapper.update", memberDO);
         } catch (Exception e) {
             throw new ServiceException("修改用户信息出现错误：", e.getCause());
         }
@@ -105,11 +107,11 @@ public class MemberServiceImpl implements MemberService {
     /**
      * 用户判断用户登录是否失效
      *
-     * @param token 回话token值
+     * @param token  回话token值
      * @param openId 微信openid
-     * @param id 用户id
+     * @param id     用户id
      */
-    private String cacheToken(String token, String openId, Long id){
+    private String cacheToken(String token, String openId, Long id) {
 
         if (StringUtils.isNotEmpty(token)) {
             String str = RedisClient.get(token, String.class);
@@ -125,6 +127,28 @@ public class MemberServiceImpl implements MemberService {
             e.printStackTrace();
         }
         return token;
+    }
+
+    /**
+     * 对encryptedData加密数据进行AES解密
+     *
+     * @param memberDO
+     * @param encryptedData
+     * @param session_key
+     * @param iv
+     */
+    private void decryptEncryptedData(MemberDO memberDO, String encryptedData, String session_key, String iv) {
+        try {
+            // 解密出来的数据包含了用户的所有信息
+            String result = AESUtil.decrypt(encryptedData, session_key, iv, "UTF-8");
+            if (StringUtils.isNotEmpty(result)) {
+                JSONObject userInfo = JSONObject.parseObject(result);
+                memberDO.setUnionid(userInfo.getString("unionId"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("解密微信encryptedData参数出现错误：" + e.getMessage());
+        }
     }
 
 }

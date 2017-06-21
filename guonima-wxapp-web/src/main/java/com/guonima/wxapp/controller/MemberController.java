@@ -9,8 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/")
 public class MemberController extends BaseController {
@@ -35,7 +33,8 @@ public class MemberController extends BaseController {
         }
         MemberDO memberDO = new MemberDO();
         MemberDTO2MemberDO(memberDTO, memberDO);
-        String result = memberService.getWxOpenidSessionKey(memberDO, code);
+        String result = memberService.getWxOpenidSessionKey(memberDO, code,
+                memberDTO.getEncryptedData(), memberDTO.getIv());
         if (StringUtils.isNotEmpty(result)) {
             return error(2000, result);
         }

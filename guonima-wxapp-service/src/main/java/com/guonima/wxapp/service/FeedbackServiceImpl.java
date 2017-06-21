@@ -28,6 +28,7 @@ public class FeedbackServiceImpl implements FeedbackService {
             return dao.insert("feedbackMapper.insert", feedbackDO);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("用户反馈信息保存出现错误： " + e.getMessage());
             throw new ServiceException("用户反馈信息保存出现错误： " + e.getMessage());
         }
     }

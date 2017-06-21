@@ -1,7 +1,6 @@
 package com.guonima.wxapp.domain;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class MemberDTO implements Serializable {
 
@@ -19,6 +18,9 @@ public class MemberDTO implements Serializable {
     private String signature; // 个性签名
     private Integer enabled; // 是否激活【1（可用）；0（不可用）】
     private String code; // 登录凭证
+    private String encryptedData; // 包括敏感数据在内的完整用户信息的加密数据
+    private String iv; // 加密算法的初始向量
+    private String sign; // 微信对用户信息签名串（用于验证用户信息是否完整）
 
     public Long getId() {
         return id;
@@ -116,6 +118,31 @@ public class MemberDTO implements Serializable {
         this.code = code;
     }
 
+    public String getEncryptedData() {
+        return encryptedData;
+    }
+
+    public void setEncryptedData(String encryptedData) {
+        this.encryptedData = encryptedData;
+    }
+
+    public String getIv() {
+        return iv;
+    }
+
+    public void setIv(String iv) {
+        this.iv = iv;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    @Override
     public String toString() {
         return "MemberDTO{" +
                 "id=" + id +
@@ -128,8 +155,11 @@ public class MemberDTO implements Serializable {
                 ", city='" + city + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
                 ", signature='" + signature + '\'' +
-                ", enabled='" + enabled + '\'' +
-                ", code=" + code +
+                ", enabled=" + enabled +
+                ", code='" + code + '\'' +
+                ", encryptedData='" + encryptedData + '\'' +
+                ", iv='" + iv + '\'' +
+                ", sign='" + sign + '\'' +
                 '}';
     }
 }

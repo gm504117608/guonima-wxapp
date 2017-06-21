@@ -95,15 +95,7 @@ public class OrderController extends BaseController {
     public Response getPrintPhotoOrderDetailInfo(@PathVariable("orderNo") String orderNo) {
         // 订单信息
         ReservationDO rdo = orderService.findReservationInfo(orderNo);
-        // 店铺信息
-        ShopDO sdo = shopService.getShopsInfo(rdo.getShopId());
-        // 收货地址信息
-        ConsigneeAddressDO cado = consignmentAddressService.getConsignmentAddressById(rdo.getConsignmentId());
-        // 订单详细内容信息
-        List<Map<String, Object>> list = orderService.findReservationPrintPhotographInfo(orderNo);
-
         ReservationDetailDTO reservationDetailDTO = new ReservationDetailDTO();
-
         reservationDetailDTO.setOrderNo(rdo.getOrderNo());
         reservationDetailDTO.setCost(rdo.getCost());
         ConfigurationDO cdo = baseConfigurationService.getBaseConfiguration("orderStatus", rdo.getStatus());
@@ -111,10 +103,13 @@ public class OrderController extends BaseController {
         reservationDetailDTO.setStatus(rdo.getStatus());
         reservationDetailDTO.setRemark(rdo.getRemark());
         reservationDetailDTO.setCreateTime(rdo.getCreateTime());
+        // 店铺信息
+        ShopDO sdo = shopService.getShopsInfo(rdo.getShopId());
         reservationDetailDTO.setShopName(sdo.getName());
         reservationDetailDTO.setDispatchingWay(rdo.getDispatchingWay());
         reservationDetailDTO.setDispatchingWayName(baseConfigurationService.getBaseConfigurationName("dispatchingWay", rdo.getDispatchingWay()));
-
+        // 收货地址信息
+        ConsigneeAddressDO cado = consignmentAddressService.getConsignmentAddressById(rdo.getConsignmentId());
         reservationDetailDTO.setName(cado.getName());
         reservationDetailDTO.setMobile(cado.getMobile());
         DistrictDO ddo = consignmentAddressService.getDistrictDatas(cado.getProvince());
@@ -128,6 +123,8 @@ public class OrderController extends BaseController {
         PrintPhoto printPhoto = null;
         ShopPrintCostConfigDO spccdo = null;
         List<PrintPhoto> ppList = new ArrayList<PrintPhoto>();
+        // 订单详细内容信息
+        List<Map<String, Object>> list = orderService.findReservationPrintPhotographInfo(orderNo);
         for (Map<String, Object> map : list) {
             printPhoto = new PrintPhoto();
             printPhoto.setDescription((String) map.get("description"));
@@ -190,7 +187,7 @@ public class OrderController extends BaseController {
      * 订单实体之间相互转换
      *
      * @param orderPaymentDTO 界面传入实体
-     * @param rdo  数据库对应实体
+     * @param rdo             数据库对应实体
      */
     private void reservationDTO2ReservationDO(OrderPaymentDTO orderPaymentDTO, ReservationDO rdo) {
         rdo.setMemberId(orderPaymentDTO.getMemberId());

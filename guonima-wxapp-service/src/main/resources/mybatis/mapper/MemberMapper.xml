@@ -4,13 +4,14 @@
 <mapper namespace="memberMapper">
 
     <sql id="memberColumns">
-        id, openid, nick_name, mobile, email, gender, country,
+        id, openid, unionid, nick_name, mobile, email, gender, country,
         province, city, avatar_url, signature, enabled, create_time, modify_time
     </sql>
 
     <resultMap id="memberResultMap" type="memberDO">
         <id column="id" property="id"/>
         <result column="openid" property="openid"/>
+        <result column="unionid" property="unionid"/>
         <result column="nick_name" property="nickName"/>
         <result column="mobile" property="mobile"/>
         <result column="email" property="email"/>
@@ -28,10 +29,10 @@
     <!-- 新增会员信息 -->
     <insert id="insert" parameterType="memberDO" useGeneratedKeys="true" keyProperty="id">
         insert into member (
-        openid, nick_name, mobile, email, gender, country,
+        openid, unionid, nick_name, mobile, email, gender, country,
         province, city, avatar_url, signature, create_time, modify_time
         )values (
-        trim(#{openid}), trim(#{nickName}), trim(#{mobile}), trim(#{email}), trim(#{gender}),
+        trim(#{openid}), trim(#{unionid}), trim(#{nickName}), trim(#{mobile}), trim(#{email}), trim(#{gender}),
         trim(#{country}), trim(#{province}), trim(#{city}), trim(#{avatarUrl}), trim(#{signature}), sysdate(), sysdate()
         )
     </insert>

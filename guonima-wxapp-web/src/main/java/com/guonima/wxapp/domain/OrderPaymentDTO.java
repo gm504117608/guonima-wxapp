@@ -23,7 +23,6 @@ public class OrderPaymentDTO implements Serializable {
     private String dispatchingWay; // 配送方式
 
 
-
     public OrderPaymentDTO() {
 
     }

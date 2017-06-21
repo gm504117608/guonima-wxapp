@@ -40,7 +40,7 @@ public class BaseConfigurationServiceImpl implements BaseConfigurationService {
     @Override
     public String getBaseConfigurationName(String type, String code) {
         ConfigurationDO cdo = getBaseConfiguration(type, code);
-        if(cdo != null){
+        if (cdo != null) {
             return cdo.getDescription();
         }
         return null;

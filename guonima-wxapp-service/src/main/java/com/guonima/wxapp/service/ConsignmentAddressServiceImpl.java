@@ -3,6 +3,7 @@ package com.guonima.wxapp.service;
 import com.guonima.wxapp.dao.DaoSupport;
 import com.guonima.wxapp.domain.ConsigneeAddressDO;
 import com.guonima.wxapp.domain.DistrictDO;
+import com.guonima.wxapp.exception.ServiceException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -61,8 +62,9 @@ public class ConsignmentAddressServiceImpl implements ConsignmentAddressService 
             return dao.insert("consignmentAddressMapper.insert", consigneeAddressDO);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("保存收货地址出现错误：" + e.getMessage());
+            throw new ServiceException("保存收货地址出现错误：" + e.getMessage());
         }
-        return -1;
     }
 
     private int update(ConsigneeAddressDO consigneeAddressDO) {
@@ -70,8 +72,9 @@ public class ConsignmentAddressServiceImpl implements ConsignmentAddressService 
             return dao.update("consignmentAddressMapper.update", consigneeAddressDO);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("修改收货地址出现错误：" + e.getMessage());
+            throw new ServiceException("修改收货地址出现错误：" + e.getMessage());
         }
-        return -1;
     }
 
     @Override
@@ -100,4 +103,5 @@ public class ConsignmentAddressServiceImpl implements ConsignmentAddressService 
         dd.setCode(code);
         return (DistrictDO) dao.findForObject("districtMapper.findDistrictData", dd);
     }
+
 }

@@ -10,7 +10,6 @@ import com.guonima.wxapp.domain.common.Pageable;
 import com.guonima.wxapp.exception.ServiceException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -61,6 +60,7 @@ public class ShopServiceImpl implements ShopService {
                 return dao.update("printPhotographMapper.update", printPhotographDO);
             }
         } catch (Exception e) {
+            log.error("上传图片信息保存出现错误： " + e.getMessage());
             throw new ServiceException("上传图片信息保存出现错误： " + e.getMessage());
         }
     }
@@ -69,6 +69,7 @@ public class ShopServiceImpl implements ShopService {
         try {
             return dao.update("printPhotographMapper.delete", id);
         } catch (Exception e) {
+            log.error("上传图片信息删除出现错误： " + e.getMessage());
             throw new ServiceException("上传图片信息删除出现错误： " + e.getMessage());
         }
     }

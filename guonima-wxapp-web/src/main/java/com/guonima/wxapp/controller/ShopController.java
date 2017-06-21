@@ -7,7 +7,6 @@ import com.guonima.wxapp.service.BaseConfigurationService;
 import com.guonima.wxapp.service.ConsignmentAddressService;
 import com.guonima.wxapp.service.ShopService;
 import com.guonima.wxapp.util.FileUploadUtil;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/")
-public class ShopController extends BaseController {
+public class ShopController extends BaseController implements ConsignmentAddress {
 
     @Autowired
     private ShopService shopService;
@@ -36,9 +35,6 @@ public class ShopController extends BaseController {
 
     @Autowired
     private BaseConfigurationService baseConfigurationService;
-
-    @Autowired
-    private ConsignmentAddressController consignmentAddressController;
 
     @RequestMapping(method = RequestMethod.GET, value = "/shops")
     public Response getShopInfo(@RequestParam String pageNum, @RequestParam String pageSize) {
@@ -213,7 +209,7 @@ public class ShopController extends BaseController {
         List<ConsigneeAddressDO> list = consignmentAddressService.getConsignmentAddressByMemberId(ppdo.getMemberId());
         for (ConsigneeAddressDO cado : list) {
             if (cado.getIsUsing() == 1) {
-                consignmentAddressController.consigneeAddressDO2consigneeAddressDTO(cado, consigneeAddressDTO);
+                consigneeAddressDO2consigneeAddressDTO(cado, consigneeAddressDTO, consignmentAddressService);
             }
         }
         // 配送方式
@@ -256,14 +252,13 @@ public class ShopController extends BaseController {
      * @param sdo 数据库获取酒店信息
      * @return
      */
-    private ShopDTO shopDO2ShopDTO(ShopDO sdo){
+    private ShopDTO shopDO2ShopDTO(ShopDO sdo) {
         ShopDTO sdto = new ShopDTO();
-        DistrictDO ddo = new DistrictDO();
         sdto.setId(sdo.getId()); // 唯一标识id
         sdto.setName(sdo.getName()); // 店铺名称
         sdto.setMobile(sdo.getMobile()); // 手机号码
         sdto.setProvince(sdo.getProvince()); // 省份
-        ddo = consignmentAddressService.getDistrictDatas(sdo.getProvince());
+        DistrictDO ddo = consignmentAddressService.getDistrictDatas(sdo.getProvince());
         sdto.setProvinceName(ddo.getDescription()); // 省份名称
         sdto.setCity(sdo.getCity()); // 城市
         ddo = consignmentAddressService.getDistrictDatas(sdo.getCity());

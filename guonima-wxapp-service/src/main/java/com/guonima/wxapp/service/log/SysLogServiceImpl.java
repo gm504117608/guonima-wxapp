@@ -2,7 +2,6 @@ package com.guonima.wxapp.service.log;
 
 import com.guonima.wxapp.aop.LogPoint;
 import com.guonima.wxapp.dao.DaoSupport;
-import com.guonima.wxapp.domain.MemberDO;
 import com.guonima.wxapp.domain.SysLogDO;
 import com.guonima.wxapp.exception.ServiceException;
 import com.guonima.wxapp.redis.RedisClient;
@@ -13,14 +12,11 @@ import org.aspectj.lang.JoinPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Date;
-import java.util.Enumeration;
 
 /**
  * SysLogDO 表数据服务层接口实现类
@@ -108,6 +104,7 @@ public class SysLogServiceImpl implements SysLogService, LogPoint {
             return dao.insert("sysLogMapper.insert", sysLogDO);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("aop记录操作日志保存出现错误： " + e.getMessage());
             throw new ServiceException("aop记录操作日志保存出现错误： " + e.getMessage());
         }
     }

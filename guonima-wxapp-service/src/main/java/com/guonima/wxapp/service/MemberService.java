@@ -27,10 +27,12 @@ public interface MemberService {
     /**
      * 通过 code 去微信服务器获取 session_key 和 openid
      *
-     * @param memberDO 会员信息实体
-     * @param code     微信登录凭证
+     * @param memberDO      会员信息实体
+     * @param code          微信登录凭证
+     * @param encryptedData 包括敏感数据在内的完整用户信息的加密数据
+     * @param iv            加密算法的初始向量
      */
-    public String getWxOpenidSessionKey(MemberDO memberDO, String code);
+    public String getWxOpenidSessionKey(MemberDO memberDO, String code, String encryptedData, String iv);
 
     /**
      * 保存用户一些可修改数据
