@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/guonima-wxapp.iml" filepath="$PROJECT_DIR$/guonima-wxapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/guonima-wxapp-common/guonima-wxapp-common.iml" filepath="$PROJECT_DIR$/guonima-wxapp-common/guonima-wxapp-common.iml" />
-      <module fileurl="file://$PROJECT_DIR$/guonima-wxapp-dao/guonima-wxapp-dao.iml" filepath="$PROJECT_DIR$/guonima-wxapp-dao/guonima-wxapp-dao.iml" />
       <module fileurl="file://$PROJECT_DIR$/guonima-wxapp-service/guonima-wxapp-service.iml" filepath="$PROJECT_DIR$/guonima-wxapp-service/guonima-wxapp-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/guonima-wxapp-web/guonima-wxapp-web.iml" filepath="$PROJECT_DIR$/guonima-wxapp-web/guonima-wxapp-web.iml" />
     </modules>
