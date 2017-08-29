@@ -14,7 +14,6 @@
     <bytecodeTargetLevel>
       <module name="guonima-wxapp" target="1.8" />
       <module name="guonima-wxapp-common" target="1.8" />
-      <module name="guonima-wxapp-dao" target="1.8" />
       <module name="guonima-wxapp-service" target="1.8" />
       <module name="guonima-wxapp-web" target="1.8" />
     </bytecodeTargetLevel>

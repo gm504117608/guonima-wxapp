@@ -10,12 +10,6 @@
           <element id="archive" name="guonima-wxapp-web-1.0-SNAPSHOT.jar">
             <element id="module-output" name="guonima-wxapp-web" />
           </element>
-          <element id="archive" name="guonima-wxapp-service-1.0-SNAPSHOT.jar">
-            <element id="module-output" name="guonima-wxapp-service" />
-          </element>
-          <element id="archive" name="guonima-wxapp-common-1.0-SNAPSHOT.jar">
-            <element id="module-output" name="guonima-wxapp-common" />
-          </element>
           <element id="library" level="project" name="Maven: redis.clients:jedis:2.9.0" />
           <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpclient:4.5.2" />
           <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.4.4" />
