@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fb9424f0-e4ab-45b8-ba53-c1b6b9cb9f01" name="Default" comment="增加.gitinogre文件">
+    <list default="true" id="fb9424f0-e4ab-45b8-ba53-c1b6b9cb9f01" name="Default" comment="">
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/artifacts/guonima_wxapp_web_war.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/artifacts/guonima_wxapp_web_war_exploded.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/junitgenerator-prj-settings.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__asm_asm_3_3_1.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__ch_qos_logback_logback_classic_1_1_7.xml" afterPath="" />
@@ -69,10 +68,6 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/guonima-wxapp-common/guonima-wxapp-common.iml" afterPath="$PROJECT_DIR$/guonima-wxapp-common/guonima-wxapp-common.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/guonima-wxapp-service/guonima-wxapp-service.iml" afterPath="$PROJECT_DIR$/guonima-wxapp-service/guonima-wxapp-service.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/guonima-wxapp-web/guonima-wxapp-web.iml" afterPath="$PROJECT_DIR$/guonima-wxapp-web/guonima-wxapp-web.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/guonima-wxapp.iml" afterPath="$PROJECT_DIR$/guonima-wxapp.iml" />
     </list>
     <list id="4dba8009-1c88-419e-8b20-f6265a0ec0ed" name="no-commit" comment="no-commit" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -277,6 +272,7 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="GO_FMT" value="false" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -781,7 +777,7 @@
       <workItem from="1503049394259" duration="1087000" />
       <workItem from="1504004704365" duration="418000" />
       <workItem from="1504005187119" duration="250000" />
-      <workItem from="1504005465698" duration="56000" />
+      <workItem from="1504005465698" duration="82000" />
     </task>
     <task id="LOCAL-00001" summary="Spring4 restful 框架搭建">
       <created>1491911237599</created>
@@ -972,11 +968,18 @@
       <option name="project" value="LOCAL" />
       <updated>1504005245032</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="增加.gitinogre文件">
+      <created>1504005534580</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1504005534580</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="205000" />
+    <option name="totallyTimeSpent" value="231000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
