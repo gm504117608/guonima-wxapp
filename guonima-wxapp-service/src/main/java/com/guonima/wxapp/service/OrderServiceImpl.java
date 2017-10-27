@@ -54,8 +54,8 @@ public class OrderServiceImpl implements OrderService {
                 dao.batchUpdate("reservationPrintPhotographMapper.update", list);
             }
         } catch (Exception e) {
-            log.error("保存/更新订单和照片打印信息关联出现错误： " + e.getMessage());
-            throw new ServiceException("保存/更新订单和照片打印信息关联出现错误： " + e.getMessage());
+            log.error("保存/更新订单和照片打印信息关联出现错误");
+            throw new ServiceException(e);
         }
         return 0;
     }
@@ -65,7 +65,8 @@ public class OrderServiceImpl implements OrderService {
         try {
             return dao.insert("reservationMapper.insert", reservationDO);
         } catch (Exception e) {
-            throw new ServiceException("保存订单信息出现错误： " + e.getMessage());
+            log.error("保存订单信息出现错误");
+            throw new ServiceException(e);
         }
     }
 
@@ -74,7 +75,8 @@ public class OrderServiceImpl implements OrderService {
         try {
             return dao.insert("reservationMapper.update", reservationDO);
         } catch (Exception e) {
-            throw new ServiceException("更新订单信息出现错误： " + e.getMessage());
+            log.error("更新订单信息出现错误");
+            throw new ServiceException(e);
         }
     }
 

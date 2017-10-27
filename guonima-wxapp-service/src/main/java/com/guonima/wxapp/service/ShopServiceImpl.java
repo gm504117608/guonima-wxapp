@@ -60,8 +60,8 @@ public class ShopServiceImpl implements ShopService {
                 return dao.update("printPhotographMapper.update", printPhotographDO);
             }
         } catch (Exception e) {
-            log.error("上传图片信息保存出现错误： " + e.getMessage());
-            throw new ServiceException("上传图片信息保存出现错误： " + e.getMessage());
+            log.error("上传图片信息保存出现错");
+            throw new ServiceException(e);
         }
     }
 
@@ -69,8 +69,8 @@ public class ShopServiceImpl implements ShopService {
         try {
             return dao.update("printPhotographMapper.delete", id);
         } catch (Exception e) {
-            log.error("上传图片信息删除出现错误： " + e.getMessage());
-            throw new ServiceException("上传图片信息删除出现错误： " + e.getMessage());
+            log.error("上传图片信息删除出现错误");
+            throw new ServiceException(e);
         }
     }
 

@@ -1,15 +1,14 @@
 package com.guonima.wxapp.dao;
 
+import com.guonima.wxapp.exception.ServiceException;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-@Repository("daoSupport")
 public class DaoSupport implements DAO {
 
     @Resource(name = "sqlSessionTemplate")
@@ -23,8 +22,12 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public int insert(String str, Object obj) throws Exception {
-        return sqlSessionTemplate.insert(str, obj);
+    public int insert(String str, Object obj) {
+        try {
+            return sqlSessionTemplate.insert(str, obj);
+        } catch (Exception e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
@@ -35,7 +38,7 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public void batchInsert(String str, List objs) throws Exception {
+    public void batchInsert(String str, List objs) {
         SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
         //批量执行器
         SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
@@ -48,6 +51,8 @@ public class DaoSupport implements DAO {
                 sqlSession.commit();
                 sqlSession.clearCache();
             }
+        } catch (Exception e) {
+            throw new ServiceException(e);
         } finally {
             sqlSession.close();
         }
@@ -61,8 +66,12 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public int update(String str, Object obj) throws Exception {
-        return sqlSessionTemplate.update(str, obj);
+    public int update(String str, Object obj) {
+        try {
+            return sqlSessionTemplate.update(str, obj);
+        } catch (Exception e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
@@ -73,7 +82,7 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public void batchUpdate(String str, List objs) throws Exception {
+    public void batchUpdate(String str, List objs) {
         SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
         //批量执行器
         SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
@@ -86,6 +95,8 @@ public class DaoSupport implements DAO {
                 sqlSession.commit();
                 sqlSession.clearCache();
             }
+        } catch (Exception e) {
+            throw new ServiceException(e);
         } finally {
             sqlSession.close();
         }
@@ -99,7 +110,7 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public void batchDelete(String str, List objs) throws Exception {
+    public void batchDelete(String str, List objs) {
         SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
         //批量执行器
         SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
@@ -112,6 +123,8 @@ public class DaoSupport implements DAO {
                 sqlSession.commit();
                 sqlSession.clearCache();
             }
+        } catch (Exception e) {
+            throw new ServiceException(e);
         } finally {
             sqlSession.close();
         }
@@ -125,8 +138,12 @@ public class DaoSupport implements DAO {
      * @return
      * @throws Exception
      */
-    public int delete(String str, Object obj) throws Exception {
-        return sqlSessionTemplate.delete(str, obj);
+    public int delete(String str, Object obj) {
+        try {
+            return sqlSessionTemplate.delete(str, obj);
+        } catch (Exception e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
@@ -153,7 +170,7 @@ public class DaoSupport implements DAO {
         return sqlSessionTemplate.selectList(str, obj);
     }
 
-    public Object findForMap(String str, Object obj, String key, String value) throws Exception {
+    public Object findForMap(String str, Object obj, String key, String value) {
         return sqlSessionTemplate.selectMap(str, obj, key);
     }
 

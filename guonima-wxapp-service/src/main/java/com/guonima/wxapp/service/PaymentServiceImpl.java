@@ -4,6 +4,7 @@ import com.guonima.wxapp.Response;
 import com.guonima.wxapp.dao.DaoSupport;
 import com.guonima.wxapp.domain.PaymentDO;
 import com.guonima.wxapp.domain.ReservationDO;
+import com.guonima.wxapp.exception.ServiceException;
 import com.guonima.wxapp.service.trade.wxpay.config.WxpayConfig;
 import com.guonima.wxapp.service.trade.wxpay.util.HttpsUtils;
 import com.guonima.wxapp.service.trade.wxpay.util.WXSignUtils;
@@ -164,9 +165,8 @@ public class PaymentServiceImpl implements PaymentService {
             dao.update("reservationMapper.update", rd);
             dao.insert("paymentMapper.insert", pd);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("微信支付回调处理支付结果出现错误：" + e.getMessage());
-            return "FAIL";
+            log.error("微信支付回调处理支付结果出现错误");
+            throw new ServiceException(e);
         }
         return "SUCCESS";
     }

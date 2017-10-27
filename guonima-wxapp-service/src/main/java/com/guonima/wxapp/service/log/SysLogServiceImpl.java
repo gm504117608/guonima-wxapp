@@ -84,7 +84,7 @@ public class SysLogServiceImpl implements SysLogService, LogPoint {
         log.setCreateTime(new Date(System.currentTimeMillis()));
         log.setRemoteAddr(IPUtils.getClientAddress(request));
         log.setRequestUrl(request.getRequestURI());
-        log.setException(e == null ? null : e.toString());
+        log.setException(e == null ? null : printCallStatck(e));
         log.setType(e == null ? SysLogDO.TYPE_ACCESS : SysLogDO.TYPE_EXCEPTION);
 
         /*========日志文件记录=========*/
@@ -103,9 +103,8 @@ public class SysLogServiceImpl implements SysLogService, LogPoint {
         try {
             return dao.insert("sysLogMapper.insert", sysLogDO);
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("aop记录操作日志保存出现错误： " + e.getMessage());
-            throw new ServiceException("aop记录操作日志保存出现错误： " + e.getMessage());
+            throw new ServiceException(e);
         }
     }
 
@@ -156,5 +155,26 @@ public class SysLogServiceImpl implements SysLogService, LogPoint {
         String id = RedisClient.get(token, String.class);
         log.setMemberId(Long.valueOf(id));
 //        log.setMemberName(me.getNickName());
+    }
+
+    /**
+     * 获取异常堆栈中详细信息
+     *
+     * @param ex
+     * @return
+     */
+    public String printCallStatck(Throwable ex) {
+        StackTraceElement[] stackElements = ex.getStackTrace(); // 通过Throwable获得堆栈信息
+        StringBuilder sb = null;
+        if (stackElements != null) {
+            sb = new StringBuilder(ex.toString() + " ");
+            for (int i = 0; i < stackElements.length; i++) {
+                sb.append(" at ");
+                sb.append(stackElements[i].getClassName() + "." +
+                        stackElements[i].getMethodName() + "(" + stackElements[i].getFileName() +
+                        ":" + stackElements[i].getLineNumber() + ") ");
+            }
+        }
+        return sb.toString();
     }
 }
